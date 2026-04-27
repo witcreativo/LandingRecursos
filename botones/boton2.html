@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botón Flecha Circular</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #faf9f7, #f5f5f5);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-flecha {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 32px;
+            background: transparent;
+            border: 2px solid #2d2d2d;
+            border-radius: 50px;
+            text-decoration: none;
+            color: #2d2d2d;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .btn-texto {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-circulo {
+            width: 44px;
+            height: 44px;
+            border: 1.5px solid #2d2d2d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+
+        .btn-circulo svg {
+            width: 20px;
+            height: 20px;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.4s ease;
+        }
+
+        .btn-flecha:hover {
+            background: #ffeb3b;
+            border-color: #ffeb3b;
+            color: #2d2d2d;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,235,59,0.3);
+        }
+
+        .btn-flecha:hover .btn-circulo {
+            background: #2d2d2d;
+            border-color: #2d2d2d;
+            transform: rotate(-45deg);
+        }
+
+        .btn-flecha:hover .btn-circulo svg {
+            stroke: #fff;
+        }
+    </style>
+</head>
+<body>
+    <a href="#" class="btn-flecha">
+        <span class="btn-texto">Ver más</span>
+        <span class="btn-circulo">
+            <svg viewBox="0 0 24 24">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </span>
+    </a>
+
+    <script>
+        const btn = document.querySelector('.btn-flecha');
+        const circulo = btn.querySelector('.btn-circulo');
+        
+        btn.addEventListener('mousemove', (e) => {
+            const rect = circulo.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            circulo.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px) rotate(-45deg)`;
+        });
+        
+        btn.addEventListener('mouseleave', () => {
+            circulo.style.transform = 'translate(0,0) rotate(0deg)';
+        });
+    </script>
+</body>
+</html>

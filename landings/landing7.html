@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Castillo de La Calahorra | Fortaleza del Renacimiento</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f4e5c2;
+            --blood: #8b0000;
+            --stone: #2a2a2a;
+            --stone-light: #4a4a4a;
+            --shadow: #0a0a0a;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
+            background: var(--shadow);
+            cursor: none;
+        }
+
+        /* CURSOR PERSONALIZADO */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.3s ease-out;
+        }
+
+        .cursor.hover {
+            transform: scale(2);
+            background: rgba(212,175,55,0.1);
+        }
+
+        /* HERO ESPECTACULAR */
+        .hero-section {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #0f0f23 100%);
+        }
+
+        /* Canvas de partículas */
+        #particleCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Capas parallax del castillo */
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 120%;
+            top: -10%;
+            will-change: transform;
+        }
+
+        .layer-mountains {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path d="M0,600 L0,400 Q200,300 400,350 T800,300 Q1000,250 1200,350 L1200,600 Z" fill="%23111" opacity="0.8"/></svg>') bottom/contain no-repeat;
+            z-index: 2;
+            opacity: 0.6;
+        }
+
+        .layer-castle-silhouette {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><path d="M200,600 L200,200 L250,150 L300,200 L300,180 L350,130 L400,180 L400,200 L450,200 L450,120 L500,80 L550,120 L550,200 L600,200 L600,600 Z" fill="%23222" opacity="0.9"/></svg>') center bottom/60% no-repeat;
+            z-index: 3;
+            filter: drop-shadow(0 0 50px rgba(212,175,55,0.3));
+        }
+
+        .layer-fog {
+            background: linear-gradient(to top, rgba(212,175,55,0.1) 0%, transparent 50%);
+            z-index: 4;
+            animation: fogMove 20s ease-in-out infinite;
+        }
+
+        @keyframes fogMove {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(30px) translateY(-10px); }
+        }
+
+        /* Contenido Hero */
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: white;
+            perspective: 1000px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 10px 30px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.3s;
+        }
+
+        .hero-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .hero-badge:hover::before {
+            left: 100%;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 50%, #8b7355 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 80px rgba(212,175,55,0.5);
+            transform-style: preserve-3d;
+            animation: titleFloat 6s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0) rotateX(0); }
+            50% { transform: translateY(-10px) rotateX(2deg); }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.7);
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.5s;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(30px); }
+        }
+
+        /* Efecto de texto con máscara de brillo que sigue al ratón */
+        .shine-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .shine-text::after {
+            content: attr(data-text);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.8) 50%, transparent 70%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shine {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
+        /* Botón CTA espectacular */
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 50px;
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            transform-style: preserve-3d;
+        }
+
+        .hero-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gold);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+            z-index: -1;
+        }
+
+        .hero-cta:hover {
+            color: var(--shadow);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(212,175,55,0.3);
+        }
+
+        .hero-cta:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .hero-cta svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            transition: transform 0.3s;
+        }
+
+        .hero-cta:hover svg {
+            transform: translateX(5px);
+        }
+
+        /* Indicador de scroll con efecto de partículas */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+        }
+
+        .scroll-mouse {
+            width: 30px;
+            height: 50px;
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-wheel {
+            width: 4px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 2px;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollWheel 2s infinite;
+        }
+
+        @keyframes scrollWheel {
+            0% { top: 10px; opacity: 1; }
+            100% { top: 30px; opacity: 0; }
+        }
+
+        /* Líneas de cuadrícula que siguen al ratón */
+        .grid-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0.1;
+            background-image: 
+                linear-gradient(rgba(212,175,55,0.3) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(212,175,55,0.3) 1px, transparent 1px);
+            background-size: 100px 100px;
+            transition: transform 0.1s;
+        }
+
+        /* SECCIÓN DE TRANSICIÓN CON PARALLAX */
+        .transition-section {
+            height: 50vh;
+            background: linear-gradient(to bottom, #0f0f23 0%, #1a1a2e 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floating-rocks {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .rock {
+            position: absolute;
+            background: radial-gradient(circle at 30% 30%, #3a3a3a, #1a1a1a);
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        /* VIDEO SECTION - Manteniendo tu efecto pero mejorado */
+        .video-section-wrapper {
+            position: relative;
+            height: 500vh;
+            background: #000;
+        }
+
+        .video-sticky-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scroll-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: cover;
+            filter: contrast(1.1) saturate(1.2);
+        }
+
+        /* Overlay cinematográfico */
+        .cinematic-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 30%, transparent 0%, rgba(0,0,0,0.4) 100%),
+                linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.3) 100%);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Vignette animada */
+        .vignette {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.8) 100%);
+            pointer-events: none;
+            z-index: 3;
+            animation: vignettePulse 4s ease-in-out infinite;
+        }
+
+        @keyframes vignettePulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* UI del video mejorada */
+        .video-ui {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            right: 40px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .video-progress-container {
+            position: relative;
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .video-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold) 0%, #ff6b6b 100%);
+            width: 0%;
+            border-radius: 2px;
+            transition: width 0.05s linear;
+            box-shadow: 0 0 20px var(--gold);
+        }
+
+        .video-progress-glow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100px;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent);
+            animation: progressGlow 2s infinite;
+            opacity: 0;
+        }
+
+        @keyframes progressGlow {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(calc(100vw + 100px)); }
+        }
+
+        .video-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            font-family: 'Cinzel', serif;
+        }
+
+        .video-time {
+            font-size: 1rem;
+            letter-spacing: 2px;
+            color: var(--gold);
+        }
+
+        .video-label {
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        /* Marcadores de capítulo en el video */
+        .chapter-markers {
+            position: absolute;
+            top: 50%;
+            right: 40px;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .chapter-marker {
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            cursor: none;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .chapter-marker.active {
+            background: var(--gold);
+            border-color: var(--gold);
+            box-shadow: 0 0 20px var(--gold);
+            transform: scale(1.3);
+        }
+
+        .chapter-marker:hover {
+            border-color: var(--gold);
+            transform: scale(1.2);
+        }
+
+        .chapter-marker::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .chapter-marker:hover::after {
+            opacity: 1;
+        }
+
+        /* Sección POST-VIDEO espectacular */
+        .after-video {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0f0f23 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 100px 20px;
+        }
+
+        /* Efecto de estrellas/destellos */
+        .stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .section-title span {
+            color: var(--gold);
+            display: block;
+        }
+
+        /* Tarjetas con efecto 3D tilt */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(212,175,55,0.2);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: none;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(212,175,55,0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 20px 60px rgba(212,175,55,0.2);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .feature-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: var(--gold);
+            stroke-width: 1.5;
+        }
+
+        .feature-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .feature-text {
+            color: rgba(255,255,255,0.7);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* Efecto de brillo en borde que sigue al ratón */
+        .card-glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Sección de historia con parallax horizontal */
+        .history-section {
+            min-height: 100vh;
+            background: #0a0a0a;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .history-parallax {
+            display: flex;
+            gap: 100px;
+            padding: 0 100px;
+            will-change: transform;
+        }
+
+        .history-item {
+            flex-shrink: 0;
+            width: 500px;
+            position: relative;
+        }
+
+        .history-year {
+            font-family: 'Cinzel', serif;
+            font-size: 6rem;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--gold);
+            opacity: 0.3;
+            position: absolute;
+            top: -40px;
+            left: -20px;
+            z-index: 0;
+        }
+
+        .history-content {
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(212,175,55,0.1);
+            padding: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .history-content h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .history-content p {
+            color: rgba(255,255,255,0.8);
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* Footer espectacular */
+        .footer-section {
+            min-height: 50vh;
+            background: linear-gradient(to top, #000 0%, #0a0a0a 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 60px 20px;
+        }
+
+        .footer-content {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .footer-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .footer-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 50px;
+            background: var(--gold);
+            color: var(--shadow);
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: none;
+        }
+
+        .footer-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .footer-cta:hover::before {
+            left: 100%;
+        }
+
+        .footer-cta:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(212,175,55,0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cursor, .cursor-follower {
+                display: none;
+            }
+            body {
+                cursor: auto;
+            }
+            .hero-title {
+                font-size: 3rem;
+            }
+            .chapter-markers {
+                display: none;
+            }
+        }
+
+        /* Animación de entrada */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Cursor personalizado -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+
+    <!-- HERO ESPECTACULAR -->
+    <section class="hero-section" id="hero">
+        <canvas id="particleCanvas"></canvas>
+        
+        <!-- Capas parallax -->
+        <div class="parallax-layer layer-mountains" data-speed="0.2"></div>
+        <div class="parallax-layer layer-castle-silhouette" data-speed="0.5"></div>
+        <div class="parallax-layer layer-fog" data-speed="0.3"></div>
+        
+        <!-- Cuadrícula que reacciona al ratón -->
+        <div class="grid-lines" id="gridLines"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge" data-tilt>Fortaleza del Renacimiento</div>
+            <h1 class="hero-title shine-text" data-text="LA CALAHORRA">LA CALAHORRA</h1>
+            <p class="hero-subtitle">Castillo • 1509 • Granada</p>
+            <button class="hero-cta" onclick="scrollToVideo()">
+                <span>Descubrir</span>
+                <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </button>
+        </div>
+
+        <div class="scroll-indicator">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+            <span>Scroll</span>
+        </div>
+    </section>
+
+    <!-- TRANSICIÓN -->
+    <section class="transition-section" id="transition">
+        <div class="floating-rocks" id="floatingRocks"></div>
+    </section>
+
+    <!-- VIDEO CONTROLADO POR SCROLL -->
+    <div class="video-section-wrapper" id="videoSectionWrapper">
+        <div class="video-sticky-container">
+            <video id="miVideo" class="scroll-video" preload="auto" playsinline muted>
+                <source src="calahorra.mp4" type="video/mp4">
+                Tu navegador no soporta el video.
+            </video>
+            
+            <div class="cinematic-overlay"></div>
+            <div class="vignette"></div>
+
+            <!-- Marcadores de capítulo -->
+            <div class="chapter-markers">
+                <div class="chapter-marker active" data-label="Entrada" data-time="0"></div>
+                <div class="chapter-marker" data-label="Patio" data-time="25"></div>
+                <div class="chapter-marker" data-label="Torres" data-time="50"></div>
+                <div class="chapter-marker" data-label="Vistas" data-time="75"></div>
+            </div>
+
+            <!-- UI del video -->
+            <div class="video-ui">
+                <div class="video-info">
+                    <span class="video-label">Experiencia Inmersiva</span>
+                    <span class="video-time" id="videoTime">0:00 / 0:00</span>
+                </div>
+                <div class="video-progress-container">
+                    <div class="video-progress-fill" id="progressFill"></div>
+                    <div class="video-progress-glow"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENIDO POST-VIDEO -->
+    <section class="after-video" id="afterVideo">
+        <div class="stars-container" id="starsContainer"></div>
+        
+        <div class="content-wrapper">
+            <div class="section-header reveal">
+                <div class="section-badge">Patrimonio UNESCO</div>
+                <h2 class="section-title">
+                    Una Fortaleza
+                    <span>Única en Europa</span>
+                </h2>
+                <p style="color: rgba(255,255,255,0.7); font-size: 1.2rem; max-width: 600px; margin: 0 auto; line-height: 1.8;">
+                    El primer castillo renacentista de España, construido en solo 3 años sobre las ruinas de una fortaleza árabe.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card" data-tilt>
+                    <div class="card-glow"></div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <h3 class="feature-title">Arquitectura Única</h3>
+                    <p class="feature-text">Planta cuadrada con cuatro torres cilíndricas en las esquinas, un diseño revolucionario para su época que rompió con la tradición militar medieval.</p>
+                </div>
+
+                <div class="feature-card" data-tilt>
+                    <div class="card-glow"></div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <h3 class="feature-title">Historia Viva</h3>
+                    <p class="feature-text">Testigo de la conquista de Granada, residencia de los Marqueses de Zenete durante siglos, conserva su atmósfera renacentista original.</p>
+                </div>
+
+                <div class="feature-card" data-tilt>
+                    <div class="card-glow"></div>
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+                    </div>
+                    <h3 class="feature-title">Ubicación Estratégica</h3>
+                    <p class="feature-text">Dominando el valle del río Guadix, con vistas panorámicas a Sierra Nevada y la Hoya de Guadix, en el corazón de la provincia de Granada.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN HISTORIA CON SCROLL HORIZONTAL -->
+    <section class="history-section" id="historySection">
+        <div class="history-parallax" id="historyParallax">
+            <div class="history-item">
+                <div class="history-year">1489</div>
+                <div class="history-content">
+                    <h3>Conquista Cristiana</h3>
+                    <p>La fortaleza árabe original es conquistada por los Reyes Católicos durante la Guerra de Granada. El lugar estratégico llama la atención de la nobleza castellana.</p>
+                </div>
+            </div>
+            <div class="history-item">
+                <div class="history-year">1509</div>
+                <div class="history-content">
+                    <h3>Renacimiento Italiano</h3>
+                    <p>Don Rodrigo Díaz de Mendoza inicia la construcción del nuevo castillo, trayendo arquitectos de Italia para crear el primer castillo renacentista de España.</p>
+                </div>
+            </div>
+            <div class="history-item">
+                <div class="history-year">1512</div>
+                <div class="history-content">
+                    <h3>Finalización Récord</h3>
+                    <p>En apenas tres años, la fortaleza está completada. La rapidez de construcción evidencia la importancia estratégica y el poderío de los Mendoza.</p>
+                </div>
+            </div>
+            <div class="history-item">
+                <div class="history-year">1922</div>
+                <div class="history-content">
+                    <h3>Monumento Nacional</h3>
+                    <p>El castillo es declarado Monumento Nacional, reconociendo su valor histórico y arquitectónico excepcional como joya del Renacimiento español.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer-section">
+        <div class="footer-content">
+            <h2 class="footer-title">Visita la Calahorra</h2>
+            <a href="#" class="footer-cta">
+                <span>Planificar Visita</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // ========== CURSOR PERSONALIZADO ==========
+        const cursor = document.getElementById('cursor');
+        const cursorFollower = document.getElementById('cursorFollower');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let followerX = 0, followerY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.2;
+            cursorY += (mouseY - cursorY) * 0.2;
+            followerX += (mouseX - followerX) * 0.1;
+            followerY += (mouseY - followerY) * 0.1;
+
+            cursor.style.left = cursorX - 10 + 'px';
+            cursor.style.top = cursorY - 10 + 'px';
+            cursorFollower.style.left = followerX - 20 + 'px';
+            cursorFollower.style.top = followerY - 20 + 'px';
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Efecto hover en elementos interactivos
+        document.querySelectorAll('button, a, .feature-card, .chapter-marker').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // ========== PARTÍCULAS EN HERO ==========
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Reacción al ratón
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                if (distance < 100) {
+                    this.x -= dx * 0.02;
+                    this.y -= dy * 0.02;
+                }
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(212, 175, 55, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            
+            // Conectar partículas cercanas
+            particles.forEach((p1, i) => {
+                particles.slice(i + 1).forEach(p2 => {
+                    const dx = p1.x - p2.x;
+                    const dy = p1.y - p2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) {
+                        ctx.strokeStyle = `rgba(212, 175, 55, ${0.1 * (1 - distance/100)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                });
+            });
+            
+            animationId = requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        // ========== PARALLAX LAYERS ==========
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        const gridLines = document.getElementById('gridLines');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.dataset.speed) || 0.5;
+                const yPos = -(scrolled * speed);
+                layer.style.transform = `translateY(${yPos}px)`;
+            });
+
+            // Efecto de cuadrícula que se inclina
+            const rotateX = (mouseY / window.innerHeight - 0.5) * 10;
+            const rotateY = (mouseX / window.innerWidth - 0.5) * 10;
+            gridLines.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        // ========== TILT EFFECT EN CARDS ==========
+        document.querySelectorAll('[data-tilt]').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                
+                // Mover el glow
+                const glow = card.querySelector('.card-glow');
+                if (glow) {
+                    glow.style.left = x - 100 + 'px';
+                    glow.style.top = y - 100 + 'px';
+                    glow.style.opacity = '1';
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                const glow = card.querySelector('.card-glow');
+                if (glow) glow.style.opacity = '0';
+            });
+        });
+
+        // ========== VIDEO SCROLL CONTROL (Tu código mejorado) ==========
+        const video = document.getElementById('miVideo');
+        const videoWrapper = document.getElementById('videoSectionWrapper');
+        const progressFill = document.getElementById('progressFill');
+        const videoTime = document.getElementById('videoTime');
+        const chapterMarkers = document.querySelectorAll('.chapter-marker');
+
+        let videoStartScroll = 0;
+        let videoEndScroll = 0;
+        let isUpdating = false;
+
+        function calculateScrollPositions() {
+            const heroHeight = document.getElementById('hero').offsetHeight;
+            const transitionHeight = document.getElementById('transition').offsetHeight;
+            const wrapperHeight = videoWrapper.offsetHeight;
+            
+            videoStartScroll = heroHeight + transitionHeight;
+            videoEndScroll = videoStartScroll + wrapperHeight;
+        }
+
+        function updateVideoFromScroll() {
+            if (isUpdating || !video.duration) return;
+            
+            const scrollY = window.scrollY;
+            
+            if (scrollY < videoStartScroll) {
+                if (video.currentTime !== 0) {
+                    video.currentTime = 0;
+                    updateProgressAndTime(0);
+                }
+                return;
+            }
+            
+            if (scrollY >= videoStartScroll && scrollY <= videoEndScroll) {
+                const scrollInVideo = scrollY - videoStartScroll;
+                const totalScrollable = videoEndScroll - videoStartScroll;
+                const progress = scrollInVideo / totalScrollable;
+                const clampedProgress = Math.max(0, Math.min(1, progress));
+                const targetTime = clampedProgress * video.duration;
+                
+                if (Math.abs(video.currentTime - targetTime) > 0.001) {
+                    isUpdating = true;
+                    video.currentTime = targetTime;
+                    updateProgressAndTime(targetTime);
+                    
+                    // Actualizar marcadores de capítulo
+                    const currentPercent = (targetTime / video.duration) * 100;
+                    chapterMarkers.forEach((marker, index) => {
+                        const markerTime = parseFloat(marker.dataset.time);
+                        const markerPercent = (markerTime / video.duration) * 100;
+                        if (currentPercent >= markerPercent) {
+                            marker.classList.add('active');
+                        } else {
+                            marker.classList.remove('active');
+                        }
+                    });
+                    
+                    setTimeout(() => { isUpdating = false; }, 10);
+                }
+                return;
+            }
+            
+            if (scrollY > videoEndScroll) {
+                if (video.currentTime !== video.duration) {
+                    video.currentTime = video.duration;
+                    updateProgressAndTime(video.duration);
+                }
+                return;
+            }
+        }
+
+        function updateProgressAndTime(currentTime) {
+            if (!video.duration) return;
+            
+            const percent = (currentTime / video.duration) * 100;
+            progressFill.style.width = `${percent}%`;
+            
+            const currentMins = Math.floor(currentTime / 60);
+            const currentSecs = Math.floor(currentTime % 60);
+            const totalMins = Math.floor(video.duration / 60);
+            const totalSecs = Math.floor(video.duration % 60);
+            
+            videoTime.textContent = `${currentMins}:${currentSecs.toString().padStart(2, '0')} / ${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
+        }
+
+        // Scroll optimizado
+        let scrollTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!scrollTicking) {
+                requestAnimationFrame(() => {
+                    updateVideoFromScroll();
+                    
+                    // Revelar elementos al scroll
+                    document.querySelectorAll('.reveal').forEach(el => {
+                        const rect = el.getBoundingClientRect();
+                        if (rect.top < window.innerHeight * 0.8) {
+                            el.classList.add('active');
+                        }
+                    });
+                    
+                    scrollTicking = false;
+                });
+                scrollTicking = true;
+            }
+        });
+
+        video.addEventListener('loadedmetadata', () => {
+            console.log('📹 Video cargado:', video.duration, 'segundos');
+            calculateScrollPositions();
+            updateVideoFromScroll();
+        });
+
+        video.addEventListener('timeupdate', () => {
+            updateProgressAndTime(video.currentTime);
+        });
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            calculateScrollPositions();
+        });
+
+        video.addEventListener('play', () => video.pause());
+        video.pause();
+
+        // Click en marcadores de capítulo
+        chapterMarkers.forEach(marker => {
+            marker.addEventListener('click', () => {
+                const time = parseFloat(marker.dataset.time);
+                const targetScroll = videoStartScroll + (time / video.duration) * (videoEndScroll - videoStartScroll);
+                window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+            });
+        });
+
+        // ========== SCROLL HORIZONTAL EN HISTORIA ==========
+        const historySection = document.getElementById('historySection');
+        const historyParallax = document.getElementById('historyParallax');
+
+        window.addEventListener('scroll', () => {
+            const rect = historySection.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                const scrolled = window.innerHeight - rect.top;
+                const maxScroll = window.innerHeight + rect.height;
+                const progress = scrolled / maxScroll;
+                const translateX = progress * (historyParallax.scrollWidth - window.innerWidth + 200);
+                historyParallax.style.transform = `translateX(-${translateX}px)`;
+            }
+        });
+
+        // ========== GENERAR ESTRELLAS ==========
+        const starsContainer = document.getElementById('starsContainer');
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // ========== GENERAR ROCAS FLOTANTES ==========
+        const floatingRocks = document.getElementById('floatingRocks');
+        for (let i = 0; i < 5; i++) {
+            const rock = document.createElement('div');
+            rock.className = 'rock';
+            rock.style.width = (Math.random() * 100 + 50) + 'px';
+            rock.style.height = (Math.random() * 100 + 50) + 'px';
+            rock.style.left = (Math.random() * 100) + '%';
+            rock.style.top = (Math.random() * 100) + '%';
+            rock.style.opacity = Math.random() * 0.3 + 0.1;
+            floatingRocks.appendChild(rock);
+        }
+
+        // ========== FUNCIONES UTILIDAD ==========
+        function scrollToVideo() {
+            const heroHeight = document.getElementById('hero').offsetHeight;
+            const transitionHeight = document.getElementById('transition').offsetHeight;
+            window.scrollTo({ 
+                top: heroHeight + transitionHeight, 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Inicializar
+        calculateScrollPositions();
+
+        // Pausar animaciones cuando no son visibles
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                cancelAnimationFrame(animationId);
+            } else {
+                animateParticles();
+            }
+        });
+    </script>
+</body>
+</html>

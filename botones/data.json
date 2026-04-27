@@ -1,0 +1,28 @@
+{
+  "botones": [
+    {
+      "id": "boton1",
+      "titulo": "Botón 1 — Efecto Líquido",
+      "descripcion": "Botón con onda expansiva al hover. Efecto orgánico y fluido usando solo CSS.",
+      "archivo": "boton1.html",
+      "tags": ["html", "css"],
+      "nuevo": false
+    },
+    {
+      "id": "boton2",
+      "titulo": "Botón 2 — Flecha Circular",
+      "descripcion": "Botón con flecha y círculo fino alrededor. Hover con background amarillo y rotación.",
+      "archivo": "boton2.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "boton3",
+      "titulo": "Botón 3 — Neumorphism Soft",
+      "descripcion": "Botón con efecto neumórfico suave. Sombras internas y externas para efecto 3D.",
+      "archivo": "boton3.html",
+      "tags": ["html", "css"],
+      "nuevo": false
+    }
+  ]
+}

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W.Creativs - A Life Extraordinary</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background: #1a1a1a;
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        #scene {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            perspective: 1000px;
+            overflow: hidden;
+        }
+
+        /* Capas de profundidad */
+        .layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        /* Capa 1: Muy atrás (pequeñas, lentas) */
+        .layer-back {
+            z-index: 1;
+        }
+
+        /* Capa 2: Atrás (medianas) */
+        .layer-mid-back {
+            z-index: 2;
+        }
+
+        /* Capa 3: Media */
+        .layer-mid {
+            z-index: 3;
+        }
+
+        /* Capa 4: Adelante */
+        .layer-mid-front {
+            z-index: 4;
+        }
+
+        /* Capa 5: Muy adelante (grandes) */
+        .layer-front {
+            z-index: 5;
+        }
+
+        /* Capa 6: Overlay oscuro */
+        .layer-overlay {
+            z-index: 6;
+            background: rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Capa 7: UI/Texto */
+        .layer-ui {
+            z-index: 7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        /* Capa 8: Fondo PNG (encima de todo) */
+        .layer-top-fondo {
+            z-index: 8;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .flower {
+            position: absolute;
+            transform-origin: center center;
+            opacity: 0;
+            will-change: transform;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+        }
+
+        .flower img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Tamaños según capa */
+        .layer-back .flower { width: 150px; }
+        .layer-mid-back .flower { width: 220px; }
+        .layer-mid .flower { width: 300px; }
+        .layer-mid-front .flower { width: 380px; }
+        .layer-front .flower { width: 480px; }
+
+        .fondo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* UI Styles */
+        .logo {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            letter-spacing: 8px;
+            text-transform: lowercase;
+            opacity: 0;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-family: 'Montserrat', sans-serif;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .main-title {
+            color: #fff;
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 300;
+            text-align: center;
+            line-height: 0.9;
+            letter-spacing: -2px;
+            opacity: 0;
+            transform: scale(0.8);
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .main-title span {
+            display: block;
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .description {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-top: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            text-align: center;
+        }
+
+        .enter-btn {
+            margin-top: 50px;
+            padding: 15px 40px;
+            background: #fff;
+            color: #0a0a0a;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            pointer-events: auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .enter-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.3);
+        }
+
+        .sound-toggle {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            color: rgba(255, 255, 255, 0.6);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .sound-icon {
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 4px;
+            z-index: 100;
+            transition: opacity 0.5s;
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+
+    <div id="loading">LOADING...</div>
+
+    <div id="scene">
+        <!-- Capa 1: Muy atrás -->
+        <div class="layer layer-back" data-depth="0.2"></div>
+
+        <!-- Capa 2: Atrás -->
+        <div class="layer layer-mid-back" data-depth="0.4"></div>
+
+        <!-- Capa 3: Media -->
+        <div class="layer layer-mid" data-depth="0.6"></div>
+
+        <!-- Capa 4: Adelante -->
+        <div class="layer layer-mid-front" data-depth="0.8"></div>
+
+        <!-- Capa 5: Muy adelante -->
+        <div class="layer layer-front" data-depth="1.2"></div>
+
+        <!-- Capa 6: Overlay oscuro -->
+        <div class="layer layer-overlay"></div>
+
+        <!-- Capa 7: UI -->
+        <div class="layer layer-ui">
+            <div class="logo">w.creativs</div>
+            <div class="subtitle">W.Creativs Presents</div>
+            <h1 class="main-title">A LIFE<br><span>EXTRAORDINARY</span></h1>
+            <p class="description">A unique journey through the unexpected.</p>
+            <button class="enter-btn">Enter</button>
+
+            <div class="sound-toggle">
+                <div class="sound-icon">♪</div>
+                <span>SOUND ON</span>
+            </div>
+        </div>
+
+        <!-- Capa 8: Fondo PNG (encima de todo) -->
+        <div class="layer layer-top-fondo">
+            <img src="fondo.png" alt="" class="fondo-img">
+        </div>
+    </div>
+
+    <script>
+        // Configuración de flores
+        const flowerFiles = ['flor1.png', 'flor2.png', 'flor3.png', 'flor4.png', 'flor5.png'];
+
+        // Configuración por capa: [cantidad, escala base, velocidad rotación, opacidad]
+        const layerConfig = {
+            'layer-back': { count: 4, scale: 0.4, rotSpeed: 0.0003, opacity: 0.6 },
+            'layer-mid-back': { count: 1, scale: 0.6, rotSpeed: 0.0005, opacity: 0.7 },
+            'layer-mid': { count: 3, scale: 0.85, rotSpeed: 0.0008, opacity: 0.8 },
+            'layer-mid-front': { count: 3, scale: 1.1, rotSpeed: 0.001, opacity: 0.9 },
+            'layer-front': { count: 2, scale: 1.4, rotSpeed: 0.0015, opacity: 1 }
+        };
+
+        const flowers = [];
+        let loadedImages = 0;
+        const totalImages = Object.values(layerConfig).reduce((a, b) => a + b.count, 0);
+
+        // Posiciones predefinidas para distribución artística (evita el centro)
+        const positions = [
+            { x: 5, y: 10 }, { x: 85, y: 15 }, { x: 10, y: 80 }, { x: 90, y: 75 },
+            { x: 20, y: 30 }, { x: 75, y: 25 }, { x: 15, y: 60 }, { x: 80, y: 65 },
+            { x: 30, y: 85 }, { x: 70, y: 10 }, { x: 40, y: 20 }, { x: 60, y: 85 },
+            { x: 8, y: 45 }, { x: 92, y: 50 }, { x: 25, y: 5 }, { x: 75, y: 90 }
+        ];
+
+        function createFlower(layerClass, fileIndex, posIndex, config) {
+            const layer = document.querySelector('.' + layerClass);
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+
+            const img = document.createElement('img');
+            img.src = flowerFiles[fileIndex % flowerFiles.length];
+            img.onload = () => {
+                loadedImages++;
+                if (loadedImages >= totalImages) {
+                    document.getElementById('loading').style.opacity = 0;
+                    setTimeout(() => {
+                        document.getElementById('loading').remove();
+                        startAnimation();
+                    }, 500);
+                }
+            };
+
+            flower.appendChild(img);
+
+            // Posición
+            const pos = positions[posIndex % positions.length];
+            flower.style.left = pos.x + '%';
+            flower.style.top = pos.y + '%';
+
+            // Variaciones aleatorias
+            const randomScale = 0.8 + Math.random() * 0.4;
+            const randomRot = Math.random() * 360;
+            const randomDelay = Math.random() * 0.5;
+
+            flower.style.transform = `scale(0) rotate(${randomRot}deg)`;
+
+            // Datos para animación
+            flower.dataset.targetScale = config.scale * randomScale;
+            flower.dataset.rotSpeed = config.rotSpeed * (0.5 + Math.random());
+            flower.dataset.currentRot = randomRot;
+            flower.dataset.delay = randomDelay;
+            flower.dataset.depth = document.querySelector('.' + layerClass).dataset.depth;
+
+            layer.appendChild(flower);
+            flowers.push(flower);
+        }
+
+        // Crear flores en cada capa
+        let posIndex = 0;
+        Object.keys(layerConfig).forEach(layerClass => {
+            const config = layerConfig[layerClass];
+            for (let i = 0; i < config.count; i++) {
+                createFlower(layerClass, i + posIndex, posIndex, config);
+                posIndex++;
+            }
+        });
+
+        // Animación de entrada
+        function startAnimation() {
+            const tl = gsap.timeline({ delay: 0.3 });
+
+            // Animar capa por capa, de atrás adelante
+            const layers = ['layer-back', 'layer-mid-back', 'layer-mid', 'layer-mid-front', 'layer-front'];
+
+            layers.forEach((layerClass, layerIdx) => {
+                const layerFlowers = document.querySelectorAll('.' + layerClass + ' .flower');
+                const config = layerConfig[layerClass];
+
+                layerFlowers.forEach((flower, i) => {
+                    const delay = layerIdx * 0.4 + i * 0.15;
+                    const targetScale = parseFloat(flower.dataset.targetScale);
+                    const currentRot = parseFloat(flower.dataset.currentRot);
+
+                    // Aparecer con zoom
+                    tl.to(flower, {
+                        opacity: config.opacity,
+                        scale: targetScale,
+                        rotation: currentRot + (Math.random() - 0.5) * 20,
+                        duration: 1.8,
+                        ease: "elastic.out(1, 0.5)"
+                    }, delay);
+                });
+            });
+
+            // Overlay oscuro
+            tl.to('.layer-overlay', {
+                opacity: 1,
+                duration: 1.5,
+                ease: "power2.out"
+            }, 0.5);
+
+            // UI
+            tl.to('.logo', { opacity: 1, duration: 1 }, 1);
+            tl.to('.subtitle', { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, 1.2);
+            tl.to('.main-title', { 
+                opacity: 1, 
+                scale: 1, 
+                duration: 1.8, 
+                ease: "expo.out" 
+            }, 1.4);
+            tl.to('.description', { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, 1.8);
+            tl.to('.enter-btn', { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, 2);
+            tl.to('.sound-toggle', { opacity: 1, duration: 1 }, 2.2);
+
+            // Fondo PNG encima (efecto disolución)
+            tl.to('.layer-top-fondo', {
+                opacity: 1,
+                duration: 2.5,
+                ease: "power2.inOut"
+            }, 2.5);
+        }
+
+        // Parallax con mouse
+        let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+        });
+
+        // Animación continua
+        function animate() {
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+
+            // Aplicar parallax a capas
+            document.querySelectorAll('.layer').forEach(layer => {
+                const depth = parseFloat(layer.dataset.depth) || 0;
+                const moveX = targetX * depth * 30;
+                const moveY = targetY * depth * 20;
+                const rotY = targetX * depth * 2;
+                const rotX = -targetY * depth * 2;
+
+                if (layer.classList.contains('layer-top-fondo')) {
+                    // El fondo superior se mueve muy poco
+                    layer.style.transform = `translate(${targetX * 5}px, ${targetY * 5}px)`;
+                } else if (!layer.classList.contains('layer-ui') && !layer.classList.contains('layer-overlay')) {
+                    layer.style.transform = `translate3d(${moveX}px, ${moveY}px, 0) rotateY(${rotY}deg) rotateX(${rotX}deg)`;
+                }
+            });
+
+            // Rotar flores individualmente
+            flowers.forEach(flower => {
+                if (flower.style.opacity > 0) {
+                    let currentRot = parseFloat(flower.dataset.currentRot);
+                    const speed = parseFloat(flower.dataset.rotSpeed);
+                    currentRot += speed * 60; // Normalizar a ~60fps
+                    flower.dataset.currentRot = currentRot;
+
+                    const currentScale = parseFloat(flower.dataset.targetScale);
+                    flower.style.transform = `scale(${currentScale}) rotate(${currentRot}deg)`;
+                }
+            });
+
+            // Parallax UI sutil
+            const uiLayer = document.querySelector('.layer-ui');
+            uiLayer.style.transform = `translate(${targetX * -10}px, ${targetY * -10}px)`;
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Interacciones
+        document.querySelector('.enter-btn').addEventListener('click', () => {
+            gsap.to('.layer-ui', { opacity: 0, duration: 1 });
+        });
+
+        let soundOn = true;
+        document.querySelector('.sound-toggle').addEventListener('click', function() {
+            soundOn = !soundOn;
+            this.querySelector('span').textContent = soundOn ? 'SOUND ON' : 'SOUND OFF';
+        });
+
+        // Responsive
+        window.addEventListener('resize', () => {
+            // Recalcular posiciones si es necesario
+        });
+    </script>
+</body>
+</html>

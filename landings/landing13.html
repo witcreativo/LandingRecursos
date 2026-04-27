@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wit Creativo | Composición</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --mondrian-red: #E63946;
+            --mondrian-blue: #457B9D;
+            --mondrian-yellow: #F4D35E;
+            --mondrian-black: #000000;
+            --mondrian-white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--mondrian-white);
+            color: var(--mondrian-black);
+            overflow: hidden;
+        }
+
+        .bg-mondrian {
+            background: var(--mondrian-white);
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: grid;
+            grid-template-columns: 40% 60%;
+        }
+
+        @media (max-width: 1024px) {
+            .bg-mondrian {
+                grid-template-columns: 100%;
+                grid-template-rows: auto 1fr;
+                overflow-y: auto;
+            }
+        }
+
+        .left-panel {
+            position: relative;
+            display: grid;
+            grid-template-rows: 20% 35% 30% 15%;
+            grid-template-columns: 100%;
+            border-right: 8px solid var(--mondrian-black);
+        }
+
+        .section-header {
+            border-bottom: 8px solid var(--mondrian-black);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-title {
+            border-bottom: 8px solid var(--mondrian-black);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-text {
+            border-bottom: 8px solid var(--mondrian-black);
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .stat-box {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-right: 8px solid var(--mondrian-black);
+        }
+
+        .stat-box:last-child {
+            border-right: none;
+            background: var(--mondrian-red);
+            color: white;
+        }
+
+        #three-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            cursor: grab;
+        }
+
+        #three-container:active {
+            cursor: grabbing;
+        }
+
+        @media (max-width: 1024px) {
+            #three-container {
+                height: 60vh;
+                min-height: 400px;
+            }
+        }
+
+        .logo-text {
+            font-weight: 700;
+            letter-spacing: -0.04em;
+        }
+
+        .logo-dot {
+            color: var(--mondrian-red);
+        }
+
+        .headline {
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+        }
+
+        .text-red { color: var(--mondrian-red); }
+        .text-blue { color: var(--mondrian-blue); }
+
+        .stat-number {
+            font-weight: 700;
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .badge {
+            border: 3px solid var(--mondrian-black);
+            background: var(--mondrian-white);
+            display: inline-block;
+            padding: 0.5rem 1rem;
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(255,255,255,0.95);
+            border: 3px solid var(--mondrian-black);
+            padding: 0.75rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .instruction-line {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .dot-red { background: var(--mondrian-red); }
+        .dot-blue { background: var(--mondrian-blue); }
+        .dot-yellow { background: var(--mondrian-yellow); }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="bg-mondrian">
+
+        <div class="left-panel">
+
+            <div class="section-header">
+                <div class="flex items-center gap-1 mb-2">
+                    <span class="logo-text text-xl">wit</span>
+                    <span class="logo-dot text-2xl">.</span>
+                    <span class="logo-text text-xl font-normal">creativo</span>
+                </div>
+                <div class="badge">
+                    <span class="text-xs tracking-widest font-bold">AGENCIA CREATIVA</span>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <h1 class="headline">
+                    <span class="block">Diseño</span>
+                    <span class="block text-red">Puro</span>
+                    <span class="block">Geo</span>
+                    <span class="block text-blue">metría</span>
+                </h1>
+            </div>
+
+            <div class="section-text">
+                <p class="text-base sm:text-lg leading-relaxed font-medium max-w-sm">
+                    Composición, equilibrio y color. 
+                    Creamos marcas con estructura y alma.
+                </p>
+            </div>
+
+            <div class="section-stats">
+                <div class="stat-box">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Obras</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Años</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Éxito</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="three-container">
+            <div class="instructions">
+                <div class="instruction-line">
+                    <div class="dot dot-red"></div>
+                    <span>Arrastra: Gira el cuadro</span>
+                </div>
+                <div class="instruction-line">
+                    <div class="dot dot-blue"></div>
+                    <span>Pasa el mouse: Resalta</span>
+                </div>
+                <div class="instruction-line">
+                    <div class="dot dot-yellow"></div>
+                    <span>Click: Cambia color</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('three-container');
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        const colors = {
+            red: 0xE63946,
+            blue: 0x457B9D,
+            yellow: 0xF4D35E,
+            black: 0x000000,
+            white: 0xFFFFFF
+        };
+
+        const colorArray = [colors.red, colors.blue, colors.yellow, colors.white];
+        const colorNames = ['red', 'blue', 'yellow', 'white'];
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setClearColor(colors.white, 1);
+        container.appendChild(renderer.domElement);
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(colors.white);
+
+        const aspect = width / height;
+        const frustumSize = 16;
+        const camera = new THREE.OrthographicCamera(
+            frustumSize * aspect / -2,
+            frustumSize * aspect / 2,
+            frustumSize / 2,
+            frustumSize / -2,
+            0.1,
+            1000
+        );
+        camera.position.set(0, 0, 20);
+        camera.lookAt(0, 0, 0);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.3);
+        dirLight.position.set(5, 10, 7);
+        scene.add(dirLight);
+
+        const materials = {
+            red: new THREE.MeshLambertMaterial({ color: colors.red }),
+            blue: new THREE.MeshLambertMaterial({ color: colors.blue }),
+            yellow: new THREE.MeshLambertMaterial({ color: colors.yellow }),
+            black: new THREE.MeshLambertMaterial({ color: colors.black }),
+            white: new THREE.MeshLambertMaterial({ color: colors.white })
+        };
+
+        const blocks = [];
+        const lines = [];
+        const clickableObjects = [];
+
+        function createBlock(w, h, d, material, x, y, z) {
+            const geometry = new THREE.BoxGeometry(w, h, d);
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.set(x, y, z);
+            return mesh;
+        }
+
+        const composition = new THREE.Group();
+
+        // Líneas con movimiento lento
+        const lineConfigs = [
+            { x: -5, angle: 0.08, length: 14, thick: 0.35, speed: 0.12, offset: 0 },
+            { x: -1.5, angle: -0.06, length: 13, thick: 0.3, speed: 0.1, offset: 1.5 },
+            { x: 2, angle: 0.1, length: 15, thick: 0.4, speed: 0.11, offset: 3 },
+            { x: 5.5, angle: -0.05, length: 14, thick: 0.32, speed: 0.09, offset: 0.5 },
+            { y: -4.5, angle: 0.04, length: 18, thick: 0.35, speed: 0.08, offset: 2, isHorizontal: true },
+            { y: -1, angle: -0.06, length: 17, thick: 0.3, speed: 0.1, offset: 4, isHorizontal: true },
+            { y: 2.5, angle: 0.07, length: 19, thick: 0.38, speed: 0.09, offset: 1, isHorizontal: true },
+            { y: 6, angle: -0.03, length: 16, thick: 0.32, speed: 0.11, offset: 3.5, isHorizontal: true },
+        ];
+
+        lineConfigs.forEach((cfg, i) => {
+            const geometry = new THREE.BoxGeometry(
+                cfg.isHorizontal ? cfg.length : cfg.thick,
+                cfg.isHorizontal ? cfg.thick : cfg.length,
+                0.6
+            );
+            const line = new THREE.Mesh(geometry, materials.black);
+
+            if (cfg.isHorizontal) {
+                line.position.set(0, cfg.y, 0.5);
+            } else {
+                line.position.set(cfg.x, 0, 0.5);
+            }
+
+            line.userData = {
+                isLine: true,
+                baseAngle: cfg.angle,
+                speed: cfg.speed,
+                offset: cfg.offset,
+                isHorizontal: cfg.isHorizontal,
+                baseX: cfg.x || 0,
+                baseY: cfg.y || 0
+            };
+
+            lines.push(line);
+            composition.add(line);
+        });
+
+        // 8 bloques grandes con movimiento lento
+        const blockConfigs = [
+            { w: 3.5, h: 4.2, mat: 'red', x: -5.5, y: 3.5, speed: 0.15, offset: 0 },
+            { w: 3.2, h: 3.8, mat: 'blue', x: 0.5, y: 4.5, speed: 0.12, offset: 2 },
+            { w: 4, h: 3.2, mat: 'yellow', x: 4.5, y: -2, speed: 0.14, offset: 4 },
+            { w: 3.8, h: 4.5, mat: 'white', x: -4, y: -3.5, speed: 0.13, offset: 1 },
+            { w: 3.5, h: 3.5, mat: 'blue', x: 2.5, y: 1, speed: 0.11, offset: 3 },
+            { w: 4.2, h: 3, mat: 'yellow', x: -6, y: -0.5, speed: 0.16, offset: 5 },
+            { w: 3, h: 4.8, mat: 'red', x: 5, y: 2.5, speed: 0.1, offset: 2.5 },
+            { w: 3.6, h: 3.6, mat: 'white', x: -1, y: -5, speed: 0.14, offset: 1.5 },
+        ];
+
+        blockConfigs.forEach((cfg, i) => {
+            const block = createBlock(cfg.w, cfg.h, 0.6, materials[cfg.mat], cfg.x, cfg.y, -0.4);
+
+            block.userData = {
+                baseX: cfg.x,
+                baseY: cfg.y,
+                baseZ: -0.4,
+                speed: cfg.speed,
+                offset: cfg.offset,
+                originalMaterial: materials[cfg.mat],
+                currentColorName: cfg.mat,
+                colorIndex: colorNames.indexOf(cfg.mat),
+                isHovered: false,
+                rotSpeed: (Math.random() - 0.5) * 0.008
+            };
+
+            blocks.push(block);
+            clickableObjects.push(block);
+            composition.add(block);
+        });
+
+        scene.add(composition);
+
+        // Interacción
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        let hoveredBlock = null;
+
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let rotationX = 0;
+        let rotationY = 0;
+        let targetRotationX = 0;
+        let targetRotationY = 0;
+
+        container.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+            container.style.cursor = 'grabbing';
+        });
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+            if (isDragging) {
+                const deltaX = e.clientX - previousMousePosition.x;
+                const deltaY = e.clientY - previousMousePosition.y;
+
+                targetRotationY += deltaX * 0.01;
+                targetRotationX += deltaY * 0.01;
+                targetRotationX = Math.max(-0.5, Math.min(0.5, targetRotationX));
+
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            }
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(clickableObjects);
+
+            if (intersects.length > 0 && !isDragging) {
+                const block = intersects[0].object;
+
+                if (hoveredBlock !== block) {
+                    if (hoveredBlock) {
+                        hoveredBlock.userData.isHovered = false;
+                        gsap.to(hoveredBlock.position, {
+                            z: hoveredBlock.userData.baseZ,
+                            duration: 0.4,
+                            ease: 'power2.out'
+                        });
+                        gsap.to(hoveredBlock.scale, {
+                            x: 1, y: 1,
+                            duration: 0.4,
+                            ease: 'power2.out'
+                        });
+                    }
+
+                    hoveredBlock = block;
+                    hoveredBlock.userData.isHovered = true;
+
+                    gsap.to(block.position, {
+                        z: 1.2,
+                        duration: 0.4,
+                        ease: 'back.out(1.5)'
+                    });
+
+                    gsap.to(block.scale, {
+                        x: 1.08, y: 1.08,
+                        duration: 0.4,
+                        ease: 'back.out(1.5)'
+                    });
+
+                    container.style.cursor = 'pointer';
+                }
+            } else {
+                if (hoveredBlock && !isDragging) {
+                    hoveredBlock.userData.isHovered = false;
+                    gsap.to(hoveredBlock.position, {
+                        z: hoveredBlock.userData.baseZ,
+                        duration: 0.4,
+                        ease: 'power2.out'
+                    });
+                    gsap.to(hoveredBlock.scale, {
+                        x: 1, y: 1,
+                        duration: 0.4,
+                        ease: 'power2.out'
+                    });
+                    hoveredBlock = null;
+                    container.style.cursor = 'grab';
+                }
+            }
+        });
+
+        container.addEventListener('mouseup', () => {
+            isDragging = false;
+            container.style.cursor = hoveredBlock ? 'pointer' : 'grab';
+        });
+
+        container.addEventListener('mouseleave', () => {
+            isDragging = false;
+            if (hoveredBlock) {
+                hoveredBlock.userData.isHovered = false;
+                gsap.to(hoveredBlock.position, {
+                    z: hoveredBlock.userData.baseZ,
+                    duration: 0.4
+                });
+                hoveredBlock = null;
+            }
+        });
+
+        container.addEventListener('click', (e) => {
+            if (hoveredBlock && !isDragging) {
+                const data = hoveredBlock.userData;
+
+                data.colorIndex = (data.colorIndex + 1) % 4;
+                const newColorName = colorNames[data.colorIndex];
+                const newMaterial = materials[newColorName];
+
+                gsap.to(hoveredBlock.scale, {
+                    x: 0.7, y: 0.7, z: 0.1,
+                    duration: 0.2,
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        hoveredBlock.material = newMaterial;
+                        hoveredBlock.userData.originalMaterial = newMaterial;
+
+                        gsap.to(hoveredBlock.scale, {
+                            x: 1.08, y: 1.08, z: 1,
+                            duration: 0.4,
+                            ease: 'elastic.out(1, 0.6)'
+                        });
+                    }
+                });
+            }
+        });
+
+        // Animación lenta
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const elapsed = clock.getElapsedTime();
+
+            rotationX += (targetRotationX - rotationX) * 0.08;
+            rotationY += (targetRotationY - rotationY) * 0.08;
+
+            composition.rotation.x = rotationX;
+            composition.rotation.y = rotationY;
+            composition.rotation.z = Math.sin(elapsed * 0.05) * 0.03;
+
+            // Movimiento lento de líneas
+            lines.forEach((line) => {
+                const data = line.userData;
+                const wave = Math.sin(elapsed * data.speed + data.offset) * 0.12;
+                const wave2 = Math.cos(elapsed * data.speed * 0.6 + data.offset) * 0.08;
+
+                if (data.isHorizontal) {
+                    line.rotation.z = data.baseAngle + wave * 0.4;
+                    line.position.y = data.baseY + wave * 0.25;
+                    line.position.x = wave2 * 0.3;
+                } else {
+                    line.rotation.z = data.baseAngle + wave * 0.4;
+                    line.position.x = data.baseX + wave * 0.25;
+                    line.position.y = wave2 * 0.3;
+                }
+            });
+
+            // Movimiento pausado de bloques
+            blocks.forEach((block) => {
+                if (!block.userData.isHovered) {
+                    const data = block.userData;
+
+                    const waveX = Math.sin(elapsed * data.speed + data.offset) * 0.8;
+                    const waveY = Math.cos(elapsed * data.speed * 0.7 + data.offset) * 0.6;
+                    const waveZ = Math.sin(elapsed * data.speed * 0.5 + data.offset) * 0.1;
+
+                    block.rotation.z += data.rotSpeed;
+                    block.rotation.x = Math.sin(elapsed * 0.1 + data.offset) * 0.05;
+                    block.rotation.y = Math.cos(elapsed * 0.08 + data.offset) * 0.04;
+
+                    block.position.x = data.baseX + waveX;
+                    block.position.y = data.baseY + waveY;
+                    block.position.z = data.baseZ + waveZ;
+                }
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            const w = container.clientWidth;
+            const h = container.clientHeight;
+            const aspect = w / h;
+
+            camera.left = frustumSize * aspect / -2;
+            camera.right = frustumSize * aspect / 2;
+            camera.top = frustumSize / 2;
+            camera.bottom = frustumSize / -2;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+        });
+
+        // GSAP entrada
+        gsap.from('.section-header', {
+            x: -50,
+            opacity: 0,
+            duration: 0.8,
+            ease: 'power3.out',
+            delay: 0.2
+        });
+
+        gsap.from('.headline span', {
+            y: 30,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'power3.out',
+            delay: 0.4
+        });
+
+        gsap.from('.section-text', {
+            opacity: 0,
+            duration: 0.6,
+            ease: 'power2.out',
+            delay: 0.9
+        });
+
+        gsap.from('.stat-box', {
+            y: 20,
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.12,
+            ease: 'power3.out',
+            delay: 1.1
+        });
+
+        gsap.from(blocks.map(b => b.scale), {
+            x: 0, y: 0, z: 0,
+            duration: 1.2,
+            stagger: 0.15,
+            ease: 'elastic.out(1, 0.7)',
+            delay: 0.5
+        });
+    </script>
+</body>
+</html>

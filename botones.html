@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botones — WIT Creativo</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        :root {
+            --blanco: #ffffff;
+            --crema: #faf9f7;
+            --rosa-pastel: #ffe4e1;
+            --rosa-suave: #fff0f3;
+            --menta: #e8f5e9;
+            --lavanda: #f3e5f5;
+            --amarillo-suave: #fffde7;
+            --turquesa: #e0f7fa;
+            --texto-principal: #2d2d2d;
+            --texto-secundario: #6b6b6b;
+            --texto-terciario: #9e9e9e;
+            --borde-suave: #f0f0f0;
+            --sombra-suave: 0 4px 24px rgba(0,0,0,0.04);
+            --sombra-hover: 0 8px 40px rgba(0,0,0,0.08);
+            --radio: 20px;
+            --radio-peq: 12px;
+            --transicion: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--crema);
+            color: var(--texto-principal);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ========== HEADER ========== */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 1000;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--borde-suave);
+            transition: var(--transicion);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--texto-principal);
+        }
+
+        .logo-icon {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--rosa-pastel), var(--lavanda));
+            border-radius: var(--radio-peq);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #d81b60;
+        }
+
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-sub {
+            font-size: 0.75rem;
+            color: var(--texto-terciario);
+            font-weight: 400;
+            margin-top: -4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--texto-secundario);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 10px 18px;
+            border-radius: 50px;
+            transition: var(--transicion);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: var(--rosa-suave);
+            border-radius: 50px;
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before, nav a.active::before { transform: scale(1); }
+        nav a:hover, nav a.active { color: #c2185b; }
+
+        nav a.landings-link {
+            background: linear-gradient(135deg, var(--rosa-pastel), var(--lavanda));
+            color: #880e4f;
+            font-weight: 600;
+        }
+
+        nav a.landings-link::before { display: none; }
+        nav a.landings-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(216,27,96,0.2);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: var(--texto-principal);
+            cursor: pointer;
+        }
+
+        /* ========== HERO ========== */
+        .section-hero {
+            padding: 160px 40px 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .section-hero h1 span {
+            background: linear-gradient(135deg, #4caf50, #00bcd4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-hero p {
+            font-size: 1.1rem;
+            color: var(--texto-secundario);
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        /* ========== GRID ========== */
+        .buttons-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px 80px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .button-card {
+            background: var(--blanco);
+            border-radius: var(--radio);
+            overflow: hidden;
+            box-shadow: var(--sombra-suave);
+            border: 1px solid var(--borde-suave);
+            transition: var(--transicion);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .button-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .button-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--sombra-hover);
+        }
+
+        .button-preview {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f8f9fa, #fff);
+            position: relative;
+            border-bottom: 1px solid var(--borde-suave);
+        }
+
+        .button-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .button-info {
+            padding: 28px;
+        }
+
+        .button-info h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .button-info p {
+            font-size: 0.9rem;
+            color: var(--texto-secundario);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .button-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .button-tags {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+            background: var(--crema);
+            color: var(--texto-secundario);
+            font-weight: 500;
+        }
+
+        .tag.css { background: #e3f2fd; color: #1976d2; }
+        .tag.js { background: #fff3e0; color: #f57c00; }
+        .tag.html { background: #fce4ec; color: #c2185b; }
+
+        .btn-code-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--menta), var(--turquesa));
+            border: none;
+            border-radius: 50px;
+            color: #2e7d32;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transicion);
+        }
+
+        .btn-code-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76,175,80,0.2);
+        }
+
+        .btn-code-toggle i { transition: transform 0.3s ease; }
+        .btn-code-toggle.open i { transform: rotate(180deg); }
+
+        /* ========== ACORDEÓN CÓDIGO ========== */
+        .code-accordion {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background: #1e1e1e;
+        }
+
+        .code-accordion.open {
+            max-height: 2000px;
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 16px 20px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .code-tab {
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            color: #888;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.3s;
+        }
+
+        .code-tab:hover { color: #ccc; }
+        .code-tab.active { background: #2d2d2d; color: #fff; }
+
+        .code-panel {
+            display: none;
+            padding: 20px;
+        }
+
+        .code-panel.active { display: block; }
+
+        .code-panel pre {
+            background: #2d2d2d;
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .btn-copy {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: #444;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-copy:hover { background: #555; }
+        .btn-copy.copied { background: #4caf50; }
+
+        .preview-badge-new {
+            position: absolute;
+            top: 16px; right: 16px;
+            background: linear-gradient(135deg, #e91e63, #9c27b0);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(233,30,99,0.3);
+            z-index: 10;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            background: var(--blanco);
+            border-top: 1px solid var(--borde-suave);
+            margin-top: 60px;
+            padding: 60px 40px 40px;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+        }
+
+        .footer-brand p {
+            color: var(--texto-secundario);
+            font-size: 0.9rem;
+            margin-top: 16px;
+            line-height: 1.6;
+        }
+
+        .footer-col h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 12px; }
+
+        .footer-col a {
+            color: var(--texto-secundario);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-col a:hover { color: #e91e63; }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 40px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--borde-suave);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--texto-terciario);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-social a {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--crema);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--texto-secundario);
+            text-decoration: none;
+            transition: var(--transicion);
+        }
+
+        .footer-social a:hover {
+            background: linear-gradient(135deg, var(--rosa-pastel), var(--lavanda));
+            color: #880e4f;
+            transform: translateY(-3px);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .buttons-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-container { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .header-container { padding: 0 20px; }
+            nav {
+                position: fixed;
+                top: 80px; left: 0; right: 0;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(20px);
+                padding: 20px;
+                transform: translateY(-150%);
+                transition: transform 0.4s ease;
+                border-bottom: 1px solid var(--borde-suave);
+            }
+            nav.active { transform: translateY(0); }
+            nav ul { flex-direction: column; gap: 4px; }
+            nav a { padding: 14px 20px; border-radius: var(--radio-peq); }
+            .menu-toggle { display: block; }
+            .section-hero { padding: 140px 20px 40px; }
+            .buttons-grid {
+                grid-template-columns: 1fr;
+                padding: 0 20px 60px;
+            }
+            .footer-container { grid-template-columns: 1fr; gap: 40px; }
+            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon"><i class="ph ph-paint-brush-broad"></i></div>
+                <div>
+                    <div class="logo-text">WIT Creativo</div>
+                    <div class="logo-sub">Biblioteca de Recursos</div>
+                </div>
+            </a>
+
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <i class="ph ph-list"></i>
+            </button>
+
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="banners.html"><i class="ph ph-monitor-play"></i> Banners</a></li>
+                    <li><a href="botones.html" class="active"><i class="ph ph-hand-tap"></i> Botones</a></li>
+                    <li><a href="listas.html"><i class="ph ph-list-dashes"></i> Listas</a></li>
+                    <li><a href="tarjetas.html"><i class="ph ph-cards"></i> Tarjetas</a></li>
+                    <li><a href="textos.html"><i class="ph ph-text-t"></i> Textos</a></li>
+                    <li><a href="fondos.html"><i class="ph ph-gradient"></i> Fondos</a></li>
+                    <li><a href="landings.html" class="landings-link"><i class="ph ph-rocket-launch"></i> Landings</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="section-hero">
+        <h1 style="animation: fadeInUp 0.6s ease forwards;">Botones <span>Interactivos</span></h1>
+        <p style="animation: fadeInUp 0.6s ease 0.1s forwards; opacity:0;">
+            CTAs y botones con microinteracciones, efectos hover y animaciones listos para copiar.
+        </p>
+    </section>
+
+    <!-- GRID DINÁMICO -->
+    <section class="buttons-grid" id="buttonsGrid"></section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon"><i class="ph ph-paint-brush-broad"></i></div>
+                    <div>
+                        <div class="logo-text">WIT Creativo</div>
+                        <div class="logo-sub">Biblioteca de Recursos</div>
+                    </div>
+                </a>
+                <p>Biblioteca de recursos web para diseñadores y desarrolladores.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Categorías</h4>
+                <ul>
+                    <li><a href="banners.html"><i class="ph ph-caret-right"></i> Banners</a></li>
+                    <li><a href="botones.html"><i class="ph ph-caret-right"></i> Botones</a></li>
+                    <li><a href="listas.html"><i class="ph ph-caret-right"></i> Listas</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Más Recursos</h4>
+                <ul>
+                    <li><a href="tarjetas.html"><i class="ph ph-caret-right"></i> Tarjetas</a></li>
+                    <li><a href="textos.html"><i class="ph ph-caret-right"></i> Textos</a></li>
+                    <li><a href="fondos.html"><i class="ph ph-caret-right"></i> Fondos</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="#"><i class="ph ph-envelope"></i> hola@witcreativo.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>© 2026 WIT Creativo. Todos los derechos reservados.</div>
+            <div class="footer-social">
+                <a href="#"><i class="ph ph-instagram-logo"></i></a>
+                <a href="#"><i class="ph ph-behance-logo"></i></a>
+                <a href="#"><i class="ph ph-dribbble-logo"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menú móvil
+        function toggleMenu() {
+            document.getElementById('mainNav').classList.toggle('active');
+        }
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mainNav').classList.remove('active');
+            });
+        });
+
+        // Header scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.style.boxShadow = window.pageYOffset > 100 
+                ? '0 4px 30px rgba(0,0,0,0.05)' 
+                : 'none';
+        });
+
+        // Acordeón
+        function toggleAccordion(btn, id) {
+            const accordion = document.getElementById(id);
+            const isOpen = accordion.classList.contains('open');
+            
+            document.querySelectorAll('.code-accordion.open').forEach(acc => {
+                acc.classList.remove('open');
+                acc.style.maxHeight = '0';
+            });
+            document.querySelectorAll('.btn-code-toggle.open').forEach(b => b.classList.remove('open'));
+
+            if (!isOpen) {
+                accordion.classList.add('open');
+                btn.classList.add('open');
+                accordion.style.maxHeight = accordion.scrollHeight + 'px';
+            }
+        }
+
+        function switchTab(accordionId, type) {
+            const accordion = document.getElementById(accordionId);
+            accordion.querySelectorAll('.code-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            accordion.querySelectorAll('.code-panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById(`${accordionId}-${type}`).classList.add('active');
+            setTimeout(() => {
+                accordion.style.maxHeight = accordion.scrollHeight + 'px';
+            }, 10);
+        }
+
+        function copyCode(btn) {
+            const pre = btn.previousElementSibling;
+            navigator.clipboard.writeText(pre.textContent).then(() => {
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="ph ph-check"></i> ¡Copiado!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+
+        // ========== CARGAR BOTONES DESDE JSON ==========
+        async function cargarBotones() {
+            try {
+                const response = await fetch('botones/data.json');
+                const data = await response.json();
+                const grid = document.getElementById('buttonsGrid');
+                
+                const botones = data.botones.sort((a, b) => {
+                    if (a.nuevo && !b.nuevo) return -1;
+                    if (!a.nuevo && b.nuevo) return 1;
+                    return 0;
+                });
+
+                botones.forEach((boton, index) => {
+                    const card = document.createElement('article');
+                    card.className = 'button-card';
+                    card.style.transitionDelay = `${index * 0.1}s`;
+                    
+                    const tagsHtml = boton.tags.map(tag => 
+                        `<span class="tag ${tag}">${tag.toUpperCase()}</span>`
+                    ).join('');
+                    
+                    const nuevoBadge = boton.nuevo ? '<span class="preview-badge-new">NUEVO</span>' : '';
+                    
+                    const tabs = [];
+                    const panels = [];
+                    
+                    tabs.push(`<button class="code-tab active" onclick="switchTab('code-${boton.id}', 'html')">HTML</button>`);
+                    panels.push(`
+                        <div class="code-panel active" id="code-${boton.id}-html">
+                            <pre>Cargando...</pre>
+                            <button class="btn-copy" onclick="copyCode(this)"><i class="ph ph-copy"></i> Copiar</button>
+                        </div>
+                    `);
+                    
+                    if (boton.tags.includes('css')) {
+                        tabs.push(`<button class="code-tab" onclick="switchTab('code-${boton.id}', 'css')">CSS</button>`);
+                        panels.push(`
+                            <div class="code-panel" id="code-${boton.id}-css">
+                                <pre>Cargando...</pre>
+                                <button class="btn-copy" onclick="copyCode(this)"><i class="ph ph-copy"></i> Copiar</button>
+                            </div>
+                        `);
+                    }
+                    
+                    if (boton.tags.includes('js')) {
+                        tabs.push(`<button class="code-tab" onclick="switchTab('code-${boton.id}', 'js')">JS</button>`);
+                        panels.push(`
+                            <div class="code-panel" id="code-${boton.id}-js">
+                                <pre>Cargando...</pre>
+                                <button class="btn-copy" onclick="copyCode(this)"><i class="ph ph-copy"></i> Copiar</button>
+                            </div>
+                        `);
+                    }
+
+                    card.innerHTML = `
+                        <div class="button-preview" style="position:relative;">
+                            ${nuevoBadge}
+                            <iframe src="botones/${boton.archivo}" loading="lazy"></iframe>
+                        </div>
+                        <div class="button-info">
+                            <h3>${boton.titulo}</h3>
+                            <p>${boton.descripcion}</p>
+                            <div class="button-meta">
+                                <div class="button-tags">${tagsHtml}</div>
+                                <button class="btn-code-toggle" onclick="toggleAccordion(this, 'code-${boton.id}')">
+                                    <i class="ph ph-code"></i> Ver código
+                                </button>
+                            </div>
+                        </div>
+                        <div class="code-accordion" id="code-${boton.id}">
+                            <div class="code-tabs">${tabs.join('')}</div>
+                            ${panels.join('')}
+                        </div>
+                    `;
+                    
+                    grid.appendChild(card);
+                    cargarCodigo(boton);
+                });
+
+                setTimeout(() => {
+                    document.querySelectorAll('.button-card').forEach(c => c.classList.add('visible'));
+                }, 100);
+
+            } catch (error) {
+                console.error('Error cargando botones:', error);
+                document.getElementById('buttonsGrid').innerHTML = 
+                    '<p style="text-align:center;color:#999;padding:40px;">Error cargando los botones. Verifica que botones/data.json exista.</p>';
+            }
+        }
+
+        async function cargarCodigo(boton) {
+            try {
+                const response = await fetch(`botones/${boton.archivo}`);
+                const html = await response.text();
+                
+                const bodyMatch = html.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+                const bodyContent = bodyMatch ? bodyMatch[1].trim() : html;
+                
+                const styleMatch = html.match(/<style[^>]*>([\s\S]*)<\/style>/i);
+                const css = styleMatch ? styleMatch[1].trim() : '/* No hay CSS interno */';
+                
+                const scriptMatch = html.match(/<script[^>]*>([\s\S]*)<\/script>/i);
+                const js = scriptMatch ? scriptMatch[1].trim() : '// No hay JS interno';
+
+                const htmlPanel = document.getElementById(`code-${boton.id}-html`);
+                if (htmlPanel) htmlPanel.querySelector('pre').textContent = bodyContent;
+                
+                if (boton.tags.includes('css')) {
+                    const cssPanel = document.getElementById(`code-${boton.id}-css`);
+                    if (cssPanel) cssPanel.querySelector('pre').textContent = css;
+                }
+                
+                if (boton.tags.includes('js')) {
+                    const jsPanel = document.getElementById(`code-${boton.id}-js`);
+                    if (jsPanel) jsPanel.querySelector('pre').textContent = js;
+                }
+                
+            } catch (error) {
+                console.error(`Error cargando código de ${boton.archivo}:`, error);
+            }
+        }
+
+        cargarBotones();
+    </script>
+
+</body>
+</html>

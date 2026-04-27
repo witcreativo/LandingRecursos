@@ -1,0 +1,28 @@
+{
+  "tarjetas": [
+    {
+      "id": "tarjeta1",
+      "titulo": "Tarjeta 1 — Flip 3D",
+      "descripcion": "Tarjeta con efecto flip en 3D al hover. Cara frontal e trasera con contenido diferente.",
+      "archivo": "tarjeta1.html",
+      "tags": ["html", "css"],
+      "nuevo": true
+    },
+    {
+      "id": "tarjeta2",
+      "titulo": "Tarjeta 2 — Glassmorphism",
+      "descripcion": "Tarjeta con efecto cristal, borde luminoso y backdrop-filter. Estilo moderno y elegante.",
+      "archivo": "tarjeta2.html",
+      "tags": ["html", "css"],
+      "nuevo": true
+    },
+    {
+      "id": "tarjeta3",
+      "titulo": "Tarjeta 3 — Hover Zoom",
+      "descripcion": "Tarjeta con zoom suave en la imagen, elevación y overlay de información al hover.",
+      "archivo": "tarjeta3.html",
+      "tags": ["html", "css"],
+      "nuevo": false
+    }
+  ]
+}

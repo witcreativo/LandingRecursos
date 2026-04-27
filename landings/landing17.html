@@ -1,0 +1,2168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wit Creativos | Agencia Creativa Digital</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Swiper.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --fuchsia: #FF006E;
+            --yellow: #FFBE0B;
+            --blue: #3A86FF;
+            --purple: #8338EC;
+            --orange: #FB5607;
+            --cyan: #00BBF9;
+            --mint: #06FFA5;
+            --dark-bg: #0a0a0f;
+            --darker-bg: #050508;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--darker-bg);
+            color: #fff;
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--fuchsia);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease, background 0.2s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0.3;
+            transition: transform 0.3s ease;
+        }
+
+        .cursor.hover {
+            transform: scale(2);
+            background: var(--fuchsia);
+            border-color: transparent;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--fuchsia), var(--purple));
+            border-radius: 4px;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .nav.scrolled {
+            padding: 15px 5%;
+            background: rgba(10, 10, 15, 0.95);
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--fuchsia), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+            -webkit-text-fill-color: var(--fuchsia);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--fuchsia), var(--cyan));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--cyan);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 100px 5% 50px;
+        }
+
+        #particles-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--glass-bg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .hero-badge i {
+            color: var(--yellow);
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            perspective: 1000px;
+        }
+
+        .hero-title-word {
+            display: inline-block;
+            background: linear-gradient(135deg, #fff 0%, var(--cyan) 50%, var(--fuchsia) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradient-shift 5s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--fuchsia), var(--purple));
+            color: #fff;
+            box-shadow: 0 10px 40px rgba(255, 0, 110, 0.4);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 60px rgba(255, 0, 110, 0.6);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--cyan);
+            background: rgba(0, 187, 249, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover i {
+            transform: translateX(5px);
+        }
+
+        /* Floating Elements */
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.6;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--fuchsia), var(--purple));
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--cyan), var(--blue));
+            border-radius: 50%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--yellow), var(--orange));
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        /* Section Styles */
+        section {
+            padding: 100px 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff, var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-header p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Services Section */
+        .services {
+            background: linear-gradient(180deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: var(--glass-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            border-color: var(--fuchsia);
+            box-shadow: 0 30px 60px rgba(255, 0, 110, 0.2);
+        }
+
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            transition: all 0.4s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .service-card:nth-child(1) .service-icon {
+            background: linear-gradient(135deg, var(--fuchsia), var(--purple));
+        }
+
+        .service-card:nth-child(2) .service-icon {
+            background: linear-gradient(135deg, var(--cyan), var(--blue));
+        }
+
+        .service-card:nth-child(3) .service-icon {
+            background: linear-gradient(135deg, var(--yellow), var(--orange));
+        }
+
+        .service-card:nth-child(4) .service-icon {
+            background: linear-gradient(135deg, var(--mint), var(--cyan));
+        }
+
+        .service-card:nth-child(5) .service-icon {
+            background: linear-gradient(135deg, var(--purple), var(--fuchsia));
+        }
+
+        .service-card:nth-child(6) .service-icon {
+            background: linear-gradient(135deg, var(--orange), var(--yellow));
+        }
+
+        .service-card:hover .service-icon {
+            transform: rotate(360deg) scale(1.1);
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .service-card .arrow {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover .arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* 3D Banner Section */
+        .banner-3d {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(131, 56, 236, 0.1) 0%, rgba(255, 0, 110, 0.1) 100%);
+        }
+
+        .banner-3d-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .banner-3d h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-shadow: 0 0 40px rgba(255, 0, 110, 0.5);
+        }
+
+        .cube-container {
+            position: absolute;
+            right: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 200px;
+            height: 200px;
+            perspective: 1000px;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate-cube 20s linear infinite;
+        }
+
+        .cube-face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            background: rgba(255, 0, 110, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .cube-face:nth-child(1) { transform: rotateY(0deg) translateZ(100px); }
+        .cube-face:nth-child(2) { transform: rotateY(90deg) translateZ(100px); }
+        .cube-face:nth-child(3) { transform: rotateY(180deg) translateZ(100px); }
+        .cube-face:nth-child(4) { transform: rotateY(-90deg) translateZ(100px); }
+        .cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(100px); }
+        .cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(100px); }
+
+        @keyframes rotate-cube {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            100% { transform: rotateX(360deg) rotateY(360deg); }
+        }
+
+        /* Portfolio Section */
+        .portfolio {
+            background: var(--dark-bg);
+        }
+
+        .portfolio-carousel {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 0;
+        }
+
+        .portfolio-card {
+            background: var(--glass-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            transform-style: preserve-3d;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 187, 249, 0.3);
+            border-color: var(--cyan);
+        }
+
+        .portfolio-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, var(--purple), var(--fuchsia));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portfolio-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.8) 100%);
+        }
+
+        .portfolio-content {
+            padding: 30px;
+        }
+
+        .portfolio-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .portfolio-content p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .portfolio-tags {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 5px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--cyan);
+        }
+
+        /* Swiper Customization */
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: var(--fuchsia);
+            background: rgba(255, 255, 255, 0.1);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            background: var(--fuchsia);
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .swiper-pagination-bullet {
+            background: rgba(255, 255, 255, 0.3);
+            width: 10px;
+            height: 10px;
+        }
+
+        .swiper-pagination-bullet-active {
+            background: var(--fuchsia);
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            background: linear-gradient(180deg, var(--dark-bg) 0%, rgba(131, 56, 236, 0.05) 100%);
+        }
+
+        .testimonials-carousel {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--glass-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 8rem;
+            color: rgba(255, 0, 110, 0.2);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .testimonial-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--fuchsia), var(--purple));
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .testimonial-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: rgba(255, 255, 255, 0.9);
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--cyan);
+        }
+
+        .testimonial-role {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        .testimonial-stars {
+            color: var(--yellow);
+            margin-top: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* Stats Section */
+        .stats {
+            background: var(--darker-bg);
+            position: relative;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 40px;
+            background: var(--glass-bg);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--fuchsia), var(--cyan));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-10px);
+            border-color: var(--cyan);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--fuchsia), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1rem;
+        }
+
+        /* Team Section */
+        .team {
+            background: linear-gradient(180deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .team-card {
+            background: var(--glass-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .team-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(131, 56, 236, 0.3);
+        }
+
+        .team-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, var(--purple), var(--fuchsia));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .team-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.8));
+        }
+
+        .team-social {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(50px);
+            display: flex;
+            gap: 15px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .team-card:hover .team-social {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .team-social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .team-social a:hover {
+            background: var(--fuchsia);
+            transform: scale(1.2);
+        }
+
+        .team-info {
+            padding: 25px;
+            text-align: center;
+        }
+
+        .team-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .team-info p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Parallax Banner */
+        .parallax-banner {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255, 0, 110, 0.2), rgba(58, 134, 255, 0.2));
+        }
+
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 120%;
+            top: -10%;
+        }
+
+        .parallax-bg {
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255, 0, 110, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(0, 187, 249, 0.3) 0%, transparent 50%);
+            filter: blur(60px);
+        }
+
+        .parallax-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .parallax-content h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, var(--fuchsia) 0%, var(--purple) 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 120px 5%;
+        }
+
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: move-grid 20s linear infinite;
+        }
+
+        @keyframes move-grid {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .btn-magnetic {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 50px;
+            background: #fff;
+            color: var(--fuchsia);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-magnetic:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--darker-bg);
+            padding: 80px 5% 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto 60px;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--fuchsia), var(--cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+        }
+
+        .footer-social a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-social a:hover {
+            background: var(--fuchsia);
+            transform: translateY(-5px);
+        }
+
+        .footer-links h4 {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: var(--cyan);
+            transform: translateX(5px);
+        }
+
+        .footer-links a i {
+            font-size: 0.8rem;
+            color: var(--fuchsia);
+        }
+
+        .footer-newsletter h4 {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            color: #fff;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 15px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--glass-bg);
+            color: #fff;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-form input:focus {
+            border-color: var(--fuchsia);
+        }
+
+        .newsletter-form input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .newsletter-form button {
+            padding: 15px 25px;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(135deg, var(--fuchsia), var(--purple));
+            color: #fff;
+            cursor: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .newsletter-form button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 0, 110, 0.4);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+        }
+
+        /* Morphing Background */
+        .morphing-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .morph-shape {
+            position: absolute;
+            filter: blur(80px);
+            animation: morph 15s ease-in-out infinite;
+        }
+
+        .morph-shape:nth-child(1) {
+            width: 500px;
+            height: 500px;
+            background: var(--fuchsia);
+            top: -250px;
+            left: -250px;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        }
+
+        .morph-shape:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            background: var(--purple);
+            bottom: -200px;
+            right: -200px;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            animation-delay: 5s;
+        }
+
+        .morph-shape:nth-child(3) {
+            width: 300px;
+            height: 300px;
+            background: var(--cyan);
+            top: 50%;
+            left: 50%;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation-delay: 10s;
+        }
+
+        @keyframes morph {
+            0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            25% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+            75% { border-radius: 60% 40% 60% 40% / 70% 30% 50% 50%; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .cursor, .cursor-follower {
+                display: none;
+            }
+
+            body {
+                cursor: auto;
+            }
+
+            .btn {
+                cursor: pointer;
+            }
+
+            .cube-container {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .services-grid,
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .testimonial-card {
+                padding: 30px 20px;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Morphing Background -->
+    <div class="morphing-bg">
+        <div class="morph-shape"></div>
+        <div class="morph-shape"></div>
+        <div class="morph-shape"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="#" class="logo">
+            <i class="fa-solid fa-bolt"></i>
+            Wit Creativos
+        </a>
+        <ul class="nav-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#testimonios">Testimonios</a></li>
+            <li><a href="#equipo">Equipo</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="inicio">
+        <canvas id="particles-canvas"></canvas>
+        
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-star"></i>
+                Agencia Creativa #1 en Innovación
+            </div>
+            <h1>
+                <span class="hero-title-word">Creamos</span><br>
+                <span class="hero-title-word">Experiencias</span><br>
+                <span class="hero-title-word">Inolvidables</span>
+            </h1>
+            <p>Transformamos ideas en realidades digitales. Diseño, desarrollo y estrategia que rompe esquemas y conecta con tu audiencia.</p>
+            <div class="hero-buttons">
+                <a href="#contacto" class="btn btn-primary magnetic-btn">
+                    <span>Empezar Proyecto</span>
+                    <i class="fa-solid fa-rocket"></i>
+                </a>
+                <a href="#portfolio" class="btn btn-secondary">
+                    <span>Ver Portfolio</span>
+                    <i class="fa-solid fa-play"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="servicios">
+        <div class="section-header fade-in">
+            <h2>Nuestros Servicios</h2>
+            <p>Soluciones creativas que impulsan tu marca al siguiente nivel</p>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card scale-in">
+                <div class="service-icon">
+                    <i class="fa-solid fa-palette"></i>
+                </div>
+                <h3>Diseño de Marca</h3>
+                <p>Creamos identidades visuales únicas que capturan la esencia de tu negocio y destacan en el mercado.</p>
+                <div class="arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <div class="service-card scale-in">
+                <div class="service-icon">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+                <h3>Desarrollo Web</h3>
+                <p>Sitios web y aplicaciones de última generación con tecnologías modernas y experiencias fluidas.</p>
+                <div class="arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <div class="service-card scale-in">
+                <div class="service-icon">
+                    <i class="fa-solid fa-bullhorn"></i>
+                </div>
+                <h3>Marketing Digital</h3>
+                <p>Estrategias de growth hacking, SEO, SEM y redes sociales que generan resultados medibles.</p>
+                <div class="arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <div class="service-card scale-in">
+                <div class="service-icon">
+                    <i class="fa-solid fa-video"></i>
+                </div>
+                <h3>Producción Audiovisual</h3>
+                <p>Videos, animaciones y contenido multimedia de alta calidad para cautivar a tu audiencia.</p>
+                <div class="arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <div class="service-card scale-in">
+                <div class="service-icon">
+                    <i class="fa-solid fa-mobile-screen"></i>
+                </div>
+                <h3>Apps Móviles</h3>
+                <p>Aplicaciones nativas y multiplataforma diseñadas para ofrecer la mejor experiencia móvil.</p>
+                <div class="arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+
+            <div class="service-card scale-in">
+                <div class="service-icon">
+                    <i class="fa-solid fa-vr-cardboard"></i>
+                </div>
+                <h3>Realidad Virtual</h3>
+                <p>Experiencias inmersivas de VR y AR que transportan a tus usuarios a nuevas dimensiones.</p>
+                <div class="arrow">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3D Banner Section -->
+    <section class="banner-3d">
+        <div class="cube-container">
+            <div class="cube">
+                <div class="cube-face"><i class="fa-solid fa-cube"></i></div>
+                <div class="cube-face"><i class="fa-solid fa-lightbulb"></i></div>
+                <div class="cube-face"><i class="fa-solid fa-rocket"></i></div>
+                <div class="cube-face"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <div class="cube-face"><i class="fa-solid fa-star"></i></div>
+                <div class="cube-face"><i class="fa-solid fa-bolt"></i></div>
+            </div>
+        </div>
+        
+        <div class="banner-3d-content">
+            <h2>Innovación Sin Límites</h2>
+            <p>Combinamos creatividad y tecnología para crear soluciones que marcan la diferencia</p>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section class="portfolio" id="portfolio">
+        <div class="section-header fade-in">
+            <h2>Proyectos Destacados</h2>
+            <p>Descubre algunos de nuestros trabajos más impactantes</p>
+        </div>
+
+        <div class="portfolio-carousel swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="portfolio-card">
+                        <div class="portfolio-image">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>E-Commerce Revolution</h3>
+                            <p>Plataforma de comercio electrónico con experiencia de compra inmersiva</p>
+                            <div class="portfolio-tags">
+                                <span class="tag">UI/UX</span>
+                                <span class="tag">E-Commerce</span>
+                                <span class="tag">3D</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <div class="portfolio-card">
+                        <div class="portfolio-image" style="background: linear-gradient(135deg, var(--cyan), var(--blue));">
+                            <i class="fa-solid fa-building"></i>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Corporate Rebrand</h3>
+                            <p>Rediseño completo de identidad corporativa para empresa Fortune 500</p>
+                            <div class="portfolio-tags">
+                                <span class="tag">Branding</span>
+                                <span class="tag">Strategy</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <div class="portfolio-card">
+                        <div class="portfolio-image" style="background: linear-gradient(135deg, var(--yellow), var(--orange));">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Game Experience</h3>
+                            <p>Desarrollo de interfaz para videojuego AAA con elementos inmersivos</p>
+                            <div class="portfolio-tags">
+                                <span class="tag">Gaming</span>
+                                <span class="tag">UI Design</span>
+                                <span class="tag">Motion</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <div class="portfolio-card">
+                        <div class="portfolio-image" style="background: linear-gradient(135deg, var(--mint), var(--cyan));">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Health Tech App</h3>
+                            <p>Aplicación de salud con dashboard analítico y tracking en tiempo real</p>
+                            <div class="portfolio-tags">
+                                <span class="tag">App</span>
+                                <span class="tag">Health</span>
+                                <span class="tag">Data</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <div class="portfolio-card">
+                        <div class="portfolio-image" style="background: linear-gradient(135deg, var(--fuchsia), var(--orange));">
+                            <i class="fa-solid fa-music"></i>
+                        </div>
+                        <div class="portfolio-content">
+                            <h3>Music Platform</h3>
+                            <p>Plataforma de streaming con visualizaciones 3D y experiencia social</p>
+                            <div class="portfolio-tags">
+                                <span class="tag">Streaming</span>
+                                <span class="tag">Social</span>
+                                <span class="tag">3D</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials" id="testimonios">
+        <div class="section-header fade-in">
+            <h2>Lo Que Dicen Nuestros Clientes</h2>
+            <p>Testimonios de quienes han experimentado la magia de Wit Creativos</p>
+        </div>
+
+        <div class="testimonials-carousel swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <p class="testimonial-text">"Wit Creativos transformó completamente nuestra presencia digital. Su creatividad y profesionalismo superaron todas nuestras expectativas. ¡El resultado fue espectacular!"</p>
+                        <div class="testimonial-author">María González</div>
+                        <div class="testimonial-role">CEO, TechStart Inc.</div>
+                        <div class="testimonial-stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar" style="background: linear-gradient(135deg, var(--cyan), var(--blue));">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <p class="testimonial-text">"El equipo de Wit tiene una capacidad única para entender la visión del cliente y llevarla más allá de lo imaginado. Su trabajo es simplemente extraordinario."</p>
+                        <div class="testimonial-author">Carlos Mendoza</div>
+                        <div class="testimonial-role">Director de Marketing, Global Corp</div>
+                        <div class="testimonial-stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="swiper-slide">
+                    <div class="testimonial-card">
+                        <div class="testimonial-avatar" style="background: linear-gradient(135deg, var(--yellow), var(--orange));">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <p class="testimonial-text">"Increíble atención al detalle y resultados que realmente impactan. Nuestra conversión aumentó un 300% después del rediseño. ¡Altamente recomendados!"</p>
+                        <div class="testimonial-author">Ana Rodríguez</div>
+                        <div class="testimonial-role">Founder, StyleBox</div>
+                        <div class="testimonial-stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item fade-in">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-rocket"></i>
+                </div>
+                <div class="stat-number" data-target="150">0</div>
+                <div class="stat-label">Proyectos Completados</div>
+            </div>
+
+            <div class="stat-item fade-in">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-face-smile"></i>
+                </div>
+                <div class="stat-number" data-target="98">0</div>
+                <div class="stat-label">% Clientes Satisfechos</div>
+            </div>
+
+            <div class="stat-item fade-in">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div class="stat-number" data-target="45">0</div>
+                <div class="stat-label">Premios Ganados</div>
+            </div>
+
+            <div class="stat-item fade-in">
+                <div class="stat-icon">
+                    <i class="fa-solid fa-clock"></i>
+                </div>
+                <div class="stat-number" data-target="8">0</div>
+                <div class="stat-label">Años de Experiencia</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="equipo">
+        <div class="section-header fade-in">
+            <h2>Nuestro Equipo</h2>
+            <p>Los creativos detrás de la magia</p>
+        </div>
+
+        <div class="team-grid">
+            <div class="team-card slide-in-left">
+                <div class="team-image">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <div class="team-social">
+                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>Alex Rivera</h3>
+                    <p>Creative Director</p>
+                </div>
+            </div>
+
+            <div class="team-card slide-in-left">
+                <div class="team-image" style="background: linear-gradient(135deg, var(--cyan), var(--blue));">
+                    <i class="fa-solid fa-code"></i>
+                    <div class="team-social">
+                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fa-brands fa-github"></i></a>
+                        <a href="#"><i class="fa-brands fa-dribbble"></i></a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>Sofia Chen</h3>
+                    <p>Lead Developer</p>
+                </div>
+            </div>
+
+            <div class="team-card slide-in-right">
+                <div class="team-image" style="background: linear-gradient(135deg, var(--yellow), var(--orange));">
+                    <i class="fa-solid fa-pen-nib"></i>
+                    <div class="team-social">
+                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fa-brands fa-behance"></i></a>
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>Diego Martínez</h3>
+                    <p>Art Director</p>
+                </div>
+            </div>
+
+            <div class="team-card slide-in-right">
+                <div class="team-image" style="background: linear-gradient(135deg, var(--mint), var(--cyan));">
+                    <i class="fa-solid fa-bullseye"></i>
+                    <div class="team-social">
+                        <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#"><i class="fa-solid fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>Valentina Ruiz</h3>
+                    <p>Strategy Lead</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Parallax Banner -->
+    <section class="parallax-banner">
+        <div class="parallax-layer parallax-bg" data-speed="0.5"></div>
+        <div class="parallax-content">
+            <h2>¿Listo para Crear Algo Increíble?</h2>
+            <p>Transformemos tu visión en realidad. Cada gran proyecto comienza con una conversación.</p>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta" id="contacto">
+        <div class="cta-content">
+            <h2>Empecemos Tu Proyecto</h2>
+            <p>Contacta con nosotros y descubre cómo podemos llevar tu marca al siguiente nivel</p>
+            <a href="mailto:hola@witcreativos.com" class="btn-magnetic magnetic-btn">
+                <i class="fa-solid fa-envelope"></i>
+                <span>Escríbenos Ahora</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3><i class="fa-solid fa-bolt"></i> Wit Creativos</h3>
+                <p>Transformando ideas en experiencias digitales extraordinarias. Creatividad sin límites, resultados garantizados.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Dribbble"><i class="fa-brands fa-dribbble"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>Servicios</h4>
+                <ul>
+                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Diseño de Marca</a></li>
+                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Desarrollo Web</a></li>
+                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Marketing Digital</a></li>
+                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Producción Audiovisual</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Compañía</h4>
+                <ul>
+                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Sobre Nosotros</a></li>
+                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Nuestro Equipo</a></li>
+                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Carreras</a></li>
+                    <li><a href="#"><i class="fa-solid fa-chevron-right"></i> Contacto</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-newsletter">
+                <h4>Newsletter</h4>
+                <p style="color: rgba(255,255,255,0.6); margin-bottom: 15px; font-size: 0.9rem;">Suscríbete para recibir las últimas tendencias creativas</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Tu email" required>
+                    <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Wit Creativos. Todos los derechos reservados. Hecho con <i class="fa-solid fa-heart" style="color: var(--fuchsia);"></i> y mucha creatividad.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        // Register GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let followerX = 0, followerY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.2;
+            cursorY += (mouseY - cursorY) * 0.2;
+            followerX += (mouseX - followerX) * 0.1;
+            followerY += (mouseY - followerY) * 0.1;
+
+            cursor.style.left = cursorX - 10 + 'px';
+            cursor.style.top = cursorY - 10 + 'px';
+            cursorFollower.style.left = followerX - 20 + 'px';
+            cursorFollower.style.top = followerY - 20 + 'px';
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Magnetic effect for buttons
+        const magneticBtns = document.querySelectorAll('.magnetic-btn');
+        magneticBtns.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+                cursor.classList.add('hover');
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+                cursor.classList.remove('hover');
+            });
+        });
+
+        // Cursor hover effect on interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .service-card, .portfolio-card, .team-card');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Navigation scroll effect
+        const nav = document.querySelector('.nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Particle System with Three.js
+        const canvas = document.getElementById('particles-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        // Create particles
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 800;
+        const posArray = new Float32Array(particlesCount * 3);
+        const colorArray = new Float32Array(particlesCount * 3);
+
+        const colors = [
+            new THREE.Color(0xFF006E),
+            new THREE.Color(0x00BBF9),
+            new THREE.Color(0x8338EC),
+            new THREE.Color(0xFFBE0B)
+        ];
+
+        for(let i = 0; i < particlesCount * 3; i += 3) {
+            posArray[i] = (Math.random() - 0.5) * 50;
+            posArray[i+1] = (Math.random() - 0.5) * 50;
+            posArray[i+2] = (Math.random() - 0.5) * 50;
+            
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            colorArray[i] = color.r;
+            colorArray[i+1] = color.g;
+            colorArray[i+2] = color.b;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.1,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        camera.position.z = 30;
+
+        // Mouse interaction for particles
+        let targetX = 0;
+        let targetY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            targetX = (event.clientX / window.innerWidth) * 2 - 1;
+            targetY = -(event.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+
+            particlesMesh.rotation.y += 0.001;
+            particlesMesh.rotation.x += 0.0005;
+
+            // Smooth mouse follow
+            particlesMesh.rotation.y += targetX * 0.05;
+            particlesMesh.rotation.x += targetY * 0.05;
+
+            renderer.render(scene, camera);
+        }
+        animateParticles();
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // GSAP Animations
+        // Hero title animation
+        gsap.from('.hero-title-word', {
+            y: 100,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power4.out",
+            delay: 0.5
+        });
+
+        // Scroll animations for sections
+        gsap.utils.toArray('.fade-in').forEach(element => {
+            gsap.fromTo(element, 
+                { opacity: 0, y: 30 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        });
+
+        // Scale in animations
+        gsap.utils.toArray('.scale-in').forEach((element, i) => {
+            gsap.fromTo(element,
+                { opacity: 0, scale: 0.8 },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.6,
+                    delay: i * 0.1,
+                    ease: "back.out(1.7)",
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        });
+
+        // Slide in animations
+        gsap.utils.toArray('.slide-in-left').forEach(element => {
+            gsap.fromTo(element,
+                { opacity: 0, x: -50 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        });
+
+        gsap.utils.toArray('.slide-in-right').forEach(element => {
+            gsap.fromTo(element,
+                { opacity: 0, x: 50 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                }
+            );
+        });
+
+        // Parallax effect
+        gsap.utils.toArray('.parallax-layer').forEach(layer => {
+            const speed = layer.dataset.speed || 0.5;
+            gsap.to(layer, {
+                y: -100 * speed,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: layer.parentElement,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+        });
+
+        // Stats counter animation
+        const statNumbers = document.querySelectorAll('.stat-number');
+        statNumbers.forEach(stat => {
+            const target = parseInt(stat.dataset.target);
+            
+            ScrollTrigger.create({
+                trigger: stat,
+                start: "top 80%",
+                onEnter: () => {
+                    gsap.to(stat, {
+                        innerHTML: target,
+                        duration: 2,
+                        snap: { innerHTML: 1 },
+                        ease: "power2.out",
+                        onUpdate: function() {
+                            stat.innerHTML = Math.ceil(this.targets()[0].innerHTML);
+                        }
+                    });
+                }
+            });
+        });
+
+        // Initialize Swiper for Portfolio
+        const portfolioSwiper = new Swiper('.portfolio-carousel', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2,
+                },
+                1024: {
+                    slidesPerView: 3,
+                },
+            },
+        });
+
+        // Initialize Swiper for Testimonials
+        const testimonialSwiper = new Swiper('.testimonials-carousel', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            effect: 'fade',
+            fadeEffect: {
+                crossFade: true
+            },
+        });
+
+        // 3D Cube mouse interaction
+        const cube = document.querySelector('.cube');
+        if (cube) {
+            document.addEventListener('mousemove', (e) => {
+                const x = (e.clientX / window.innerWidth - 0.5) * 360;
+                const y = (e.clientY / window.innerHeight - 0.5) * 360;
+                cube.style.transform = `rotateX(${-y}deg) rotateY(${x}deg)`;
+            });
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Newsletter form
+        document.querySelector('.newsletter-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+            btn.style.background = 'var(--mint)';
+            
+            setTimeout(() => {
+                btn.innerHTML = originalContent;
+                btn.style.background = '';
+                e.target.reset();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

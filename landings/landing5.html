@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W.Creativs - A Life Extraordinary</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            overflow: hidden;
+            background: #0a0a0a;
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        #ui-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            letter-spacing: 8px;
+            text-transform: lowercase;
+            opacity: 0;
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-family: 'Montserrat', sans-serif;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .main-title {
+            color: #fff;
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 300;
+            text-align: center;
+            line-height: 0.9;
+            letter-spacing: -2px;
+            opacity: 0;
+            transform: scale(0.8);
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .main-title span {
+            display: block;
+            font-style: italic;
+            font-weight: 400;
+        }
+        
+        .description {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-top: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            text-align: center;
+        }
+        
+        .enter-btn {
+            margin-top: 50px;
+            padding: 15px 40px;
+            background: #fff;
+            color: #0a0a0a;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            pointer-events: auto;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .enter-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 10px 40px rgba(255,255,255,0.3);
+        }
+        
+        .sound-toggle {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            color: rgba(255, 255, 255, 0.6);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+        
+        .sound-icon {
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+        
+        .dark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 5;
+            pointer-events: none;
+            opacity: 0;
+        }
+        
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 4px;
+            z-index: 100;
+            transition: opacity 0.5s;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loading">LOADING...</div>
+    
+    <div id="canvas-container"></div>
+    <div class="dark-overlay"></div>
+    
+    <div id="ui-layer">
+        <div class="logo">w.creativs</div>
+        <div class="subtitle">W.Creativs Presents</div>
+        <h1 class="main-title">A LIFE<br><span>EXTRAORDINARY</span></h1>
+        <p class="description">A unique journey through the unexpected.</p>
+        <button class="enter-btn">Enter</button>
+        
+        <div class="sound-toggle">
+            <div class="sound-icon">♪</div>
+            <span>SOUND ON</span>
+        </div>
+    </div>
+
+    <script>
+        // Tus imágenes locales de flores
+        const flowerImages = [
+            'flor1.png',
+            'flor2.png',
+            'flor3.png',
+            'flor4.png',
+            'flor5.png',
+            'flor6.png'
+        ];
+
+        // Configuración de Three.js
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        camera.position.z = 5;
+
+        // Grupos para capas de profundidad
+        const layers = {
+            back: new THREE.Group(),
+            mid: new THREE.Group(),
+            front: new THREE.Group(),
+            text: new THREE.Group()
+        };
+
+        scene.add(layers.back);
+        scene.add(layers.mid);
+        scene.add(layers.front);
+        scene.add(layers.text);
+
+        // Cargador de texturas
+        const textureLoader = new THREE.TextureLoader();
+        const loadedTextures = [];
+        let loadedCount = 0;
+
+        // Variable para el fondo
+        let backgroundMesh;
+
+        // Configuración de flores por capa - MODIFICADO
+        const flowersConfig = [
+            // Capa trasera (más pequeñas, más opacas)
+            { layer: 'back', count: 8, scale: 0.8, opacity: 0.6, z: -2, spread: 4, edgeBias: 0 },
+            // Capa media
+            { layer: 'mid', count: 6, scale: 1.2, opacity: 0.8, z: 0, spread: 3, edgeBias: 0 },
+            // Capa frontal (más grandes, más opacas) - AUMENTADAS Y MÁS DISPERSAS
+            { layer: 'front', count: 9, scale: 1.8, opacity: 1, z: 2, spread: 5, edgeBias: 0.6 } // edgeBias empuja hacia los bordes
+        ];
+
+        // Crear planos de flores - MODIFICADO
+        function createFlowerPlane(config, index, texture) {
+            const geometry = new THREE.PlaneGeometry(2, 2);
+            const material = new THREE.MeshBasicMaterial({
+                map: texture,
+                transparent: true,
+                opacity: 0,
+                side: THREE.DoubleSide,
+                depthWrite: false
+            });
+            
+            const mesh = new THREE.Mesh(geometry, material);
+            
+            let x, y, radius, angle;
+            
+            // Si tiene edgeBias, algunas flores irán preferentemente a los bordes
+            if (config.edgeBias && config.edgeBias > 0 && index % 2 !== 0) {
+                // Flores impares (1, 3, 5...) van hacia los bordes
+                // Usamos un radio mayor para empujarlas fuera del centro
+                const minRadius = config.spread * 0.5; // Mínimo para no estar en el centro
+                const maxRadius = config.spread;
+                radius = minRadius + Math.random() * (maxRadius - minRadius);
+                
+                // Distribuir en ángulos que favorezcan los bordes laterales
+                // Evitamos el centro (ángulos horizontales)
+                const side = Math.random() > 0.5 ? 1 : -1; // Izquierda o derecha
+                angle = (side * Math.PI / 2) + (Math.random() - 0.5) * Math.PI * 0.8;
+            } else {
+                // Distribución normal para el resto
+                angle = (index / config.count) * Math.PI * 2 + Math.random() * 0.5;
+                radius = Math.random() * config.spread * (config.edgeBias ? 0.6 : 1);
+            }
+            
+            mesh.position.x = Math.cos(angle) * radius + (Math.random() - 0.5) * 1.5;
+            mesh.position.y = Math.sin(angle) * radius * 0.6 + (Math.random() - 0.5) * 2;
+            mesh.position.z = config.z + (Math.random() - 0.5) * 0.8;
+            
+            // Rotación inicial aleatoria
+            mesh.rotation.z = (Math.random() - 0.5) * 0.8;
+            mesh.rotation.y = (Math.random() - 0.5) * 0.5;
+            
+            // Escala inicial (pequeña para animación de zoom)
+            const targetScale = config.scale * (0.9 + Math.random() * 0.3);
+            mesh.scale.set(0.1, 0.1, 0.1);
+            mesh.userData = {
+                targetScale: targetScale,
+                rotationSpeed: (Math.random() - 0.5) * 0.003,
+                floatSpeed: 0.001 + Math.random() * 0.002,
+                floatOffset: Math.random() * Math.PI * 2,
+                parallaxFactor: config.z * 0.1 + 0.5
+            };
+            
+            return mesh;
+        }
+
+        // Crear fondo
+        function createBackground() {
+            return new Promise((resolve) => {
+                textureLoader.load('fondo.png', (texture) => {
+                    texture.minFilter = THREE.LinearFilter;
+                    texture.magFilter = THREE.LinearFilter;
+                    
+                    // Calcular dimensiones para cubrir toda la pantalla manteniendo proporción
+                    const imageAspect = texture.image.width / texture.image.height;
+                    const screenAspect = window.innerWidth / window.innerHeight;
+                    
+                    let planeWidth, planeHeight;
+                    
+                    if (screenAspect > imageAspect) {
+                        // Pantalla más ancha que la imagen
+                        planeWidth = 10 * screenAspect;
+                        planeHeight = planeWidth / imageAspect;
+                    } else {
+                        // Pantalla más alta que la imagen
+                        planeHeight = 10;
+                        planeWidth = planeHeight * imageAspect;
+                    }
+                    
+                    const geometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
+                    const material = new THREE.MeshBasicMaterial({
+                        map: texture,
+                        transparent: true,
+                        opacity: 0
+                    });
+                    
+                    backgroundMesh = new THREE.Mesh(geometry, material);
+                    backgroundMesh.position.z = -3; // Detrás de todas las flores
+                    
+                    scene.add(backgroundMesh);
+                    resolve();
+                }, undefined, () => resolve());
+            });
+        }
+
+        // Cargar todas las texturas y crear flores
+        Promise.all([
+            createBackground(),
+            ...flowerImages.map(url => {
+                return new Promise((resolve) => {
+                    textureLoader.load(url, (texture) => {
+                        texture.minFilter = THREE.LinearFilter;
+                        texture.magFilter = THREE.LinearFilter;
+                        loadedTextures.push(texture);
+                        resolve();
+                    }, undefined, () => resolve());
+                });
+            })
+        ]).then(() => {
+            document.getElementById('loading').style.opacity = 0;
+            setTimeout(() => document.getElementById('loading').remove(), 500);
+            
+            initFlowers();
+            startAnimation();
+        });
+
+        function initFlowers() {
+            flowersConfig.forEach(config => {
+                for (let i = 0; i < config.count; i++) {
+                    const texture = loadedTextures[i % loadedTextures.length];
+                    const flower = createFlowerPlane(config, i, texture);
+                    layers[config.layer].add(flower);
+                }
+            });
+        }
+
+        // Animación de entrada escalonada
+        function startAnimation() {
+            const tl = gsap.timeline({ delay: 0.5 });
+            
+            // 1. Aparece el fondo y la capa trasera simultáneamente
+            tl.to(backgroundMesh.material, {
+                opacity: 1,
+                duration: 1.5,
+                ease: "power2.out"
+            }, 0);
+            
+            layers.back.children.forEach((flower, i) => {
+                tl.to(flower.material, {
+                    opacity: 0.6,
+                    duration: 1.2,
+                    ease: "power2.out"
+                }, i * 0.1);
+                tl.to(flower.scale, {
+                    x: flower.userData.targetScale,
+                    y: flower.userData.targetScale,
+                    z: flower.userData.targetScale,
+                    duration: 1.5,
+                    ease: "elastic.out(1, 0.5)"
+                }, i * 0.1);
+                tl.to(flower.rotation, {
+                    z: flower.rotation.z + (Math.random() - 0.5) * 0.3,
+                    duration: 1.5,
+                    ease: "power2.out"
+                }, i * 0.1);
+            });
+            
+            // 2. Aparece overlay oscuro
+            tl.to('.dark-overlay', {
+                opacity: 1,
+                duration: 1,
+                ease: "power2.out"
+            }, 0.5);
+            
+            // 3. Aparece capa media
+            layers.mid.children.forEach((flower, i) => {
+                tl.to(flower.material, {
+                    opacity: 0.8,
+                    duration: 1.2,
+                    ease: "power2.out"
+                }, 0.8 + i * 0.15);
+                tl.to(flower.scale, {
+                    x: flower.userData.targetScale,
+                    y: flower.userData.targetScale,
+                    z: flower.userData.targetScale,
+                    duration: 1.5,
+                    ease: "elastic.out(1, 0.5)"
+                }, 0.8 + i * 0.15);
+            });
+            
+            // 4. UI Elements
+            tl.to('.logo', { opacity: 1, duration: 1 }, 1);
+            tl.to('.subtitle', { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, 1.2);
+            tl.to('.main-title', { 
+                opacity: 1, 
+                scale: 1, 
+                duration: 1.5, 
+                ease: "expo.out" 
+            }, 1.4);
+            tl.to('.description', { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, 1.8);
+            tl.to('.enter-btn', { opacity: 1, y: 0, duration: 1, ease: "power3.out" }, 2);
+            tl.to('.sound-toggle', { opacity: 1, duration: 1 }, 2.2);
+            
+            // 5. Capa frontal (más dramática) - CON MÁS FLORES
+            layers.front.children.forEach((flower, i) => {
+                tl.to(flower.material, {
+                    opacity: 1,
+                    duration: 1.2,
+                    ease: "power2.out"
+                }, 1.5 + i * 0.15); // Reducido el stagger para que no tarde tanto
+                tl.to(flower.scale, {
+                    x: flower.userData.targetScale,
+                    y: flower.userData.targetScale,
+                    z: flower.userData.targetScale,
+                    duration: 1.8,
+                    ease: "elastic.out(1, 0.3)"
+                }, 1.5 + i * 0.15);
+                tl.fromTo(flower.rotation, {
+                    z: flower.rotation.z + 0.5
+                }, {
+                    z: flower.rotation.z,
+                    duration: 2,
+                    ease: "power3.out"
+                }, 1.5 + i * 0.15);
+            });
+        }
+
+        // Efecto Parallax con mouse
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
+        const windowHalfX = window.innerWidth / 2;
+        const windowHalfY = window.innerHeight / 2;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - windowHalfX) / windowHalfX;
+            mouseY = (event.clientY - windowHalfY) / windowHalfY;
+        });
+
+        // Animación continua
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const time = clock.getElapsedTime();
+            
+            // Suavizado del mouse
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+            
+            // Parallax del fondo (muy sutil)
+            if (backgroundMesh) {
+                backgroundMesh.position.x = targetX * 0.2;
+                backgroundMesh.position.y = -targetY * 0.1;
+            }
+            
+            // Aplicar parallax a cada capa con diferentes intensidades
+            layers.back.position.x = targetX * 0.5;
+            layers.back.position.y = -targetY * 0.3;
+            layers.back.rotation.y = targetX * 0.05;
+            layers.back.rotation.x = targetY * 0.05;
+            
+            layers.mid.position.x = targetX * 1.0;
+            layers.mid.position.y = -targetY * 0.6;
+            layers.mid.rotation.y = targetX * 0.1;
+            layers.mid.rotation.x = targetY * 0.08;
+            
+            layers.front.position.x = targetX * 2.0;
+            layers.front.position.y = -targetY * 1.2;
+            layers.front.rotation.y = targetX * 0.15;
+            layers.front.rotation.x = targetY * 0.12;
+            
+            // Animación flotante de flores individuales
+            [...layers.back.children, ...layers.mid.children, ...layers.front.children].forEach(flower => {
+                const floatY = Math.sin(time * flower.userData.floatSpeed + flower.userData.floatOffset) * 0.1;
+                flower.position.y += floatY * 0.01;
+                flower.rotation.z += flower.userData.rotationSpeed;
+            });
+            
+            // Parallax sutil del texto UI
+            document.getElementById('ui-layer').style.transform = 
+                `translate(${targetX * -10}px, ${targetY * -10}px)`;
+            
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Responsive
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Recalcular dimensiones del fondo si cambia el tamaño de pantalla
+            if (backgroundMesh && backgroundMesh.material.map) {
+                const texture = backgroundMesh.material.map;
+                const imageAspect = texture.image.width / texture.image.height;
+                const screenAspect = window.innerWidth / window.innerHeight;
+                
+                let planeWidth, planeHeight;
+                
+                if (screenAspect > imageAspect) {
+                    planeWidth = 10 * screenAspect;
+                    planeHeight = planeWidth / imageAspect;
+                } else {
+                    planeHeight = 10;
+                    planeWidth = planeHeight * imageAspect;
+                }
+                
+                backgroundMesh.geometry.dispose();
+                backgroundMesh.geometry = new THREE.PlaneGeometry(planeWidth, planeHeight);
+            }
+        });
+
+        // Interacción del botón
+        document.querySelector('.enter-btn').addEventListener('click', () => {
+            gsap.to('#ui-layer', {
+                opacity: 0,
+                duration: 1,
+                onComplete: () => {
+                    // Aquí iría la navegación
+                    console.log('Enter clicked');
+                }
+            });
+        });
+
+        // Toggle sound visual
+        let soundOn = true;
+        document.querySelector('.sound-toggle').addEventListener('click', function() {
+            soundOn = !soundOn;
+            this.querySelector('span').textContent = soundOn ? 'SOUND ON' : 'SOUND OFF';
+            this.querySelector('.sound-icon').style.opacity = soundOn ? 1 : 0.3;
+        });
+    </script>
+</body>
+</html>

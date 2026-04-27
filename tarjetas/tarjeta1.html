@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flip 3D</title>
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #faf9f7, #f0f0f0);
+            font-family: 'Outfit', sans-serif;
+            padding: 40px 20px;
+        }
+
+        .flip-container {
+            perspective: 1000px;
+            width: 320px;
+            height: 420px;
+        }
+
+        .flip-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .flip-container:hover .flip-card {
+            transform: rotateY(180deg);
+        }
+
+        .flip-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+        }
+
+        .flip-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            color: #fff;
+        }
+
+        .flip-front .icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .flip-front h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .flip-front p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .flip-hint {
+            position: absolute;
+            bottom: 20px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .flip-back {
+            background: #fff;
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+        }
+
+        .flip-back h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2d2d2d;
+            margin-bottom: 20px;
+        }
+
+        .feature-list {
+            list-style: none;
+            flex: 1;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            color: #6b6b6b;
+            font-size: 0.9rem;
+        }
+
+        .feature-list li i {
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        .flip-btn {
+            margin-top: 24px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .flip-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102,126,234,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="flip-container">
+        <div class="flip-card">
+            <div class="flip-face flip-front">
+                <div class="icon"><i class="ph ph-rocket-launch"></i></div>
+                <h3>Premium Plan</h3>
+                <p>Todo lo que necesitas para escalar tu negocio online</p>
+                <div class="flip-hint">
+                    <i class="ph ph-arrows-left-right"></i>
+                    Pasa el ratón para ver más
+                </div>
+            </div>
+            <div class="flip-face flip-back">
+                <h3>¿Qué incluye?</h3>
+                <ul class="feature-list">
+                    <li><i class="ph ph-check-circle"></i> Hosting ilimitado</li>
+                    <li><i class="ph ph-check-circle"></i> SSL gratuito</li>
+                    <li><i class="ph ph-check-circle"></i> Soporte 24/7</li>
+                    <li><i class="ph ph-check-circle"></i> Backups diarios</li>
+                    <li><i class="ph ph-check-circle"></i> CDN global</li>
+                </ul>
+                <button class="flip-btn">Empezar ahora</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

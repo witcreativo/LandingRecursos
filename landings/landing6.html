@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure Bay Resort - Paraíso Caribeño</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F4E8C1;
+            --dark: #0a0a0a;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #000;
+            overflow-x: hidden;
+            color: white;
+        }
+
+        /* Navegación flotante */
+        .nav-floating {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.5s ease;
+            background: transparent;
+        }
+
+        .nav-floating.scrolled {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 15px 50px;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            color: var(--gold-light);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        /* FONDO DE AGUA GLOBAL */
+        .global-water-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            pointer-events: none;
+        }
+
+        .global-water-bg.active {
+            opacity: 1;
+        }
+
+        .global-water-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.3) 100%),
+                url('https://kimi-web-img.moonshot.cn/img/thumbs.dreamstime.com/7585764e4d4c5e97ffb4ce4d8261c44ae0304b4f.jpg');
+            background-size: cover, 100% auto;
+            background-position: center, center;
+            background-repeat: no-repeat, repeat-y;
+            animation: waterFlow 25s linear infinite;
+        }
+
+        @keyframes waterFlow {
+            0% { background-position: center, center 0%; }
+            100% { background-position: center, center 100%; }
+        }
+
+        /* Sección Prezi Effect */
+        .prezi-section {
+            position: relative;
+            height: 300vh;
+            width: 100%;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .prezi-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Capa de dormitorio */
+        .bedroom-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            transform-origin: center center;
+        }
+
+        .bedroom-layer img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.9);
+        }
+
+        /* El cuadro transparente - ahora ve directamente al fondo global */
+        .picture-frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40vw;
+            height: 50vh;
+            border: 12px solid #2a2520;
+            box-shadow: 
+                0 0 0 2px #1a1510,
+                0 20px 60px rgba(0,0,0,0.5),
+                inset 0 0 100px rgba(0,0,0,0.3);
+            z-index: 3;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        .picture-frame::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 10px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            pointer-events: none;
+            z-index: 4;
+        }
+
+        /* Texto hero */
+        .hero-text {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 5;
+            opacity: 1;
+        }
+
+        .hero-text h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            font-weight: 300;
+            letter-spacing: 8px;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .hero-text p {
+            font-size: 1rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator span {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, white, transparent);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Sección Info del Hotel */
+        .hotel-info-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .hotel-content {
+            max-width: 900px;
+            text-align: center;
+            padding: 60px;
+            background: rgba(0, 40, 60, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+            opacity: 0;
+            transform: translateY(50px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .hotel-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            color: var(--gold-light);
+        }
+
+        .hotel-content p {
+            font-size: 1.1rem;
+            line-height: 2;
+            font-weight: 300;
+            margin-bottom: 40px;
+        }
+
+        .hotel-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 50px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-top: 10px;
+        }
+
+        /* Testimonios */
+        .testimonials-section {
+            position: relative;
+            min-height: 100vh;
+            padding: 100px 50px;
+            z-index: 2;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--gold-light);
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .stars {
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .testimonial-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            font-style: italic;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), #8B7355);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .author-info h4 {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .author-info span {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        /* Servicios */
+        .services-section {
+            position: relative;
+            min-height: 100vh;
+            padding: 100px 50px;
+            z-index: 2;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .service-item {
+            text-align: center;
+            padding: 40px 20px;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 25px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--gold-light);
+            transition: all 0.3s;
+        }
+
+        .service-item:hover .service-icon {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: var(--gold);
+            transform: scale(1.1);
+            color: var(--gold);
+        }
+
+        .service-item h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--gold-light);
+        }
+
+        .service-item p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            opacity: 0.7;
+            font-weight: 300;
+        }
+
+        /* Sección Habitaciones - Cielo Nocturno */
+        .rooms-section {
+            position: relative;
+            min-height: 100vh;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        /* Canvas de estrellas */
+        #stars-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .rooms-container {
+            position: relative;
+            z-index: 10;
+            padding: 150px 50px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rooms-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .rooms-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--gold-light);
+            margin-bottom: 20px;
+        }
+
+        .rooms-header p {
+            font-size: 1rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.6;
+        }
+
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .room-card {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .room-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .room-card:hover::before {
+            opacity: 1;
+        }
+
+        .room-card:hover {
+            transform: translateY(-15px);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .room-image {
+            height: 250px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .room-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .room-placeholder span {
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .room-info {
+            padding: 30px;
+        }
+
+        .room-type {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .room-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .room-type h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 400;
+            color: var(--gold-light);
+        }
+
+        .room-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .room-features li {
+            font-size: 0.85rem;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.7;
+        }
+
+        .room-features li:last-child {
+            border-bottom: none;
+        }
+
+        .room-price {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            margin-top: 20px;
+        }
+
+        .room-price span {
+            font-size: 0.9rem;
+            opacity: 0.6;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .book-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+
+        .book-btn:hover {
+            background: var(--gold);
+            color: #000;
+        }
+
+        /* Footer */
+        footer {
+            position: relative;
+            z-index: 20;
+            background: #000;
+            padding: 60px 50px 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--gold-light);
+            margin-bottom: 20px;
+        }
+
+        .footer-brand p {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            opacity: 0.6;
+            font-weight: 300;
+        }
+
+        .footer-links h4 {
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            color: var(--gold);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.8rem;
+            opacity: 0.4;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .testimonials-grid,
+            .services-grid,
+            .rooms-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .picture-frame {
+                width: 80vw;
+                height: 40vh;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .testimonials-grid,
+            .services-grid,
+            .rooms-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FONDO DE AGUA GLOBAL -->
+    <div class="global-water-bg" id="globalWaterBg"></div>
+
+    <!-- Navegación -->
+    <nav class="nav-floating">
+        <div class="logo">AZURE BAY</div>
+        <ul class="nav-links">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#experiencias">Experiencias</a></li>
+            <li><a href="#habitaciones">Habitaciones</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <!-- Sección Prezi Effect -->
+    <section class="prezi-section" id="inicio">
+        <div class="prezi-container">
+            <!-- Solo el dormitorio, sin capa de agua intermedia -->
+            <div class="bedroom-layer">
+                <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=1920&q=80" alt="Suite de lujo">
+                <!-- El cuadro transparente - ahora ve directamente al fondo global -->
+                <div class="picture-frame"></div>
+            </div>
+
+            <!-- Texto hero -->
+            <div class="hero-text">
+                <h1>AZURE BAY RESORT</h1>
+                <p>Donde el lujo encuentra el paraíso</p>
+            </div>
+
+            <!-- Indicador de scroll -->
+            <div class="scroll-indicator">
+                <span>Descubre</span>
+                <div class="scroll-line"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Info del Hotel -->
+    <section class="hotel-info-section" id="experiencias">
+        <div class="hotel-content">
+            <h2>Un Refugio de Elegancia</h2>
+            <p>
+                Sumérgete en la exclusividad de Azure Bay, donde cada amanecer pinta el horizonte 
+                con tonos imposibles y cada momento se convierte en un recuerdo eterno. 
+                Nuestro resort de cinco estrellas fusiona la arquitectura contemporánea 
+                con la naturaleza virgen del Caribe, ofreciendo una experiencia 
+                donde el tiempo se detiene y los sentidos despiertan.
+            </p>
+            <div class="hotel-stats">
+                <div class="stat">
+                    <span class="stat-number">47</span>
+                    <span class="stat-label">Suites Privadas</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">5★</span>
+                    <span class="stat-label">Servicio Premium</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Vistas al Mar</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section class="testimonials-section">
+        <div class="section-header">
+            <h2>Experiencias Inolvidables</h2>
+            <p>Lo que dicen nuestros huéspedes</p>
+        </div>
+        
+        <div class="testimonials-grid">
+            <div class="glass-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">
+                    "Una experiencia que redefine el lujo. Despertar con vistas al mar turquesa 
+                    y el sonido de las olas es simplemente mágico. El servicio es impecable."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">MR</div>
+                    <div class="author-info">
+                        <h4>María Rodríguez</h4>
+                        <span>Madrid, España</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">
+                    "Celebramos nuestro aniversario aquí y fue perfecto. La cena privada en la playa 
+                    bajo las estrellas fue el momento más romántico de nuestras vidas."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">JL</div>
+                    <div class="author-info">
+                        <h4>James & Laura</h4>
+                        <span>Londres, UK</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">
+                    "El spa es otro nivel. Los tratamientos con vistas al océano son pura meditación. 
+                    Volveremos sin duda, este lugar tiene algo especial."
+                </p>
+                <div class="testimonial-author">
+                    <div class="author-avatar">SC</div>
+                    <div class="author-info">
+                        <h4>Sophie Chen</h4>
+                        <span>Singapur</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servicios -->
+    <section class="services-section">
+        <div class="section-header">
+            <h2>Servicios Exclusivos</h2>
+            <p>Todo diseñado para tu bienestar</p>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-item">
+                <div class="service-icon">
+                    <i class="ph ph-fork-knife"></i>
+                </div>
+                <h3>Gastronomía Michelin</h3>
+                <p>Restaurantes con chefs estrella Michelín y productos locales de primera calidad</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">
+                    <i class="ph ph-waves"></i>
+                </div>
+                <h3>Piscinas Infinitas</h3>
+                <p>Tres piscinas infinity con vistas panorámicas al mar Caribe</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">
+                    <i class="ph ph-sparkle"></i>
+                </div>
+                <h3>Spa & Bienestar</h3>
+                <p>Tratamientos holísticos con ingredientes orgánicos y terapeutas expertos</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">
+                    <i class="ph ph-sailboat"></i>
+                </div>
+                <h3>Yacht Privado</h3>
+                <p>Excursiones exclusivas en yate para descubrir calas secretas</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">
+                    <i class="ph ph-person-simple-swim"></i>
+                </div>
+                <h3>Deportes Acuáticos</h3>
+                <p>Desde paddle surf hasta buceo en arrecifes de coral vírgenes</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">
+                    <i class="ph ph-wine"></i>
+                </div>
+                <h3>Beach Club</h3>
+                <p>Cócteles artesanales y música lounge en la arena dorada</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">
+                    <i class="ph ph-concierge-bell"></i>
+                </div>
+                <h3>Concierge 24/7</h3>
+                <p>Servicio personalizado para anticipar cada uno de tus deseos</p>
+            </div>
+            <div class="service-item">
+                <div class="service-icon">
+                    <i class="ph ph-helicopter"></i>
+                </div>
+                <h3>Traslados VIP</h3>
+                <p>Helipuerto privado y traslados en vehículos de lujo</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Habitaciones con Cielo Nocturno y Estrellas -->
+    <section class="rooms-section" id="habitaciones">
+        <canvas id="stars-canvas"></canvas>
+        
+        <div class="rooms-container">
+            <div class="rooms-header">
+                <h2>Nuestras Suites</h2>
+                <p>Elegancia celestial</p>
+            </div>
+            
+            <div class="rooms-grid">
+                <div class="room-card">
+                    <div class="room-image">
+                        <div class="room-placeholder">
+                            <span>SUITE OCEAN</span>
+                        </div>
+                    </div>
+                    <div class="room-info">
+                        <div class="room-type">
+                            <div class="room-icon">🌊</div>
+                            <h3>Ocean View Suite</h3>
+                        </div>
+                        <ul class="room-features">
+                            <li>✦ 65m² de espacio</li>
+                            <li>✦ Terraza privada</li>
+                            <li>✦ Baño de mármol</li>
+                            <li>✦ Vista panorámica</li>
+                        </ul>
+                        <div class="room-price">$890<span>/noche</span></div>
+                        <button class="book-btn">Reservar</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <div class="room-image">
+                        <div class="room-placeholder">
+                            <span>SUITE BEACH</span>
+                        </div>
+                    </div>
+                    <div class="room-info">
+                        <div class="room-type">
+                            <div class="room-icon">🏖️</div>
+                            <h3>Beachfront Villa</h3>
+                        </div>
+                        <ul class="room-features">
+                            <li>✦ Acceso directo a playa</li>
+                            <li>✦ Piscina privada</li>
+                            <li>✦ Jardín tropical</li>
+                            <li>✦ Mayordomo 24h</li>
+                        </ul>
+                        <div class="room-price">$1,450<span>/noche</span></div>
+                        <button class="book-btn">Reservar</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <div class="room-image">
+                        <div class="room-placeholder">
+                            <span>PRESIDENTIAL</span>
+                        </div>
+                    </div>
+                    <div class="room-info">
+                        <div class="room-type">
+                            <div class="room-icon">👑</div>
+                            <h3>Presidential Suite</h3>
+                        </div>
+                        <ul class="room-features">
+                            <li>✦ 200m² de lujo</li>
+                            <li>✦ Comedor privado</li>
+                            <li>✦ Spa en suite</li>
+                            <li>✦ Chef personal</li>
+                        </ul>
+                        <div class="room-price">$3,200<span>/noche</span></div>
+                        <button class="book-btn">Reservar</button>
+                    </div>
+                </div>
+
+                <div class="room-card">
+                    <div class="room-image">
+                        <div class="room-placeholder">
+                            <span>AZURE PENTHOUSE</span>
+                        </div>
+                    </div>
+                    <div class="room-info">
+                        <div class="room-type">
+                            <div class="room-icon">💎</div>
+                            <h3>Azure Penthouse</h3>
+                        </div>
+                        <ul class="room-features">
+                            <li>✦ Último piso exclusivo</li>
+                            <li>✦ Rooftop infinity pool</li>
+                            <li>✦ 360° vistas al mar</li>
+                            <li>✦ Experiencia ultra VIP</li>
+                        </ul>
+                        <div class="room-price">$5,800<span>/noche</span></div>
+                        <button class="book-btn">Reservar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>AZURE BAY</h3>
+                <p>Un santuario de paz y elegancia en el corazón del Caribe. 
+                   Donde cada detalle está diseñado para crear recuerdos eternos.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Resort</h4>
+                <ul>
+                    <li><a href="#">Habitaciones</a></li>
+                    <li><a href="#">Restaurantes</a></li>
+                    <li><a href="#">Spa</a></li>
+                    <li><a href="#">Actividades</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Información</h4>
+                <ul>
+                    <li><a href="#">Sobre Nosotros</a></li>
+                    <li><a href="#">Sostenibilidad</a></li>
+                    <li><a href="#">Trabaja con Nosotros</a></li>
+                    <li><a href="#">Prensa</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="#">reservas@azurebay.com</a></li>
+                    <li><a href="#">+1 (809) 555-0123</a></li>
+                    <li><a href="#">Punta Cana, República Dominicana</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Azure Bay Resort. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Registro de ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // ===== FONDO DE AGUA GLOBAL =====
+        const waterBg = document.getElementById('globalWaterBg');
+        
+        // Activar inmediatamente con fade suave
+        setTimeout(() => {
+            waterBg.classList.add('active');
+        }, 100);
+
+        // Mantener durante todas las secciones hasta habitaciones
+        ScrollTrigger.create({
+            trigger: ".prezi-section",
+            start: "top top",
+            end: "bottom bottom",
+            onLeave: () => {
+                gsap.to(waterBg, { opacity: 0, duration: 0.5 });
+            },
+            onEnterBack: () => {
+                gsap.to(waterBg, { opacity: 1, duration: 0.5 });
+            }
+        });
+
+        ScrollTrigger.create({
+            trigger: ".hotel-info-section",
+            start: "top bottom",
+            end: "bottom top",
+            onEnter: () => gsap.to(waterBg, { opacity: 1, duration: 0.5 }),
+            onLeave: () => gsap.to(waterBg, { opacity: 0, duration: 0.5 }),
+            onEnterBack: () => gsap.to(waterBg, { opacity: 1, duration: 0.5 }),
+            onLeaveBack: () => gsap.to(waterBg, { opacity: 1, duration: 0.5 })
+        });
+
+        ScrollTrigger.create({
+            trigger: ".testimonials-section",
+            start: "top bottom",
+            end: "bottom top",
+            onEnter: () => gsap.to(waterBg, { opacity: 1, duration: 0.5 }),
+            onLeave: () => gsap.to(waterBg, { opacity: 0, duration: 0.5 }),
+            onEnterBack: () => gsap.to(waterBg, { opacity: 1, duration: 0.5 }),
+            onLeaveBack: () => gsap.to(waterBg, { opacity: 1, duration: 0.5 })
+        });
+
+        ScrollTrigger.create({
+            trigger: ".services-section",
+            start: "top bottom",
+            end: "bottom top",
+            onEnter: () => gsap.to(waterBg, { opacity: 1, duration: 0.5 }),
+            onLeave: () => gsap.to(waterBg, { opacity: 0, duration: 0.5 }),
+            onEnterBack: () => gsap.to(waterBg, { opacity: 1, duration: 0.5 }),
+            onLeaveBack: () => gsap.to(waterBg, { opacity: 1, duration: 0.5 })
+        });
+
+        // ===== EFECTO PREZI =====
+        const preziTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".prezi-section",
+                start: "top top",
+                end: "bottom bottom",
+                scrub: 1,
+                pin: ".prezi-container",
+                anticipatePin: 1
+            }
+        });
+
+        preziTl.to(".bedroom-layer", {
+            scale: 8,
+            opacity: 0,
+            duration: 0.6,
+            ease: "power2.inOut"
+        }, 0);
+
+        preziTl.to(".picture-frame", {
+            scale: 15,
+            duration: 0.6,
+            ease: "power2.inOut"
+        }, 0);
+
+        preziTl.to(".hero-text", {
+            opacity: 0,
+            y: -50,
+            duration: 0.3
+        }, 0);
+
+        preziTl.to(".scroll-indicator", {
+            opacity: 0,
+            duration: 0.2
+        }, 0);
+
+        // ===== INFO DEL HOTEL =====
+        gsap.to(".hotel-content", {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            scrollTrigger: {
+                trigger: ".hotel-info-section",
+                start: "top 60%",
+                end: "top 30%",
+                scrub: 1
+            }
+        });
+
+        // ===== TESTIMONIOS =====
+        gsap.utils.toArray('.glass-card').forEach((card, i) => {
+            gsap.to(card, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                delay: i * 0.2,
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        // ===== SERVICIOS =====
+        gsap.utils.toArray('.service-item').forEach((item, i) => {
+            gsap.to(item, {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                delay: i * 0.1,
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        // ===== SISTEMA DE ESTRELLAS - CANVAS =====
+        const starsCanvas = document.getElementById('stars-canvas');
+        const ctx = starsCanvas.getContext('2d');
+        
+        let stars = [];
+        let mouse = { x: null, y: null, radius: 150 };
+        let animationId;
+
+        function resizeCanvas() {
+            starsCanvas.width = window.innerWidth;
+            starsCanvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Clase Estrella
+        class Star {
+            constructor() {
+                this.x = Math.random() * starsCanvas.width;
+                this.y = Math.random() * starsCanvas.height;
+                this.size = Math.random() * 1.5 + 0.5; // Muy pequeñas (0.5-2px)
+                this.baseSize = this.size;
+                this.opacity = Math.random() * 0.8 + 0.2;
+                this.baseOpacity = this.opacity;
+                this.twinkleSpeed = Math.random() * 0.02 + 0.005;
+                this.twinklePhase = Math.random() * Math.PI * 2;
+                
+                // Color: blanco, azul muy claro, o dorado pálido
+                const colorRand = Math.random();
+                if (colorRand < 0.7) {
+                    this.color = '255, 255, 255';
+                } else if (colorRand < 0.9) {
+                    this.color = '200, 220, 255';
+                } else {
+                    this.color = '255, 240, 200';
+                }
+            }
+
+            update() {
+                // Efecto de brillo base (twinkle)
+                this.twinklePhase += this.twinkleSpeed;
+                const twinkle = Math.sin(this.twinklePhase) * 0.3 + 0.7;
+                
+                // Distancia al mouse
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Si el mouse está cerca, reducir brillo (efecto atenuación)
+                if (distance < mouse.radius) {
+                    const fadeAmount = (mouse.radius - distance) / mouse.radius;
+                    this.opacity = this.baseOpacity * twinkle * (1 - fadeAmount * 0.8);
+                    this.size = this.baseSize * (1 - fadeAmount * 0.5);
+                } else {
+                    this.opacity = this.baseOpacity * twinkle;
+                    this.size = this.baseSize;
+                }
+
+                this.draw();
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                
+                // Glow effect con blur
+                ctx.shadowBlur = this.size * 2;
+                ctx.shadowColor = `rgba(${this.color}, ${this.opacity})`;
+                
+                ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
+            }
+        }
+
+        // Crear estrellas
+        function initStars() {
+            stars = [];
+            const numberOfStars = Math.floor((starsCanvas.width * starsCanvas.height) / 3000); // Densidad alta
+            for (let i = 0; i < numberOfStars; i++) {
+                stars.push(new Star());
+            }
+        }
+
+        // Animación
+        function animateStars() {
+            ctx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+            
+            stars.forEach(star => {
+                star.update();
+            });
+            
+            animationId = requestAnimationFrame(animateStars);
+        }
+
+        // Mouse events
+        window.addEventListener('mousemove', (e) => {
+            const rect = starsCanvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+
+        window.addEventListener('mouseleave', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // Iniciar estrellas cuando se vea la sección
+        ScrollTrigger.create({
+            trigger: ".rooms-section",
+            start: "top 80%",
+            onEnter: () => {
+                initStars();
+                animateStars();
+            },
+            onLeave: () => {
+                cancelAnimationFrame(animationId);
+            },
+            onEnterBack: () => {
+                animateStars();
+            },
+            onLeaveBack: () => {
+                cancelAnimationFrame(animationId);
+            }
+        });
+
+        // ===== NAVEGACIÓN =====
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.nav-floating');
+            if (window.scrollY > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Animación inicial
+        gsap.from(".logo", {
+            opacity: 0,
+            y: -20,
+            duration: 1,
+            delay: 0.5
+        });
+
+        gsap.from(".nav-links li", {
+            opacity: 0,
+            y: -20,
+            duration: 0.8,
+            stagger: 0.1,
+            delay: 0.7
+        });
+
+        gsap.from(".hero-text h1", {
+            opacity: 0,
+            y: 30,
+            duration: 1.2,
+            delay: 1
+        });
+
+        gsap.from(".hero-text p", {
+            opacity: 0,
+            y: 20,
+            duration: 1,
+            delay: 1.3
+        });
+    </script>
+
+</body>
+</html>

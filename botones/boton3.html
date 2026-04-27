@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botón Neumorphism</title>
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e0e5ec;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .btn-neumorph {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            padding: 20px 40px;
+            background: #e0e5ec;
+            border: none;
+            border-radius: 20px;
+            color: #4a5568;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 
+                10px 10px 20px rgba(163,177,198,0.7),
+                -10px -10px 20px rgba(255,255,255,0.8);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+
+        .btn-neumorph::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .btn-neumorph:hover {
+            box-shadow: 
+                14px 14px 28px rgba(163,177,198,0.8),
+                -14px -14px 28px rgba(255,255,255,0.9);
+            transform: translateY(-3px);
+            color: #e91e63;
+        }
+
+        .btn-neumorph:hover::before {
+            opacity: 1;
+        }
+
+        .btn-neumorph:active {
+            box-shadow: 
+                inset 8px 8px 16px rgba(163,177,198,0.7),
+                inset -8px -8px 16px rgba(255,255,255,0.8);
+            transform: translateY(0);
+        }
+
+        .btn-neumorph i {
+            font-size: 1.4rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-neumorph:hover i {
+            transform: scale(1.25) rotate(10deg);
+            color: #e91e63;
+        }
+    </style>
+</head>
+<body>
+    <button class="btn-neumorph">
+        <i class="ph ph-heart"></i>
+        <span>Me gusta</span>
+    </button>
+</body>
+</html>

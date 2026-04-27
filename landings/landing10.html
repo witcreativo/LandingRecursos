@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wit Creativo - Chroma</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            background: #0f0f0f;
+            color: #ffffff;
+        }
+
+        .banner-container {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            min-height: 600px;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #1a1a1a;
+            border: 3px solid #333;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .banner-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 400px;
+            }
+        }
+
+        .left-panel {
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            border-right: 3px solid #333;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b4e 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        @media (max-width: 768px) {
+            .left-panel {
+                border-right: none;
+                border-bottom: 3px solid #333;
+            }
+        }
+
+        .grid-cell {
+            padding: 2rem;
+            border-bottom: 2px solid #333;
+            position: relative;
+            z-index: 1;
+        }
+
+        .grid-cell:last-child {
+            border-bottom: none;
+        }
+
+        .logo-cell {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(90deg, #fbbf24, #f59e0b, #ec4899, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+            background-size: 300% 300%;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .tagline {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+            color: #d8b4fe;
+        }
+
+        .headline-cell h1 {
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            font-weight: 700;
+            line-height: 0.95;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 25%, #fbbf24 50%, #f59e0b 75%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.3));
+        }
+
+        .headline-cell p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            max-width: 90%;
+            color: #e9d5ff;
+        }
+
+        .stats-cell {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            align-content: end;
+        }
+
+        .stat-item {
+            border-top: 2px solid rgba(139, 92, 246, 0.3);
+            padding-top: 1rem;
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.25rem;
+            color: #fbbf24;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.7;
+            color: #c4b5fd;
+        }
+
+        .cta-cell {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .cta-button {
+            background: linear-gradient(90deg, #f59e0b, #ef4444, #ec4899);
+            background-size: 200% 200%;
+            color: #ffffff;
+            padding: 1rem 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Space Grotesk', sans-serif;
+            position: relative;
+            overflow: hidden;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .secondary-link {
+            font-size: 0.875rem;
+            text-decoration: underline;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: all 0.3s;
+            color: #fbbf24;
+        }
+
+        .secondary-link:hover {
+            opacity: 1;
+            color: #fde68a;
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+        }
+
+        #three-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 600px;
+            overflow: hidden;
+            cursor: crosshair;
+            background: #0f0f0f;
+        }
+
+        .interaction-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+            color: #fbbf24;
+            backdrop-filter: blur(10px);
+        }
+
+        .interaction-hint.visible {
+            opacity: 1;
+        }
+
+        .color-indicator {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 0.5rem;
+            pointer-events: none;
+        }
+
+        .color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="banner-container">
+        <div class="left-panel">
+            <div class="grid-cell logo-cell">
+                <span class="logo">Wit Creativo</span>
+                <span class="tagline">Agencia Digital</span>
+            </div>
+
+            <div class="grid-cell headline-cell">
+                <h1>Chroma<br>Wave</h1>
+                <p>Explosión de color y movimiento. Creamos experiencias digitales que vibran con energía y capturan la atención al instante.</p>
+            </div>
+
+            <div class="grid-cell stats-cell">
+                <div class="stat-item">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Posibilidades</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">360°</span>
+                    <span class="stat-label">Creatividad</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Energía</span>
+                </div>
+            </div>
+
+            <div class="grid-cell cta-cell">
+                <button class="cta-button">Desatar Color</button>
+                <span class="secondary-link">Ver Explosión →</span>
+            </div>
+        </div>
+
+        <div id="three-container">
+            <div class="color-indicator" id="color-indicator">
+                <div class="color-dot" style="background: #8b5cf6;"></div>
+                <div class="color-dot" style="background: #ec4899;"></div>
+                <div class="color-dot" style="background: #ef4444;"></div>
+                <div class="color-dot" style="background: #fbbf24;"></div>
+            </div>
+            <div class="interaction-hint" id="hint">Mueve el ratón · Click para explosión cromática</div>
+        </div>
+    </div>
+
+    <script>
+        // Three.js Chroma Wave Scene - Dynamic colorful waves
+        const container = document.getElementById('three-container');
+        const hint = document.getElementById('hint');
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x0f0f0f, 5, 30);
+
+        const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.set(0, 8, 15);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        // Vibrant color palette: purples, pinks, reds, yellows
+        const colorPalette = [
+            new THREE.Color(0x8b5cf6), // Violet
+            new THREE.Color(0xa855f7), // Purple
+            new THREE.Color(0xd946ef), // Fuchsia
+            new THREE.Color(0xec4899), // Pink
+            new THREE.Color(0xf43f5e), // Rose
+            new THREE.Color(0xef4444), // Red
+            new THREE.Color(0xf97316), // Orange
+            new THREE.Color(0xf59e0b), // Amber
+            new THREE.Color(0xfbbf24), // Yellow
+            new THREE.Color(0xfcd34d)  // Light yellow
+        ];
+
+        // Create multiple wave layers
+        const waveLayers = [];
+        const layerCount = 5;
+
+        for (let layer = 0; layer < layerCount; layer++) {
+            const geometry = new THREE.PlaneGeometry(30, 20, 80, 60);
+            const positions = geometry.attributes.position;
+
+            // Store initial positions
+            const initialPositions = [];
+            for (let i = 0; i < positions.count; i++) {
+                initialPositions.push({
+                    x: positions.getX(i),
+                    y: positions.getY(i),
+                    z: positions.getZ(i)
+                });
+            }
+
+            // Create gradient material
+            const material = new THREE.MeshBasicMaterial({
+                color: colorPalette[layer * 2 % colorPalette.length],
+                wireframe: true,
+                transparent: true,
+                opacity: 0.6 - (layer * 0.08),
+                side: THREE.DoubleSide
+            });
+
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.rotation.x = -Math.PI / 2.5;
+            mesh.position.y = layer * 0.8 - 2;
+            mesh.position.z = -layer * 2;
+
+            mesh.userData = {
+                layer: layer,
+                initialPositions: initialPositions,
+                speed: 0.5 + layer * 0.3,
+                amplitude: 1.5 + layer * 0.5,
+                frequency: 0.3 + layer * 0.1,
+                phase: layer * Math.PI / 3,
+                baseColor: colorPalette[layer * 2 % colorPalette.length].clone()
+            };
+
+            waveLayers.push(mesh);
+            scene.add(mesh);
+        }
+
+        // Add floating particles
+        const particleCount = 800;
+        const particleGeometry = new THREE.BufferGeometry();
+        const particlePositions = new Float32Array(particleCount * 3);
+        const particleColors = new Float32Array(particleCount * 3);
+        const particleSizes = new Float32Array(particleCount);
+
+        for (let i = 0; i < particleCount; i++) {
+            particlePositions[i * 3] = (Math.random() - 0.5) * 25;
+            particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 15;
+            particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 15;
+
+            const color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+            particleColors[i * 3] = color.r;
+            particleColors[i * 3 + 1] = color.g;
+            particleColors[i * 3 + 2] = color.b;
+
+            particleSizes[i] = 0.1 + Math.random() * 0.3;
+        }
+
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+        particleGeometry.setAttribute('size', new THREE.BufferAttribute(particleSizes, 1));
+
+        const particleMaterial = new THREE.PointsMaterial({
+            size: 0.2,
+            vertexColors: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        // Create glow texture
+        const canvas = document.createElement('canvas');
+        canvas.width = 32;
+        canvas.height = 32;
+        const ctx = canvas.getContext('2d');
+        const grad = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+        grad.addColorStop(0, 'rgba(255,255,255,1)');
+        grad.addColorStop(0.4, 'rgba(255,255,255,0.5)');
+        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 32, 32);
+        particleMaterial.map = new THREE.CanvasTexture(canvas);
+
+        const particles = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particles);
+
+        // Add dynamic lights
+        const lights = [];
+        const lightColors = [0x8b5cf6, 0xec4899, 0xf59e0b];
+
+        for (let i = 0; i < 3; i++) {
+            const light = new THREE.PointLight(lightColors[i], 2, 20);
+            light.position.set(
+                (Math.random() - 0.5) * 10,
+                5 + Math.random() * 5,
+                (Math.random() - 0.5) * 10
+            );
+            lights.push(light);
+            scene.add(light);
+        }
+
+        // Mouse interaction
+        const mouse = new THREE.Vector2();
+        const targetMouse = new THREE.Vector2();
+        let isExploding = false;
+        let explosionTime = 0;
+
+        function onMouseMove(event) {
+            const rect = container.getBoundingClientRect();
+            mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+        }
+
+        function triggerExplosion() {
+            isExploding = true;
+            explosionTime = 0;
+
+            // Flash effect
+            waveLayers.forEach((mesh, index) => {
+                const originalOpacity = mesh.material.opacity;
+                mesh.material.opacity = 1;
+
+                gsap.to(mesh.material, {
+                    opacity: originalOpacity,
+                    duration: 0.5,
+                    delay: index * 0.05
+                });
+
+                // Random color shift
+                const newColor = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+                gsap.to(mesh.material.color, {
+                    r: newColor.r,
+                    g: newColor.g,
+                    b: newColor.b,
+                    duration: 0.3
+                });
+            });
+
+            // Explode particles
+            const positions = particles.geometry.attributes.position.array;
+            for (let i = 0; i < particleCount; i++) {
+                const idx = i * 3;
+                const explosionForce = 5 + Math.random() * 10;
+                const angle = Math.random() * Math.PI * 2;
+                const elevation = (Math.random() - 0.5) * Math.PI;
+
+                gsap.to(positions, {
+                    [idx]: positions[idx] + Math.cos(angle) * Math.cos(elevation) * explosionForce,
+                    [idx + 1]: positions[idx + 1] + Math.sin(elevation) * explosionForce,
+                    [idx + 2]: positions[idx + 2] + Math.sin(angle) * Math.cos(elevation) * explosionForce,
+                    duration: 0.8,
+                    ease: "power2.out",
+                    onUpdate: () => particles.geometry.attributes.position.needsUpdate = true
+                });
+            }
+
+            hint.textContent = '¡Explosión Cromática!';
+            hint.classList.add('visible');
+            setTimeout(() => {
+                hint.classList.remove('visible');
+                isExploding = false;
+            }, 1500);
+        }
+
+        container.addEventListener('mousemove', onMouseMove);
+        container.addEventListener('click', triggerExplosion);
+        container.addEventListener('mouseleave', () => {
+            mouse.x = 0;
+            mouse.y = 0;
+        });
+
+        // Touch support
+        container.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const rect = container.getBoundingClientRect();
+            const touch = e.touches[0];
+            mouse.x = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
+        }, { passive: false });
+
+        container.addEventListener('touchstart', triggerExplosion);
+
+        // Show hint
+        setTimeout(() => {
+            hint.classList.add('visible');
+            setTimeout(() => hint.classList.remove('visible'), 3000);
+        }, 1000);
+
+        // Animation loop
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const time = clock.getElapsedTime();
+            const delta = clock.getDelta();
+
+            targetMouse.lerp(mouse, 0.05);
+
+            // Animate wave layers
+            waveLayers.forEach((mesh) => {
+                const positions = mesh.geometry.attributes.position;
+                const initial = mesh.userData.initialPositions;
+
+                for (let i = 0; i < positions.count; i++) {
+                    const init = initial[i];
+
+                    // Complex wave formula combining multiple sine waves
+                    const wave1 = Math.sin(init.x * mesh.userData.frequency + time * mesh.userData.speed + mesh.userData.phase);
+                    const wave2 = Math.cos(init.y * mesh.userData.frequency * 0.5 + time * mesh.userData.speed * 0.8);
+                    const wave3 = Math.sin((init.x + init.y) * 0.3 + time * mesh.userData.speed * 1.2);
+
+                    // Mouse influence
+                    const mouseInfluence = Math.sin(targetMouse.x * Math.PI) * Math.cos(targetMouse.y * Math.PI);
+                    const mouseWave = Math.sin(init.x * 0.5 + targetMouse.x * 3) * Math.cos(init.y * 0.5 + targetMouse.y * 3) * mouseInfluence;
+
+                    const z = (wave1 + wave2 * 0.5 + wave3 * 0.3 + mouseWave) * mesh.userData.amplitude;
+
+                    positions.setZ(i, z);
+                }
+
+                positions.needsUpdate = true;
+
+                // Color cycling
+                const hueShift = (time * 0.1 + mesh.userData.layer * 0.1) % 1;
+                const baseColor = mesh.userData.baseColor;
+                const hsl = {};
+                baseColor.getHSL(hsl);
+                mesh.material.color.setHSL((hsl.h + hueShift) % 1, hsl.s, hsl.l);
+            });
+
+            // Animate particles
+            if (!isExploding) {
+                const positions = particles.geometry.attributes.position.array;
+                for (let i = 0; i < particleCount; i++) {
+                    const idx = i * 3;
+
+                    // Gentle floating
+                    positions[idx + 1] += Math.sin(time * 2 + i * 0.1) * 0.02;
+                    positions[idx] += Math.cos(time * 1.5 + i * 0.05) * 0.01;
+
+                    // Return to bounds
+                    if (Math.abs(positions[idx]) > 15) positions[idx] *= 0.99;
+                    if (Math.abs(positions[idx + 1]) > 10) positions[idx + 1] *= 0.99;
+                    if (Math.abs(positions[idx + 2]) > 10) positions[idx + 2] *= 0.99;
+                }
+                particles.geometry.attributes.position.needsUpdate = true;
+            }
+
+            // Animate lights
+            lights.forEach((light, index) => {
+                const angle = time * 0.5 + (index * Math.PI * 2 / 3);
+                light.position.x = Math.sin(angle) * 8;
+                light.position.z = Math.cos(angle) * 8;
+                light.position.y = 5 + Math.sin(time * 0.3 + index) * 3;
+
+                // Color cycle
+                const colorIndex = Math.floor((time * 0.2 + index * 0.3) * colorPalette.length) % colorPalette.length;
+                light.color.lerp(colorPalette[colorIndex], 0.02);
+            });
+
+            // Rotate particles slowly
+            particles.rotation.y = time * 0.05;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+        });
+    </script>
+</body>
+</html>

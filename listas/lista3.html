@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Items con Hover</title>
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #faf9f7, #f0f0f0);
+            font-family: 'Outfit', sans-serif;
+            padding: 60px 20px;
+        }
+
+        .list-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .list-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .list-header h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d2d2d;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+
+        .list-header p {
+            color: #6b6b6b;
+            font-size: 0.95rem;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 24px;
+            background: #fff;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            border: 2px solid transparent;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        .list-item:nth-child(1) { animation-delay: 0.1s; }
+        .list-item:nth-child(2) { animation-delay: 0.2s; }
+        .list-item:nth-child(3) { animation-delay: 0.3s; }
+        .list-item:nth-child(4) { animation-delay: 0.4s; }
+        .list-item:nth-child(5) { animation-delay: 0.5s; }
+        .list-item:nth-child(6) { animation-delay: 0.6s; }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .list-item:hover {
+            transform: translateX(12px) translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            border-color: rgba(0,188,212,0.2);
+        }
+
+        .list-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #00838f;
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+        }
+
+        .list-item:hover .list-number {
+            background: linear-gradient(135deg, #00bcd4, #4caf50);
+            color: #fff;
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .list-content {
+            flex: 1;
+        }
+
+        .list-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #2d2d2d;
+            margin-bottom: 4px;
+            transition: color 0.3s;
+        }
+
+        .list-item:hover .list-title {
+            color: #00838f;
+        }
+
+        .list-desc {
+            font-size: 0.85rem;
+            color: #9e9e9e;
+        }
+
+        .list-arrow {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--crema);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--texto-terciario);
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .list-item:hover .list-arrow {
+            opacity: 1;
+            transform: translateX(0);
+            background: linear-gradient(135deg, #00bcd4, #4caf50);
+            color: #fff;
+        }
+
+        /* Barra de progreso decorativa */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--borde-suave);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #00bcd4, #4caf50);
+            transition: width 0.8s ease;
+            width: 0;
+        }
+
+        .list-item:hover .progress-fill {
+            width: 100%;
+        }
+
+        .list-item:nth-child(2):hover .list-number { background: linear-gradient(135deg, #4caf50, #8bc34a); }
+        .list-item:nth-child(2):hover .list-title { color: #4caf50; }
+        .list-item:nth-child(2):hover .list-arrow { background: linear-gradient(135deg, #4caf50, #8bc34a); }
+
+        .list-item:nth-child(3):hover .list-number { background: linear-gradient(135deg, #ff9800, #ffc107); }
+        .list-item:nth-child(3):hover .list-title { color: #ff9800; }
+        .list-item:nth-child(3):hover .list-arrow { background: linear-gradient(135deg, #ff9800, #ffc107); }
+
+        .list-item:nth-child(4):hover .list-number { background: linear-gradient(135deg, #e91e63, #f06292); }
+        .list-item:nth-child(4):hover .list-title { color: #e91e63; }
+        .list-item:nth-child(4):hover .list-arrow { background: linear-gradient(135deg, #e91e63, #f06292); }
+
+        .list-item:nth-child(5):hover .list-number { background: linear-gradient(135deg, #9c27b0, #ce93d8); }
+        .list-item:nth-child(5):hover .list-title { color: #9c27b0; }
+        .list-item:nth-child(5):hover .list-arrow { background: linear-gradient(135deg, #9c27b0, #ce93d8); }
+
+        .list-item:nth-child(6):hover .list-number { background: linear-gradient(135deg, #3f51b5, #7986cb); }
+        .list-item:nth-child(6):hover .list-title { color: #3f51b5; }
+        .list-item:nth-child(6):hover .list-arrow { background: linear-gradient(135deg, #3f51b5, #7986cb); }
+    </style>
+</head>
+<body>
+    <div class="list-container">
+        <div class="list-header">
+            <h2>Servicios Destacados</h2>
+            <p>Lista con números animados, hover escalonado y barra de progreso</p>
+        </div>
+
+        <div class="list-item">
+            <div class="list-number">01</div>
+            <div class="list-content">
+                <div class="list-title">Diseño Web</div>
+                <div class="list-desc">Webs modernas y responsivas con animaciones fluidas</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+            <div class="list-arrow"><i class="ph ph-arrow-right"></i></div>
+        </div>
+
+        <div class="list-item">
+            <div class="list-number">02</div>
+            <div class="list-content">
+                <div class="list-title">WordPress & Elementor</div>
+                <div class="list-desc">Sitios personalizados con los mejores page builders</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+            <div class="list-arrow"><i class="ph ph-arrow-right"></i></div>
+        </div>
+
+        <div class="list-item">
+            <div class="list-number">03</div>
+            <div class="list-content">
+                <div class="list-title">E-commerce</div>
+                <div class="list-desc">Tiendas online optimizadas para conversión</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+            <div class="list-arrow"><i class="ph ph-arrow-right"></i></div>
+        </div>
+
+        <div class="list-item">
+            <div class="list-number">04</div>
+            <div class="list-content">
+                <div class="list-title">SEO & Marketing</div>
+                <div class="list-desc">Posicionamiento web y estrategias de crecimiento</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+            <div class="list-arrow"><i class="ph ph-arrow-right"></i></div>
+        </div>
+
+        <div class="list-item">
+            <div class="list-number">05</div>
+            <div class="list-content">
+                <div class="list-title">Branding</div>
+                <div class="list-desc">Identidad visual completa para tu marca</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+            <div class="list-arrow"><i class="ph ph-arrow-right"></i></div>
+        </div>
+
+        <div class="list-item">
+            <div class="list-number">06</div>
+            <div class="list-content">
+                <div class="list-title">Mantenimiento</div>
+                <div class="list-desc">Soporte técnico continuo y actualizaciones</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+            </div>
+            <div class="list-arrow"><i class="ph ph-arrow-right"></i></div>
+        </div>
+    </div>
+</body>
+</html>

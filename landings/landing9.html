@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Wit Creativo - Nexus Dimension | Experiencia Espectacular</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            background: #000000;
+            color: #ffffff;
+        }
+
+        .banner-container {
+            display: grid;
+            grid-template-columns: 38% 62%;
+            min-height: 700px;
+            max-width: 1600px;
+            margin: 0 auto;
+            background: #000000;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 80px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .banner-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 500px;
+            }
+        }
+
+        .left-panel {
+            display: grid;
+            grid-template-rows: auto auto 1fr auto;
+            background: linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(10,10,10,0.98) 100%);
+            backdrop-filter: blur(0px);
+            position: relative;
+            z-index: 10;
+            border-right: 1px solid rgba(255,215,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid rgba(255,215,0,0.3);
+            }
+        }
+
+        .grid-cell {
+            padding: 2rem 2.5rem;
+            border-bottom: 1px solid rgba(255,215,0,0.15);
+        }
+
+        .grid-cell:last-child {
+            border-bottom: none;
+        }
+
+        .logo-cell {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #FFD700, #FFA500, #FF4500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(255,215,0,0.3);
+        }
+
+        .tagline {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            opacity: 0.8;
+            color: #FFD700;
+            font-weight: 500;
+        }
+
+        .headline-cell h1 {
+            font-size: clamp(2.8rem, 5.5vw, 4.8rem);
+            font-weight: 800;
+            line-height: 0.92;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.2rem;
+            background: linear-gradient(135deg, #FFFFFF, #FFD700, #FF8C00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .headline-cell p {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.8;
+            max-width: 90%;
+            color: #dddddd;
+            font-weight: 400;
+        }
+
+        .stats-cell {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            align-content: end;
+        }
+
+        .stat-item {
+            border-top: 2px solid #FFD700;
+            padding-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            border-top-color: #FFFFFF;
+            transform: translateY(-3px);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 0.25rem;
+            background: linear-gradient(135deg, #FFD700, #FFFFFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.7;
+            color: #FFD700;
+        }
+
+        .cta-cell {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000000;
+            padding: 1rem 2.2rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            font-family: 'Space Grotesk', sans-serif;
+            border-radius: 40px;
+            box-shadow: 0 0 20px rgba(255,215,0,0.4);
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 0 35px rgba(255,215,0,0.7);
+            background: linear-gradient(135deg, #FFE44D, #FFB347);
+        }
+
+        .secondary-link {
+            font-size: 0.85rem;
+            text-decoration: none;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: all 0.3s;
+            color: #FFD700;
+            border-bottom: 1px solid rgba(255,215,0,0.5);
+            padding-bottom: 2px;
+        }
+
+        .secondary-link:hover {
+            opacity: 1;
+            color: #FFFFFF;
+            border-bottom-color: #FFFFFF;
+        }
+
+        #three-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 700px;
+            overflow: hidden;
+            cursor: crosshair;
+            background: radial-gradient(circle at center, #0a0a0a 0%, #000000 100%);
+        }
+
+        .interaction-hint {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.75);
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,215,0,0.6);
+            color: #FFD700;
+            white-space: nowrap;
+            font-weight: 600;
+            z-index: 20;
+            font-family: monospace;
+        }
+
+        .interaction-hint.visible {
+            opacity: 1;
+        }
+
+        .shape-indicator {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            background: rgba(0,0,0,0.6);
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,215,0,0.4);
+            color: #FFD700;
+            font-weight: 500;
+            z-index: 20;
+            pointer-events: none;
+            font-family: monospace;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; text-shadow: 0 0 0px #FFD700; }
+            100% { opacity: 1; text-shadow: 0 0 15px #FFD700; }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner-container">
+        <div class="left-panel">
+            <div class="grid-cell logo-cell">
+                <span class="logo">✦ WIT CREATIVO ✦</span>
+                <span class="tagline">DIMENSION DIGITAL</span>
+            </div>
+
+            <div class="grid-cell headline-cell">
+                <h1>NEXUS<br>PARTICLE</h1>
+                <p>10,000 almas lumínicas danzan al ritmo de tu interacción. Una sinfonía visual única que redefine lo espectacular.</p>
+            </div>
+
+            <div class="grid-cell stats-cell">
+                <div class="stat-item">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">Dinamismo</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">144Hz</span>
+                    <span class="stat-label">Fluidez</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4D</span>
+                    <span class="stat-label">Inmersión</span>
+                </div>
+            </div>
+
+            <div class="grid-cell cta-cell">
+                <button class="cta-button">⚡ VIVE LA EXPERIENCIA ⚡</button>
+                <span class="secondary-link">✨ EXPLORAR GALAXIA ✨</span>
+            </div>
+        </div>
+
+        <div id="three-container">
+            <div class="shape-indicator" id="shape-indicator">🌀 NEBULOSA ESPIRAL 🌀</div>
+            <div class="interaction-hint" id="hint">🌀 MOUSE = FLUJO DE ENERGÍA · CLICK = SUPERNOVA · SCROLL = CAMBIO DE DIMENSIÓN 🌀</div>
+        </div>
+    </div>
+
+    <script>
+        // ==================================================
+        // SISTEMA DE PARTÍCULAS ESPECTACULAR - NEXUS DIMENSION
+        // ==================================================
+        const container = document.getElementById('three-container');
+        const hint = document.getElementById('hint');
+        const shapeIndicator = document.getElementById('shape-indicator');
+
+        // Configuración de escena con efectos de profundidad
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+        scene.fog = new THREE.FogExp2(0x000000, 0.003);
+
+        // Cámara con movimiento sutil
+        const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 200);
+        camera.position.set(0, 2, 24);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setClearColor(0x000000, 1);
+        container.appendChild(renderer.domElement);
+
+        // ========== 10,000 PARTÍCULAS PARA MÁXIMO ESPECTÁCULO ==========
+        const particleCount = 10000;
+        const geometry = new THREE.BufferGeometry();
+        
+        const positions = new Float32Array(particleCount * 3);
+        const originalPositions = new Float32Array(particleCount * 3);
+        const velocities = new Float32Array(particleCount * 3);
+        const colorsArray = new Float32Array(particleCount * 3);
+        const sizes = new Float32Array(particleCount);
+        const orbits = new Float32Array(particleCount); // factor orbital individual
+
+        // Paleta de colores cósmica: dorado, rubí, zafiro, esmeralda
+        const palette = [
+            new THREE.Color(0xffaa33), // oro
+            new THREE.Color(0xff6633), // ámbar
+            new THREE.Color(0xff3366), // rosa neón
+            new THREE.Color(0xaa44ff), // púrpura
+            new THREE.Color(0x33ccff), // cian
+            new THREE.Color(0x00ffaa), // menta
+            new THREE.Color(0xffaa00)  // ámbar brillante
+        ];
+
+        // ========== FORMAS DINÁMICAS MÁS ESPECTACULARES ==========
+        const shapes = [
+            { name: '🌀 NEBULOSA ESPIRAL', generator: generateSpiralNebula },
+            { name: '⭐ SUPERNOVA ESTELAR', generator: generateSupernova },
+            { name: '🌊 ONDA CUÁNTICA', generator: generateQuantumWave },
+            { name: '💎 CRISTAL DE LUZ', generator: generateCrystalCore },
+            { name: '🌀 VÓRTICE GALÁCTICO', generator: generateGalacticVortex },
+            { name: 'W ✦ PORTAL WIT', generator: generateWitPortal }
+        ];
+
+        let currentShapeIndex = 0;
+        let isExploded = false;
+        let morphingInProgress = false;
+        let timeAcc = 0;
+
+        // Generador: Espiral Nebulosa (espectacular)
+        function generateSpiralNebula(count, posArr, origArr) {
+            const arms = 3;
+            const radiusMax = 9;
+            const twist = 5.5;
+            for (let i = 0; i < count; i++) {
+                const t = Math.pow(Math.random(), 1.2);
+                const r = radiusMax * t;
+                const angleOffset = (i % arms) * (Math.PI * 2 / arms);
+                const angle = angleOffset + twist * t + Math.random() * 0.8;
+                const x = Math.cos(angle) * r;
+                const z = Math.sin(angle) * r;
+                const y = Math.sin(angle * 2) * 1.8 * (1 - t) + (Math.random() - 0.5) * 1.5;
+                const idx = i * 3;
+                posArr[idx] = x;
+                posArr[idx+1] = y;
+                posArr[idx+2] = z;
+                if(origArr) { origArr[idx]=x; origArr[idx+1]=y; origArr[idx+2]=z; }
+            }
+        }
+
+        // Generador: Supernova (explosión radial con anillos)
+        function generateSupernova(count, posArr, origArr) {
+            for (let i = 0; i < count; i++) {
+                const rad = Math.pow(Math.random(), 0.7) * 10;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                const x = rad * Math.sin(phi) * Math.cos(theta);
+                const y = rad * Math.sin(phi) * Math.sin(theta) * 0.6;
+                const z = rad * Math.cos(phi) * 0.8;
+                const idx = i * 3;
+                posArr[idx] = x;
+                posArr[idx+1] = y * 1.2;
+                posArr[idx+2] = z;
+                if(origArr) { origArr[idx]=x; origArr[idx+1]=y*1.2; origArr[idx+2]=z; }
+            }
+        }
+
+        // Generador: Onda Cuántica
+        function generateQuantumWave(count, posArr, origArr) {
+            for (let i = 0; i < count; i++) {
+                const u = Math.random() * Math.PI * 2;
+                const v = Math.random() * Math.PI * 2;
+                const r = 5 + Math.sin(u * 5) * 2;
+                const x = r * Math.cos(u);
+                const z = r * Math.sin(u);
+                const y = Math.sin(u * 4) * 2.5 + Math.cos(v * 3) * 1.2;
+                const idx = i * 3;
+                posArr[idx] = x;
+                posArr[idx+1] = y;
+                posArr[idx+2] = z;
+                if(origArr) { origArr[idx]=x; origArr[idx+1]=y; origArr[idx+2]=z; }
+            }
+        }
+
+        // Generador: Cristal de Luz
+        function generateCrystalCore(count, posArr, origArr) {
+            for (let i = 0; i < count; i++) {
+                const shape = Math.floor(Math.random() * 3);
+                let x, y, z;
+                if(shape === 0) {
+                    x = (Math.random() - 0.5) * 12;
+                    y = (Math.random() - 0.5) * 8;
+                    z = (Math.random() - 0.5) * 8;
+                } else if(shape === 1) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const rad = Math.random() * 7;
+                    x = Math.cos(angle) * rad;
+                    z = Math.sin(angle) * rad;
+                    y = (Math.random() - 0.5) * 7;
+                } else {
+                    x = (Math.random() - 0.5) * 10;
+                    z = (Math.random() - 0.5) * 10;
+                    y = Math.sin(x * 1.5) * 3 + Math.cos(z * 1.5) * 3;
+                }
+                const idx = i * 3;
+                posArr[idx] = x;
+                posArr[idx+1] = y;
+                posArr[idx+2] = z;
+                if(origArr) { origArr[idx]=x; origArr[idx+1]=y; origArr[idx+2]=z; }
+            }
+        }
+
+        // Generador: Vórtice Galáctico
+        function generateGalacticVortex(count, posArr, origArr) {
+            for (let i = 0; i < count; i++) {
+                const r = Math.pow(Math.random(), 0.8) * 9;
+                const angle = Math.random() * Math.PI * 2;
+                const spiralFactor = angle * 1.8;
+                const x = Math.cos(angle + spiralFactor) * r;
+                const z = Math.sin(angle + spiralFactor) * r;
+                const y = Math.sin(angle * 3) * 2.2 * (r / 9) + (Math.random() - 0.5) * 1.2;
+                const idx = i * 3;
+                posArr[idx] = x;
+                posArr[idx+1] = y;
+                posArr[idx+2] = z;
+                if(origArr) { origArr[idx]=x; origArr[idx+1]=y; origArr[idx+2]=z; }
+            }
+        }
+
+        // Generador: Portal WIT (logo W expansivo)
+        function generateWitPortal(count, posArr, origArr) {
+            for (let i = 0; i < count; i++) {
+                const t = i / count;
+                let x, y, z;
+                if(t < 0.25) {
+                    const local = t / 0.25;
+                    x = -5.5 + local * 3;
+                    y = 4 - local * 8;
+                    z = Math.sin(local * Math.PI) * 1.5;
+                } else if(t < 0.5) {
+                    const local = (t - 0.25) / 0.25;
+                    x = -2.5 + local * 3;
+                    y = -4 + local * 6;
+                    z = Math.cos(local * Math.PI) * 1.5;
+                } else if(t < 0.75) {
+                    const local = (t - 0.5) / 0.25;
+                    x = 0.5 + local * 3;
+                    y = 2 - local * 8;
+                    z = Math.sin(local * Math.PI * 1.5) * 1.5;
+                } else {
+                    const local = (t - 0.75) / 0.25;
+                    x = 3.5 + local * 2;
+                    y = -6 + local * 8;
+                    z = Math.cos(local * Math.PI) * 1.5;
+                }
+                x += (Math.random() - 0.5) * 1.2;
+                y += (Math.random() - 0.5) * 1.2;
+                z += (Math.random() - 0.5) * 2.2;
+                const idx = i * 3;
+                posArr[idx] = x;
+                posArr[idx+1] = y;
+                posArr[idx+2] = z;
+                if(origArr) { origArr[idx]=x; origArr[idx+1]=y; origArr[idx+2]=z; }
+            }
+        }
+
+        // Inicializar forma por defecto (espiral)
+        generateSpiralNebula(particleCount, positions, originalPositions);
+
+        // Asignar colores vibrantes + tamaños variables
+        for (let i = 0; i < particleCount; i++) {
+            velocities[i*3] = (Math.random() - 0.5) * 0.02;
+            velocities[i*3+1] = (Math.random() - 0.5) * 0.02;
+            velocities[i*3+2] = (Math.random() - 0.5) * 0.02;
+            
+            const colorPick = palette[Math.floor(Math.random() * palette.length)];
+            const brightness = 0.7 + Math.random() * 0.5;
+            colorsArray[i*3] = colorPick.r * brightness;
+            colorsArray[i*3+1] = colorPick.g * brightness;
+            colorsArray[i*3+2] = colorPick.b * brightness;
+            
+            sizes[i] = 0.22 + Math.random() * 0.35;
+            orbits[i] = Math.random() * Math.PI * 2;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
+        geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+        // Textura de partícula con glow extremo
+        const canvasTex = document.createElement('canvas');
+        canvasTex.width = 64;
+        canvasTex.height = 64;
+        const ctx = canvasTex.getContext('2d');
+        const gradGlow = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+        gradGlow.addColorStop(0, 'rgba(255, 200, 100, 1)');
+        gradGlow.addColorStop(0.3, 'rgba(255, 100, 50, 0.9)');
+        gradGlow.addColorStop(0.6, 'rgba(255, 50, 100, 0.5)');
+        gradGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = gradGlow;
+        ctx.fillRect(0, 0, 64, 64);
+        const particleTexture = new THREE.CanvasTexture(canvasTex);
+        
+        const particleMaterial = new THREE.PointsMaterial({
+            size: 0.38,
+            map: particleTexture,
+            vertexColors: true,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            transparent: true,
+            opacity: 0.98
+        });
+
+        const particleSystem = new THREE.Points(geometry, particleMaterial);
+        scene.add(particleSystem);
+
+        // Estrellas de fondo adicionales (campo estelar)
+        const starFieldGeo = new THREE.BufferGeometry();
+        const starCount = 1500;
+        const starPos = [];
+        for (let i = 0; i < starCount; i++) {
+            starPos.push((Math.random() - 0.5) * 200);
+            starPos.push((Math.random() - 0.5) * 100);
+            starPos.push((Math.random() - 0.5) * 80 - 40);
+        }
+        starFieldGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(starPos), 3));
+        const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.12, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending });
+        const starField = new THREE.Points(starFieldGeo, starMaterial);
+        scene.add(starField);
+
+        // Interacción mouse
+        const mouse = new THREE.Vector2(0, 0);
+        const targetMouse = new THREE.Vector2(0, 0);
+        
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+        });
+        container.addEventListener('mouseleave', () => { mouse.x = 0; mouse.y = 0; });
+        
+        container.addEventListener('touchmove', (e) => {
+            const rect = container.getBoundingClientRect();
+            const touch = e.touches[0];
+            mouse.x = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
+        }, { passive: false });
+
+        // Explosión / Supernova
+        function triggerSupernova() {
+            if (morphingInProgress) return;
+            isExploded = !isExploded;
+            
+            if (isExploded) {
+                for (let i = 0; i < particleCount; i++) {
+                    const idx = i * 3;
+                    const px = originalPositions[idx];
+                    const py = originalPositions[idx+1];
+                    const pz = originalPositions[idx+2];
+                    const dir = new THREE.Vector3(px, py, pz).normalize();
+                    const force = 14 + Math.random() * 22;
+                    gsap.to(positions, {
+                        [idx]: px + dir.x * force,
+                        [idx+1]: py + dir.y * force,
+                        [idx+2]: pz + dir.z * force,
+                        duration: 0.7 + Math.random() * 0.5,
+                        ease: "back.out(0.7)",
+                        onUpdate: () => geometry.attributes.position.needsUpdate = true
+                    });
+                }
+                hint.textContent = '💥 SUPERNOVA · CLICK PARA REINTEGRAR 💥';
+                hint.classList.add('visible');
+                setTimeout(() => hint.classList.remove('visible'), 2800);
+            } else {
+                morphToShape(currentShapeIndex, 1.1);
+                hint.textContent = '✨ REINTEGRACIÓN DIMENSIONAL ✨';
+                hint.classList.add('visible');
+                setTimeout(() => hint.classList.remove('visible'), 2800);
+            }
+        }
+        
+        container.addEventListener('click', triggerSupernova);
+        container.addEventListener('touchstart', triggerSupernova);
+
+        // Cambio de forma con scroll
+        let scrollBlock = false;
+        container.addEventListener('wheel', (e) => {
+            if (isExploded || morphingInProgress || scrollBlock) return;
+            scrollBlock = true;
+            const delta = e.deltaY > 0 ? 1 : -1;
+            currentShapeIndex = (currentShapeIndex + delta + shapes.length) % shapes.length;
+            morphToShape(currentShapeIndex, 1.3);
+            shapeIndicator.textContent = shapes[currentShapeIndex].name;
+            gsap.to(shapeIndicator, { scale: 1.1, duration: 0.2, yoyo: true, repeat: 1 });
+            setTimeout(() => { scrollBlock = false; }, 500);
+        });
+
+        function morphToShape(index, duration) {
+            if (morphingInProgress) return;
+            morphingInProgress = true;
+            const shape = shapes[index];
+            const newPos = new Float32Array(particleCount * 3);
+            const tempOrig = new Float32Array(particleCount * 3);
+            shape.generator(particleCount, newPos, tempOrig);
+            
+            const targets = {};
+            for (let i = 0; i < particleCount; i++) {
+                const idx = i * 3;
+                targets[idx] = newPos[idx];
+                targets[idx+1] = newPos[idx+1];
+                targets[idx+2] = newPos[idx+2];
+            }
+            gsap.to(positions, {
+                ...targets,
+                duration: duration,
+                ease: "elastic.out(1, 0.5)",
+                onUpdate: () => geometry.attributes.position.needsUpdate = true,
+                onComplete: () => {
+                    for (let i = 0; i < particleCount; i++) {
+                        const idx = i * 3;
+                        originalPositions[idx] = newPos[idx];
+                        originalPositions[idx+1] = newPos[idx+1];
+                        originalPositions[idx+2] = newPos[idx+2];
+                    }
+                    morphingInProgress = false;
+                }
+            });
+        }
+
+        // Animación principal
+        const clock = new THREE.Clock();
+        const tempVec = new THREE.Vector3();
+        const mouseForce = new THREE.Vector3();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            const delta = Math.min(clock.getDelta(), 0.033);
+            const time = performance.now() * 0.002;
+            
+            targetMouse.lerp(mouse, 0.08);
+            
+            if (!isExploded && !morphingInProgress) {
+                const posAttr = geometry.attributes.position.array;
+                mouseForce.set(targetMouse.x * 11, targetMouse.y * 7, 0);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const idx = i * 3;
+                    const px = posAttr[idx];
+                    const py = posAttr[idx+1];
+                    const pz = posAttr[idx+2];
+                    tempVec.set(px, py, pz);
+                    const dist = tempVec.distanceTo(mouseForce);
+                    
+                    if (dist < 7.5) {
+                        const strength = (7.5 - dist) / 7.5 * 0.055;
+                        const dir = new THREE.Vector3().subVectors(mouseForce, tempVec).normalize();
+                        posAttr[idx] += dir.x * strength;
+                        posAttr[idx+1] += dir.y * strength;
+                        posAttr[idx+2] += dir.z * strength;
+                    }
+                    
+                    const returnSpeed = 0.048;
+                    posAttr[idx] += (originalPositions[idx] - posAttr[idx]) * returnSpeed;
+                    posAttr[idx+1] += (originalPositions[idx+1] - posAttr[idx+1]) * returnSpeed;
+                    posAttr[idx+2] += (originalPositions[idx+2] - posAttr[idx+2]) * returnSpeed;
+                    
+                    // Efecto flotante armónico
+                    posAttr[idx] += Math.sin(time * 1.8 + i * 0.003) * 0.009;
+                    posAttr[idx+1] += Math.cos(time * 1.5 + i * 0.0032) * 0.009;
+                }
+                geometry.attributes.position.needsUpdate = true;
+            }
+            
+            // Rotación y movimiento de cámara dinámico
+            particleSystem.rotation.y = time * 0.07;
+            particleSystem.rotation.x = Math.sin(time * 0.15) * 0.06;
+            particleSystem.rotation.z = Math.cos(time * 0.1) * 0.04;
+            starField.rotation.y = time * 0.02;
+            starField.rotation.x = time * 0.01;
+            
+            camera.position.x += (targetMouse.x * 1.2 - camera.position.x) * 0.03;
+            camera.position.y += (-targetMouse.y * 0.8 - camera.position.y) * 0.03;
+            camera.lookAt(0, 0, 0);
+            
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+        
+        window.addEventListener('resize', () => {
+            const w = container.clientWidth;
+            const h = container.clientHeight;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+        });
+        
+        setTimeout(() => {
+            hint.classList.add('visible');
+            setTimeout(() => hint.classList.remove('visible'), 5500);
+        }, 800);
+        
+        // Efecto de brillo adicional en el indicador
+        setInterval(() => {
+            shapeIndicator.style.animation = 'pulse 0.6s ease';
+            setTimeout(() => { shapeIndicator.style.animation = ''; }, 600);
+        }, 4000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "banners": [
+    {
+      "id": "banner1",
+      "titulo": "Banner 1 — Partículas Fluidas",
+      "descripcion": "Fondo de partículas conectadas que responden al movimiento del ratón. Efecto de red neuronal.",
+      "archivo": "banner1.html",
+      "tags": ["html", "css", "js", "canvas"],
+      "nuevo": true
+    },
+    {
+      "id": "banner2",
+      "titulo": "Banner 2 — Malla 3D Tipográfica",
+      "descripcion": "Banner con texto formado por una malla de puntos en 3D usando Three.js. Efecto de distorsión al hover.",
+      "archivo": "banner2.html",
+      "tags": ["html", "css", "js", "threejs"],
+      "nuevo": true
+    },
+    {
+      "id": "banner3",
+      "titulo": "Banner 3 — Parallax Layers",
+      "descripcion": "Banner con múltiples capas que se mueven a diferentes velocidades al hacer scroll. Profundidad visual.",
+      "archivo": "banner3.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    }
+  ]
+}

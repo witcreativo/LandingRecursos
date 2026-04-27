@@ -1,0 +1,28 @@
+{
+  "listas": [
+    {
+      "id": "lista1",
+      "titulo": "Lista 1 — Acordeón Animado",
+      "descripcion": "Lista tipo acordeón con animación de apertura suave, iconos rotatorios y transiciones elegantes.",
+      "archivo": "lista1.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": true
+    },
+    {
+      "id": "lista2",
+      "titulo": "Lista 2 — Timeline Vertical",
+      "descripcion": "Línea de tiempo vertical animada con puntos conectados. Ideal para procesos, historias o roadmaps.",
+      "archivo": "lista2.html",
+      "tags": ["html", "css"],
+      "nuevo": true
+    },
+    {
+      "id": "lista3",
+      "titulo": "Lista 3 — Items con Hover",
+      "descripcion": "Lista de items con efectos hover escalonados, números animados y transiciones suaves.",
+      "archivo": "lista3.html",
+      "tags": ["html", "css"],
+      "nuevo": false
+    }
+  ]
+}

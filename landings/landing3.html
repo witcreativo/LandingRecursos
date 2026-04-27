@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>W.Creative - Vintage Bicycles | Fluidez perfecta</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none; /* Evita selecciones molestas en hover */
+        }
+
+        :root {
+            --turquoise: #40E0D0;
+            --turquoise-dark: #20B2AA;
+            --pink: #FFB6C1;
+            --pink-dark: #FF69B4;
+            --coral: #FF7F7F;
+            --mint: #98FF98;
+            --cream: #FFF8DC;
+            --lavender: #E6E6FA;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        /* Navigation - Bike References */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            border-bottom: 1px solid rgba(64, 224, 208, 0.2);
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--turquoise), var(--pink));
+            /* CORREGIDO: Propiedad estándar + vendor prefix para compatibilidad total */
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--turquoise), var(--pink));
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover {
+            color: #fff;
+        }
+
+        .nav a:hover::after {
+            width: 100%;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .nav-icon:hover {
+            color: var(--turquoise);
+        }
+
+        /* Main Banner */
+        .banner-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        /* Custom Cursor - Optimizado sin lag */
+        .custom-cursor {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--turquoise);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            will-change: left, top;
+            transition: width 0.25s ease, height 0.25s ease, background 0.25s ease, border-color 0.2s ease;
+            mix-blend-mode: difference;
+            box-shadow: 0 0 15px rgba(64, 224, 208, 0.4);
+            transform: translate(-50%, -50%);
+            /* Evitamos transiciones en left/top para que siga al ratón sin arrastre */
+        }
+
+        .custom-cursor.hovering {
+            width: 80px;
+            height: 80px;
+            border-color: var(--pink);
+            background: rgba(255, 182, 193, 0.15);
+            box-shadow: 0 0 40px rgba(255, 182, 193, 0.6);
+        }
+
+        /* Floating Images Grid */
+        .images-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: auto;
+        }
+
+        .floating-image {
+            position: absolute;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1), opacity 0.3s ease, filter 0.3s ease;
+            will-change: transform;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            border: 2px solid transparent;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        .floating-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(64, 224, 208, 0.25), rgba(255, 182, 193, 0.2));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .floating-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: saturate(1.2) contrast(1.05);
+            transition: filter 0.3s ease;
+        }
+
+        /* 12 Images - Distribución armónica */
+        .img-1 { width: 220px; height: 160px; top: 8%; left: 3%; transform: rotate(-5deg); }
+        .img-2 { width: 180px; height: 240px; top: 5%; left: 22%; transform: rotate(3deg); }
+        .img-3 { width: 200px; height: 150px; top: 12%; right: 25%; transform: rotate(-3deg); }
+        .img-4 { width: 240px; height: 180px; top: 6%; right: 5%; transform: rotate(4deg); }
+        .img-5 { width: 160px; height: 220px; top: 35%; left: 2%; transform: rotate(5deg); }
+        .img-6 { width: 280px; height: 190px; top: 40%; left: 18%; transform: rotate(-2deg); }
+        .img-7 { width: 200px; height: 260px; top: 38%; right: 20%; transform: rotate(6deg); }
+        .img-8 { width: 220px; height: 170px; top: 32%; right: 3%; transform: rotate(-4deg); }
+        .img-9 { width: 190px; height: 140px; bottom: 20%; left: 5%; transform: rotate(3deg); }
+        .img-10 { width: 250px; height: 200px; bottom: 15%; left: 28%; transform: rotate(-6deg); }
+        .img-11 { width: 180px; height: 240px; bottom: 18%; right: 22%; transform: rotate(4deg); }
+        .img-12 { width: 210px; height: 160px; bottom: 8%; right: 5%; transform: rotate(-3deg); }
+
+        /* Estados hover/imagen activa */
+        .floating-image.active {
+            z-index: 100;
+            transform: scale(1.2) rotate(0deg) !important;
+            border-color: var(--turquoise);
+            box-shadow: 0 30px 80px rgba(64, 224, 208, 0.5);
+        }
+
+        .floating-image.active::before {
+            opacity: 1;
+        }
+
+        .floating-image.inactive {
+            opacity: 0.35;
+            filter: grayscale(0.5) blur(1.2px);
+            transform: scale(0.94);
+        }
+
+        /* Content Layer - Center */
+        .content-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        .hashtag {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, var(--turquoise), var(--pink));
+            /* CORREGIDO: propiedad estándar */
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+            text-transform: uppercase;
+        }
+
+        .hashtag.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .main-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(40px, 6vw, 80px);
+            font-weight: 700;
+            text-align: center;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            max-width: 800px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease 0.2s;
+            text-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .main-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .main-title span {
+            display: block;
+            background: linear-gradient(135deg, #fff 0%, var(--turquoise) 50%, var(--pink) 100%);
+            /* CORREGIDO */
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            margin: 10px 0;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 30px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.4s;
+        }
+
+        .subtitle.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* CTA Button */
+        .cta-container {
+            margin-top: 50px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.6s;
+        }
+
+        .cta-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--turquoise), var(--pink));
+            color: #1a1a2e;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+            box-shadow: 0 10px 30px rgba(64, 224, 208, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(64, 224, 208, 0.5);
+            gap: 16px;
+        }
+
+        .cta-button svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Info Cards - Fixed Positions */
+        .info-card {
+            position: absolute;
+            background: rgba(26, 26, 46, 0.96);
+            border: 1px solid rgba(64, 224, 208, 0.4);
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 280px;
+            backdrop-filter: blur(12px);
+            opacity: 0;
+            transform: translateY(15px) scale(0.96);
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            pointer-events: none;
+            z-index: 200;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, var(--turquoise), var(--pink));
+            border-radius: 18px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .info-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: var(--turquoise);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .info-card p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .info-card .year {
+            display: inline-block;
+            padding: 4px 12px;
+            background: linear-gradient(135deg, var(--pink), var(--coral));
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        /* Posiciones info cards */
+        .info-pos-1 { top: 5%; left: 2%; }
+        .info-pos-2 { top: 2%; left: 20%; }
+        .info-pos-3 { top: 8%; right: 23%; }
+        .info-pos-4 { top: 4%; right: 3%; }
+        .info-pos-5 { top: 32%; left: 1%; }
+        .info-pos-6 { top: 38%; left: 17%; }
+        .info-pos-7 { top: 35%; right: 18%; }
+        .info-pos-8 { top: 30%; right: 2%; }
+        .info-pos-9 { bottom: 18%; left: 3%; }
+        .info-pos-10 { bottom: 13%; left: 26%; }
+        .info-pos-11 { bottom: 16%; right: 20%; }
+        .info-pos-12 { bottom: 6%; right: 3%; }
+
+        /* Ambient Glow */
+        .ambient-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(64, 224, 208, 0.2) 0%, rgba(255, 182, 193, 0.1) 50%, transparent 80%);
+            pointer-events: none;
+            z-index: 5;
+            transform: translate(-50%, -50%);
+            will-change: left, top;
+            opacity: 0;
+            filter: blur(45px);
+            transition: opacity 0.2s ease;
+        }
+
+        /* Decorative Elements */
+        .deco-circle {
+            position: absolute;
+            border: 2px solid rgba(64, 224, 208, 0.2);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .deco-1 { width: 300px; height: 300px; top: 10%; left: 15%; }
+        .deco-2 { width: 200px; height: 200px; bottom: 20%; right: 10%; border-color: rgba(255, 182, 193, 0.2); }
+        .deco-3 { width: 150px; height: 150px; top: 50%; left: 50%; border-color: rgba(255, 127, 127, 0.15); }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .floating-image { transform: scale(0.85) !important; }
+            .info-card { max-width: 220px; padding: 16px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .banner-container {
+                height: auto;
+                min-height: 100vh;
+                padding: 100px 20px;
+                cursor: auto;
+            }
+            .floating-image {
+                position: relative !important;
+                width: 45% !important;
+                height: 200px !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+                transform: none !important;
+                margin: 10px;
+                display: inline-block;
+            }
+            .images-layer {
+                position: relative;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                pointer-events: auto;
+                padding: 20px 0;
+            }
+            .content-layer {
+                position: relative;
+                padding: 40px 20px;
+            }
+            .info-card {
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                bottom: auto !important;
+                width: 100%;
+                max-width: 100%;
+                margin: 10px 0;
+                opacity: 1;
+                transform: none;
+            }
+            .custom-cursor, .ambient-glow { display: none; }
+            .deco-circle { display: none; }
+            body { cursor: auto; }
+            .banner-container { cursor: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <div class="nav-left">
+            <a href="#" class="logo">W.CREATIVE</a>
+            <div class="nav-links">
+                <a href="#">Bicicletas</a><a href="#">Clásicas</a><a href="#">Carreras</a>
+                <a href="#">Urbanas</a><a href="#">Paseo</a><a href="#">Accesorios</a>
+                <a href="#">Taller</a><a href="#">Historia</a>
+            </div>
+        </div>
+        <div class="nav-right">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+        </div>
+    </nav>
+
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="banner-container" id="banner">
+        <div class="ambient-glow" id="glow"></div>
+        <div class="deco-circle deco-1"></div><div class="deco-circle deco-2"></div><div class="deco-circle deco-3"></div>
+
+        <div class="images-layer" id="imagesLayer">
+            <div class="floating-image img-1" data-speed="0.02" data-info="info-1"><img src="https://kimi-web-img.moonshot.cn/img/c8.alamy.com/8d2bb3c4790f9477e5c4cc18db5f9f44c3171199.jpg" alt="Turquoise cruiser"></div>
+            <div class="floating-image img-2" data-speed="0.04" data-info="info-2"><img src="https://kimi-web-img.moonshot.cn/img/i5.walmartimages.com/57fec7aa2cf11e26983e68bb513ad292e5ac4202.jpeg" alt="Pink beach cruiser"></div>
+            <div class="floating-image img-3" data-speed="0.03" data-info="info-3"><img src="https://kimi-web-img.moonshot.cn/img/www.beachbikes.net/88634e3f3917e7cd4c8b381a4c76727f1006e6c0.jpg" alt="Coral pink cruiser"></div>
+            <div class="floating-image img-4" data-speed="0.05" data-info="info-4"><img src="https://kimi-web-img.moonshot.cn/img/ih1.redbubble.net/fe19a0f38c40dceadb78f5793ec1e7f25d26a1a9.jpg" alt="Watercolor bicycle"></div>
+            <div class="floating-image img-5" data-speed="0.06" data-info="info-5"><img src="https://kimi-web-img.moonshot.cn/img/pixaii.com/e758ea222a7f6c543a8a40dcc5bb14aa309c7fee.jpg" alt="Pastel garden"></div>
+            <div class="floating-image img-6" data-speed="0.02" data-info="info-6"><img src="https://kimi-web-img.moonshot.cn/img/images.squarespace-cdn.com/ccb0583e4f8e1eebfc9e722e6123922ba0d52058.jpg" alt="Vintage poster"></div>
+            <div class="floating-image img-7" data-speed="0.04" data-info="info-7"><img src="https://kimi-web-img.moonshot.cn/img/media.istockphoto.com/ee768d6e8c425e10ad6b044ac3893526888d70ec.jpg" alt="Pink bike turquoise wall"></div>
+            <div class="floating-image img-8" data-speed="0.03" data-info="info-8"><img src="https://kimi-web-img.moonshot.cn/img/reidbikes.com/589b8aad4a41fa0ef3a022b2d5e741368ef711ea.png" alt="Mint green"></div>
+            <div class="floating-image img-9" data-speed="0.05" data-info="info-9"><img src="https://kimi-web-img.moonshot.cn/img/media.posterlounge.com/5fdb470f6b085c8d56d0e30bf255a9c9c7317086.jpg" alt="Grand Prix poster"></div>
+            <div class="floating-image img-10" data-speed="0.02" data-info="info-10"><img src="https://kimi-web-img.moonshot.cn/img/images.squarespace-cdn.com/2a0fec6d57289cf0be97e6c7e348cac5633ca1e6.jpg" alt="Cycles Brillant"></div>
+            <div class="floating-image img-11" data-speed="0.04" data-info="info-11"><img src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=400" alt="Vintage blue bike"></div>
+            <div class="floating-image img-12" data-speed="0.03" data-info="info-12"><img src="https://images.unsplash.com/photo-1485965120184-e224f723d621?w=400" alt="Retro bicycle"></div>
+        </div>
+
+        <div class="content-layer">
+            <div class="hashtag" id="hashtag">#WCREATIVE</div>
+            <h1 class="main-title" id="mainTitle"><span>Las bicicletas</span><span>que crearon</span><span>historia.</span></h1>
+            <p class="subtitle" id="subtitle">Descubre nuestra colección vintage</p>
+            <div class="cta-container" id="ctaContainer"><a href="#" class="cta-button"><span>Ver Colección</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div>
+        </div>
+
+        <!-- Info Cards -->
+        <div class="info-card info-pos-1" id="info-1"><span class="year">1950s</span><h3>Beach Cruiser</h3><p>El clásico turquesa con cesta de flores. Diseñado para paseos relajados por la costa.</p></div>
+        <div class="info-card info-pos-2" id="info-2"><span class="year">1960s</span><h3>Lady Classic</h3><p>Rosa pastel con cesta de mimbre. La elegancia sobre dos ruedas.</p></div>
+        <div class="info-card info-pos-3" id="info-3"><span class="year">1970s</span><h3>Coral Dream</h3><p>Edición limitada en coral con aros turquesa. Playa y estilo.</p></div>
+        <div class="info-card info-pos-4" id="info-4"><span class="year">ART</span><h3>Cycle Chic</h3><p>Ilustración acuarela que captura la esencia del ciclismo vintage.</p></div>
+        <div class="info-card info-pos-5" id="info-5"><span class="year">2024</span><h3>Garden Edition</h3><p>Bicicleta pastel en entorno floral. Donde la naturaleza encuentra el diseño.</p></div>
+        <div class="info-card info-pos-6" id="info-6"><span class="year">1895</span><h3>Fernand Clément</h3><p>Póster art nouveau original. La era dorada de la publicidad ciclista.</p></div>
+        <div class="info-card info-pos-7" id="info-7"><span class="year">1980s</span><h3>Urban Pink</h3><p>Rosa vibrante contra pared turquesa. El contraste perfecto para la ciudad.</p></div>
+        <div class="info-card info-pos-8" id="info-8"><span class="year">2023</span><h3>Mint Classic</h3><p>Verde menta con cesta natural. Modernidad con alma vintage.</p></div>
+        <div class="info-card info-pos-9" id="info-9"><span class="year">1930</span><h3>Grand Prix</h3><p>El mejor ciclista de montaña de 1930. Leyendas del ciclismo francés.</p></div>
+        <div class="info-card info-pos-10" id="info-10"><span class="year">1900</span><h3>Cycles Brillant</h3><p>Damas elegantes con sus bicicletas. El inicio de la revolución sobre ruedas.</p></div>
+        <div class="info-card info-pos-11" id="info-11"><span class="year">1965</span><h3>City Blue</h3><p>Azul cielo urbano. La compañera perfecta para las calles de la ciudad.</p></div>
+        <div class="info-card info-pos-12" id="info-12"><span class="year">1975</span><h3>Retro Street</h3><p>Diseño clásico callejero. Cuando cada bicicleta contaba una historia.</p></div>
+    </div>
+
+    <script>
+        (function() {
+            const banner = document.getElementById('banner');
+            const cursor = document.getElementById('cursor');
+            const glow = document.getElementById('glow');
+            const images = document.querySelectorAll('.floating-image');
+            const hashtag = document.getElementById('hashtag');
+            const mainTitle = document.getElementById('mainTitle');
+            const subtitle = document.getElementById('subtitle');
+            const ctaContainer = document.getElementById('ctaContainer');
+            
+            // Animaciones iniciales
+            setTimeout(() => {
+                hashtag.classList.add('visible');
+                mainTitle.classList.add('visible');
+                subtitle.classList.add('visible');
+                ctaContainer.classList.add('visible');
+            }, 200);
+
+            const isTouch = window.matchMedia('(pointer: coarse)').matches;
+            if (isTouch) {
+                if(cursor) cursor.style.display = 'none';
+                if(glow) glow.style.display = 'none';
+                images.forEach(img => {
+                    img.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const infoId = img.dataset.info;
+                        if(infoId) {
+                            document.querySelectorAll('.info-card').forEach(i => i.classList.remove('visible'));
+                            const targetInfo = document.getElementById(infoId);
+                            if(targetInfo) targetInfo.classList.add('visible');
+                        }
+                    });
+                });
+                return;
+            }
+
+            // --- MOUSE SEGUIMIENTO SIN TROMPICONES (RAF suave) ---
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+            let cursorX = mouseX, cursorY = mouseY;
+            let glowX = mouseX, glowY = mouseY;
+            let animationId = null;
+            let lastHoveredImage = null;
+            
+            const updateMousePosition = (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                if(glow) {
+                    glow.style.left = mouseX + 'px';
+                    glow.style.top = mouseY + 'px';
+                    glow.style.opacity = '1';
+                }
+            };
+            
+            banner.addEventListener('mousemove', updateMousePosition);
+            banner.addEventListener('mouseleave', () => {
+                if(glow) glow.style.opacity = '0';
+                cursor.classList.remove('hovering');
+                images.forEach(img => {
+                    img.classList.remove('active', 'inactive');
+                });
+                document.querySelectorAll('.info-card').forEach(card => card.classList.remove('visible'));
+                if(lastHoveredImage) lastHoveredImage = null;
+            });
+            
+            function smoothFollow() {
+                // Suavizado para el cursor y glow
+                cursorX += (mouseX - cursorX) * 0.22;
+                cursorY += (mouseY - cursorY) * 0.22;
+                cursor.style.left = cursorX + 'px';
+                cursor.style.top = cursorY + 'px';
+                
+                if(glow) {
+                    glowX += (mouseX - glowX) * 0.15;
+                    glowY += (mouseY - glowY) * 0.15;
+                    glow.style.left = glowX + 'px';
+                    glow.style.top = glowY + 'px';
+                }
+                
+                // efecto parallax en imagenes basado en posicion relativa al centro
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const offsetX = (mouseX - centerX) / centerX;
+                const offsetY = (mouseY - centerY) / centerY;
+                
+                let currentHover = null;
+                let minDist = 210;
+                
+                images.forEach(img => {
+                    const rect = img.getBoundingClientRect();
+                    const imgCenterX = rect.left + rect.width/2;
+                    const imgCenterY = rect.top + rect.height/2;
+                    const dist = Math.hypot(mouseX - imgCenterX, mouseY - imgCenterY);
+                    
+                    const speed = parseFloat(img.dataset.speed) || 0.03;
+                    const moveX = offsetX * speed * -70;
+                    const moveY = offsetY * speed * -70;
+                    const currentRot = img.className.match(/rotate\([^)]+\)/)?.[0] || '';
+                    img.style.transform = `translate(${moveX}px, ${moveY}px) ${currentRot}`;
+                    
+                    if(dist < minDist && dist < 190) {
+                        minDist = dist;
+                        currentHover = img;
+                    }
+                });
+                
+                if(currentHover && currentHover !== lastHoveredImage) {
+                    cursor.classList.add('hovering');
+                    images.forEach(img => {
+                        if(img === currentHover) {
+                            img.classList.add('active');
+                            img.classList.remove('inactive');
+                            const infoId = img.dataset.info;
+                            if(infoId) {
+                                document.querySelectorAll('.info-card').forEach(c => c.classList.remove('visible'));
+                                const activeInfo = document.getElementById(infoId);
+                                if(activeInfo) activeInfo.classList.add('visible');
+                            }
+                        } else {
+                            img.classList.add('inactive');
+                            img.classList.remove('active');
+                        }
+                    });
+                    lastHoveredImage = currentHover;
+                } 
+                else if (!currentHover && lastHoveredImage !== null) {
+                    cursor.classList.remove('hovering');
+                    images.forEach(img => {
+                        img.classList.remove('active', 'inactive');
+                    });
+                    document.querySelectorAll('.info-card').forEach(c => c.classList.remove('visible'));
+                    lastHoveredImage = null;
+                }
+                else if (currentHover && currentHover === lastHoveredImage) {
+                    // mantener estados, no hacer nada extra
+                }
+                
+                animationId = requestAnimationFrame(smoothFollow);
+            }
+            
+            animationId = requestAnimationFrame(smoothFollow);
+            
+            document.addEventListener('visibilitychange', () => {
+                if(document.hidden) {
+                    if(animationId) cancelAnimationFrame(animationId);
+                } else {
+                    if(animationId) cancelAnimationFrame(animationId);
+                    animationId = requestAnimationFrame(smoothFollow);
+                }
+            });
+            
+            // Evitar conflictos resize
+            window.addEventListener('resize', () => {
+                // solo reajuste de referencia
+            });
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baraja de Cartas</title>
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .spacer {
+            height: 30vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+
+        .spacer i {
+            font-size: 24px;
+            margin-bottom: 12px;
+            display: block;
+            text-align: center;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .deck-container {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .deck-wrapper {
+            position: relative;
+            width: 300px;
+            height: 420px;
+        }
+
+        .card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+            pointer-events: none;
+        }
+
+        /* Posiciones iniciales apiladas */
+        .card:nth-child(1) {
+            background: linear-gradient(135deg, #e91e63, #9c27b0);
+            z-index: 4;
+            transform: translateY(0) scale(1);
+        }
+
+        .card:nth-child(2) {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            z-index: 3;
+            transform: translateY(15px) scale(0.95);
+            opacity: 0.8;
+        }
+
+        .card:nth-child(3) {
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            z-index: 2;
+            transform: translateY(30px) scale(0.9);
+            opacity: 0.6;
+        }
+
+        .card:nth-child(4) {
+            background: linear-gradient(135deg, #2196f3, #03a9f4);
+            z-index: 1;
+            transform: translateY(45px) scale(0.85);
+            opacity: 0.4;
+        }
+
+        /* Estados activos (cuando se revelan con scroll) */
+        .card.active:nth-child(1) {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 1;
+        }
+
+        .card.active:nth-child(2) {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 1;
+        }
+
+        .card.active:nth-child(3) {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 1;
+        }
+
+        .card.active:nth-child(4) {
+            transform: translateY(0) scale(1) rotate(0deg);
+            opacity: 1;
+        }
+
+        /* Estados "usados" (cuando pasan a segundo plano) */
+        .card.used {
+            transform: translateX(-120%) rotate(-15deg) scale(0.8);
+            opacity: 0;
+        }
+
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #fff;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-number {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.15);
+        }
+
+        .card-btn {
+            padding: 12px 28px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50px;
+            color: #fff;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Indicador de scroll */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+            z-index: 100;
+            transition: opacity 0.3s;
+        }
+
+        .scroll-indicator.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .scroll-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .scroll-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .scroll-dot.active {
+            background: #fff;
+            transform: scale(1.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .deck-wrapper {
+                width: 260px;
+                height: 360px;
+            }
+            .card {
+                padding: 24px;
+            }
+            .card h3 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="spacer">
+        <div>
+            <i class="ph ph-mouse-scroll"></i>
+            <div>Desplaza hacia abajo para revelar las cartas</div>
+        </div>
+    </div>
+
+    <div class="deck-container" id="deckContainer">
+        <div class="deck-wrapper" id="deckWrapper">
+            <div class="card" data-index="0">
+                <div class="card-number">01</div>
+                <div class="card-icon"><i class="ph ph-rocket-launch"></i></div>
+                <h3>Lanzamiento</h3>
+                <p>Despegamos tu proyecto con estrategia, diseño y desarrollo de primer nivel.</p>
+                <button class="card-btn">Empezar</button>
+            </div>
+
+            <div class="card" data-index="1">
+                <div class="card-number">02</div>
+                <div class="card-icon"><i class="ph ph-chart-line-up"></i></div>
+                <h3>Crecimiento</h3>
+                <p>Escalamos tu presencia digital con SEO, marketing y analítica avanzada.</p>
+                <button class="card-btn">Crecer</button>
+            </div>
+
+            <div class="card" data-index="2">
+                <div class="card-number">03</div>
+                <div class="card-icon"><i class="ph ph-users"></i></div>
+                <h3>Comunidad</h3>
+                <p>Construimos una audiencia fiel con contenido de valor y engagement real.</p>
+                <button class="card-btn">Conectar</button>
+            </div>
+
+            <div class="card" data-index="3">
+                <div class="card-number">04</div>
+                <div class="card-icon"><i class="ph ph-trophy"></i></div>
+                <h3>Éxito</h3>
+                <p>Resultados medibles, conversiones reales y un negocio que crece solo.</p>
+                <button class="card-btn">Triunfar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="spacer" style="height: 50vh;">
+        <div>
+            <i class="ph ph-check-circle"></i>
+            <div>¡Todas las cartas reveladas!</div>
+        </div>
+    </div>
+
+    <div class="scroll-indicator" id="scrollIndicator">
+        <div class="scroll-dots">
+            <div class="scroll-dot active" data-card="0"></div>
+            <div class="scroll-dot" data-card="1"></div>
+            <div class="scroll-dot" data-card="2"></div>
+            <div class="scroll-dot" data-card="3"></div>
+        </div>
+        <div>Carta <span id="currentCard">1</span> de 4</div>
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.card');
+        const dots = document.querySelectorAll('.scroll-dot');
+        const currentCardSpan = document.getElementById('currentCard');
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        const deckContainer = document.getElementById('deckContainer');
+
+        let currentIndex = 0;
+        let isInView = false;
+
+        // Intersection Observer para detectar cuando el deck está en pantalla
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                isInView = entry.isIntersecting;
+            });
+        }, { threshold: 0.3 });
+
+        observer.observe(deckContainer);
+
+        // Scroll handler
+        let lastScrollY = window.scrollY;
+        let scrollTimeout;
+
+        window.addEventListener('scroll', () => {
+            if (!isInView) return;
+
+            const scrollY = window.scrollY;
+            const containerTop = deckContainer.offsetTop;
+            const containerHeight = deckContainer.offsetHeight;
+            const scrollProgress = (scrollY - containerTop + window.innerHeight * 0.3) / (containerHeight * 0.7);
+
+            // Determinar qué carta mostrar basado en el progreso del scroll
+            const newIndex = Math.min(Math.max(Math.floor(scrollProgress * cards.length), 0), cards.length - 1);
+
+            if (newIndex !== currentIndex) {
+                currentIndex = newIndex;
+                updateCards();
+            }
+
+            // Ocultar indicador cuando se acaba
+            if (scrollProgress > 1.2) {
+                scrollIndicator.classList.add('hidden');
+            } else {
+                scrollIndicator.classList.remove('hidden');
+            }
+
+            lastScrollY = scrollY;
+        });
+
+        function updateCards() {
+            cards.forEach((card, index) => {
+                card.classList.remove('active', 'used');
+
+                if (index < currentIndex) {
+                    // Cartas ya vistas → se van a la izquierda
+                    card.classList.add('used');
+                } else if (index === currentIndex) {
+                    // Carta actual → al frente
+                    card.classList.add('active');
+                }
+                // Cartas futuras → se quedan apiladas detrás (estado por defecto)
+            });
+
+            // Actualizar dots
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+
+            currentCardSpan.textContent = currentIndex + 1;
+        }
+
+        // Click en cartas para navegar
+        cards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+                // Scroll suave a la posición correspondiente
+                const containerTop = deckContainer.offsetTop;
+                const targetScroll = containerTop + (index / cards.length) * deckContainer.offsetHeight * 0.5;
+                window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+            });
+        });
+
+        // Inicializar
+        updateCards();
+    </script>
+
+</body>
+</html>

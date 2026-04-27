@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máquina de Escribir</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Outfit', sans-serif;
+            padding: 40px;
+        }
+
+        .typewriter-container {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .typewriter-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 32px;
+            backdrop-filter: blur(10px);
+        }
+
+        .typewriter {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+
+        .typewriter .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: #e91e63;
+            margin-left: 4px;
+            animation: blink 1s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .typewriter-sub {
+            margin-top: 24px;
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.6);
+            font-weight: 300;
+            opacity: 0;
+            animation: fadeIn 1s ease 3s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Efecto de glow en el cursor */
+        .cursor {
+            box-shadow: 0 0 10px #e91e63, 0 0 20px #e91e63;
+        }
+    </style>
+</head>
+<body>
+    <div class="typewriter-container">
+        <div class="typewriter-label">✨ Efecto Typewriter</div>
+        <div class="typewriter" id="typewriter">
+            <span id="typed-text"></span><span class="cursor"></span>
+        </div>
+        <div class="typewriter-sub">Animación de texto carácter por carácter con cursor parpadeante</div>
+    </div>
+
+    <script>
+        const text = "Creamos experiencias digitales que enamoran";
+        const typedText = document.getElementById('typed-text');
+        let index = 0;
+
+        function type() {
+            if (index < text.length) {
+                typedText.textContent += text.charAt(index);
+                index++;
+                setTimeout(type, 100 + Math.random() * 50); // Velocidad variable para naturalidad
+            }
+        }
+
+        // Iniciar después de un pequeño delay
+        setTimeout(type, 500);
+
+        // Reiniciar al hacer click
+        document.addEventListener('click', () => {
+            index = 0;
+            typedText.textContent = '';
+            setTimeout(type, 200);
+        });
+    </script>
+</body>
+</html>

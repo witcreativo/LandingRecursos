@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIT Creativo — Biblioteca de Recursos Web</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        :root {
+            --blanco: #ffffff;
+            --crema: #faf9f7;
+            --rosa-pastel: #ffe4e1;
+            --rosa-suave: #fff0f3;
+            --menta: #e8f5e9;
+            --lavanda: #f3e5f5;
+            --amarillo-suave: #fffde7;
+            --turquesa: #e0f7fa;
+            --texto-principal: #2d2d2d;
+            --texto-secundario: #6b6b6b;
+            --texto-terciario: #9e9e9e;
+            --borde-suave: #f0f0f0;
+            --sombra-suave: 0 4px 24px rgba(0,0,0,0.04);
+            --sombra-hover: 0 8px 40px rgba(0,0,0,0.08);
+            --radio: 20px;
+            --radio-peq: 12px;
+            --transicion: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--crema);
+            color: var(--texto-principal);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ========== HEADER ========== */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            z-index: 1000;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--borde-suave);
+            transition: var(--transicion);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--texto-principal);
+        }
+
+        .logo-icon {
+            width: 44px; height: 44px;
+            background: linear-gradient(135deg, var(--rosa-pastel), var(--lavanda));
+            border-radius: var(--radio-peq);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #d81b60;
+        }
+
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .logo-sub {
+            font-size: 0.75rem;
+            color: var(--texto-terciario);
+            font-weight: 400;
+            margin-top: -4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--texto-secundario);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 10px 18px;
+            border-radius: 50px;
+            transition: var(--transicion);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: var(--rosa-suave);
+            border-radius: 50px;
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+
+        nav a:hover::before, nav a.active::before { transform: scale(1); }
+        nav a:hover, nav a.active { color: #c2185b; }
+
+        nav a.landings-link {
+            background: linear-gradient(135deg, var(--rosa-pastel), var(--lavanda));
+            color: #880e4f;
+            font-weight: 600;
+        }
+
+        nav a.landings-link::before { display: none; }
+        nav a.landings-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(216,27,96,0.2);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: var(--texto-principal);
+            cursor: pointer;
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            padding: 160px 40px 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, var(--rosa-pastel) 0%, transparent 70%);
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--blanco);
+            border: 1px solid var(--borde-suave);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--texto-secundario);
+            margin-bottom: 32px;
+            box-shadow: var(--sombra-suave);
+        }
+
+        .hero-badge i { color: #e91e63; font-size: 1.1rem; }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #e91e63, #9c27b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--texto-secundario);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            font-weight: 300;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 48px;
+        }
+
+        .stat { text-align: center; }
+
+        .stat-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--texto-principal);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--texto-terciario);
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ========== SECCIONES ========== */
+        .section-resource {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .section-title-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .section-icon {
+            width: 56px; height: 56px;
+            border-radius: var(--radio);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .section-icon.banners { background: var(--rosa-suave); color: #e91e63; }
+        .section-icon.botones { background: var(--menta); color: #4caf50; }
+        .section-icon.listas { background: var(--turquesa); color: #00bcd4; }
+        .section-icon.tarjetas { background: var(--lavanda); color: #9c27b0; }
+        .section-icon.textos { background: var(--amarillo-suave); color: #ff9800; }
+        .section-icon.fondos { background: #fce4ec; color: #f06292; }
+
+        .section-title-group h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .section-title-group p {
+            font-size: 0.9rem;
+            color: var(--texto-terciario);
+            margin-top: 2px;
+        }
+
+        .btn-ver-todos {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--blanco);
+            border: 1px solid var(--borde-suave);
+            border-radius: 50px;
+            color: var(--texto-principal);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transicion);
+            box-shadow: var(--sombra-suave);
+        }
+
+        .btn-ver-todos:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--sombra-hover);
+            border-color: #e0e0e0;
+        }
+
+        /* Grid */
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+
+        .preview-card {
+            background: var(--blanco);
+            border-radius: var(--radio);
+            overflow: hidden;
+            box-shadow: var(--sombra-suave);
+            transition: var(--transicion);
+            border: 1px solid var(--borde-suave);
+            position: relative;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .preview-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .preview-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--sombra-hover);
+        }
+
+        .preview-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--rosa-pastel), var(--lavanda));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .preview-card:hover::after { opacity: 1; }
+
+        .preview-frame {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #f5f5f5, #fafafa);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .preview-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            transform: scale(0.8);
+            transform-origin: center;
+            pointer-events: none;
+        }
+
+        .preview-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            color: var(--texto-terciario);
+        }
+
+        .preview-placeholder i { font-size: 48px; opacity: 0.3; }
+        .preview-placeholder span { font-size: 0.85rem; font-weight: 500; }
+
+        .preview-badge-new {
+            position: absolute;
+            top: 16px; right: 16px;
+            background: linear-gradient(135deg, #e91e63, #9c27b0);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(233,30,99,0.3);
+            z-index: 10;
+        }
+
+        .preview-info { padding: 24px; }
+
+        .preview-info h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--texto-principal);
+        }
+
+        .preview-info p {
+            font-size: 0.85rem;
+            color: var(--texto-secundario);
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .preview-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid var(--borde-suave);
+        }
+
+        .preview-tags {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 50px;
+            background: var(--crema);
+            color: var(--texto-secundario);
+            font-weight: 500;
+        }
+
+        .tag.css { background: #e3f2fd; color: #1976d2; }
+        .tag.js { background: #fff3e0; color: #f57c00; }
+        .tag.html { background: #fce4ec; color: #c2185b; }
+        .tag.svg { background: #f3e5f5; color: #7b1fa2; }
+
+        .preview-arrow {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: var(--crema);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--texto-principal);
+            transition: var(--transicion);
+        }
+
+        .preview-card:hover .preview-arrow {
+            background: linear-gradient(135deg, var(--rosa-pastel), var(--lavanda));
+            color: #880e4f;
+            transform: rotate(-45deg);
+        }
+
+        .section-divider {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .section-divider hr {
+            border: none;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--borde-suave), transparent);
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            background: var(--blanco);
+            border-top: 1px solid var(--borde-suave);
+            margin-top: 80px;
+            padding: 60px 40px 40px;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+        }
+
+        .footer-brand p {
+            color: var(--texto-secundario);
+            font-size: 0.9rem;
+            margin-top: 16px;
+            line-height: 1.6;
+        }
+
+        .footer-col h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--texto-principal);
+        }
+
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 12px; }
+
+        .footer-col a {
+            color: var(--texto-secundario);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-col a:hover { color: #e91e63; }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 40px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid var(--borde-suave);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--texto-terciario);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-social a {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: var(--crema);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--texto-secundario);
+            text-decoration: none;
+            transition: var(--transicion);
+        }
+
+        .footer-social a:hover {
+            background: linear-gradient(135deg, var(--rosa-pastel), var(--lavanda));
+            color: #880e4f;
+            transform: translateY(-3px);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1024px) {
+            .preview-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-container { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .header-container { padding: 0 20px; }
+            nav {
+                position: fixed;
+                top: 80px; left: 0; right: 0;
+                background: rgba(255,255,255,0.98);
+                backdrop-filter: blur(20px);
+                padding: 20px;
+                transform: translateY(-150%);
+                transition: transform 0.4s ease;
+                border-bottom: 1px solid var(--borde-suave);
+            }
+            nav.active { transform: translateY(0); }
+            nav ul { flex-direction: column; gap: 4px; }
+            nav a { padding: 14px 20px; border-radius: var(--radio-peq); }
+            .menu-toggle { display: block; }
+            .hero { padding: 140px 20px 60px; }
+            .hero-stats { gap: 24px; }
+            .section-resource { padding: 40px 20px; }
+            .preview-grid { grid-template-columns: 1fr; }
+            .section-header { flex-direction: column; align-items: flex-start; }
+            .footer-container { grid-template-columns: 1fr; gap: 40px; }
+            .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <!-- <div class="logo-icon"><i class="ph ph-paint-brush-broad"></i></div>-->
+                <div>
+                    <div class="logo-text">WIT Creativo</div>
+                    <div class="logo-sub">Biblioteca de Recursos</div>
+                </div>
+            </a>
+
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <i class="ph ph-list"></i>
+            </button>
+
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="banners.html"><i class="ph ph-monitor-play"></i> Banners</a></li>
+                    <li><a href="botones.html"><i class="ph ph-hand-tap"></i> Botones</a></li>
+                    <li><a href="listas.html"><i class="ph ph-list-dashes"></i> Listas</a></li>
+                    <li><a href="tarjetas.html"><i class="ph ph-cards"></i> Tarjetas</a></li>
+                    <li><a href="textos.html"><i class="ph ph-text-t"></i> Textos</a></li>
+                    <li><a href="fondos.html"><i class="ph ph-gradient"></i> Fondos</a></li>
+                    <li><a href="landings.html" class="landings-link"><i class="ph ph-rocket-launch"></i> Landings</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-badge animate-in">
+            <i class="ph ph-sparkle"></i>
+            Recursos actualizados constantemente
+        </div>
+        <h1 class="animate-in" style="animation: fadeInUp 0.6s ease forwards;">
+            Recursos web para<br><span>WordPress & Elementor</span>
+        </h1>
+        <p class="animate-in" style="animation: fadeInUp 0.6s ease 0.1s forwards; opacity:0;">
+            Biblioteca de animaciones, componentes y efectos visuales listos para copiar e integrar en tus proyectos web.
+        </p>
+
+        <div class="hero-stats animate-in" style="animation: fadeInUp 0.6s ease 0.2s forwards; opacity:0;">
+            <div class="stat">
+                <div class="stat-num" id="statCategorias">6</div>
+                <div class="stat-label">Categorías</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num" id="statRecursos">24+</div>
+                <div class="stat-label">Recursos</div>
+            </div>
+            <div class="stat">
+                <div class="stat-num">100%</div>
+                <div class="stat-label">Compatible Elementor</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BANNERS -->
+    <section class="section-resource">
+        <div class="section-header">
+            <div class="section-title-group">
+                <div class="section-icon banners"><i class="ph ph-monitor-play"></i></div>
+                <div>
+                    <h2>Banners</h2>
+                    <p>Headers animados y secciones hero</p>
+                </div>
+            </div>
+            <a href="banners.html" class="btn-ver-todos">Ver todos <i class="ph ph-arrow-right"></i></a>
+        </div>
+        <div class="preview-grid" id="grid-banners"></div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- BOTONES -->
+    <section class="section-resource">
+        <div class="section-header">
+            <div class="section-title-group">
+                <div class="section-icon botones"><i class="ph ph-hand-tap"></i></div>
+                <div>
+                    <h2>Botones</h2>
+                    <p>CTAs y botones con microinteracciones</p>
+                </div>
+            </div>
+            <a href="botones.html" class="btn-ver-todos">Ver todos <i class="ph ph-arrow-right"></i></a>
+        </div>
+        <div class="preview-grid" id="grid-botones"></div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- LISTAS -->
+    <section class="section-resource">
+        <div class="section-header">
+            <div class="section-title-group">
+                <div class="section-icon listas"><i class="ph ph-list-dashes"></i></div>
+                <div>
+                    <h2>Listas</h2>
+                    <p>Listados con animaciones y estilos únicos</p>
+                </div>
+            </div>
+            <a href="listas.html" class="btn-ver-todos">Ver todos <i class="ph ph-arrow-right"></i></a>
+        </div>
+        <div class="preview-grid" id="grid-listas"></div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- TARJETAS -->
+    <section class="section-resource">
+        <div class="section-header">
+            <div class="section-title-group">
+                <div class="section-icon tarjetas"><i class="ph ph-cards"></i></div>
+                <div>
+                    <h2>Tarjetas</h2>
+                    <p>Cards con efectos hover y transiciones</p>
+                </div>
+            </div>
+            <a href="tarjetas.html" class="btn-ver-todos">Ver todos <i class="ph ph-arrow-right"></i></a>
+        </div>
+        <div class="preview-grid" id="grid-tarjetas"></div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- TEXTOS -->
+    <section class="section-resource">
+        <div class="section-header">
+            <div class="section-title-group">
+                <div class="section-icon textos"><i class="ph ph-text-t"></i></div>
+                <div>
+                    <h2>Textos</h2>
+                    <p>Títulos y efectos tipográficos animados</p>
+                </div>
+            </div>
+            <a href="textos.html" class="btn-ver-todos">Ver todos <i class="ph ph-arrow-right"></i></a>
+        </div>
+        <div class="preview-grid" id="grid-textos"></div>
+    </section>
+
+    <div class="section-divider"><hr></div>
+
+    <!-- FONDOS -->
+    <section class="section-resource">
+        <div class="section-header">
+            <div class="section-title-group">
+                <div class="section-icon fondos"><i class="ph ph-gradient"></i></div>
+                <div>
+                    <h2>Fondos</h2>
+                    <p>Backgrounds animados y generativos</p>
+                </div>
+            </div>
+            <a href="fondos.html" class="btn-ver-todos">Ver todos <i class="ph ph-arrow-right"></i></a>
+        </div>
+        <div class="preview-grid" id="grid-fondos"></div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon"><i class="ph ph-paint-brush-broad"></i></div>
+                    <div>
+                        <div class="logo-text">WIT Creativo</div>
+                        <div class="logo-sub">Biblioteca de Recursos</div>
+                    </div>
+                </a>
+                <p>Biblioteca de recursos web para diseñadores y desarrolladores. Compatible con WordPress, Elementor y cualquier proyecto web.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Categorías</h4>
+                <ul>
+                    <li><a href="banners.html"><i class="ph ph-caret-right"></i> Banners</a></li>
+                    <li><a href="botones.html"><i class="ph ph-caret-right"></i> Botones</a></li>
+                    <li><a href="listas.html"><i class="ph ph-caret-right"></i> Listas</a></li>
+                    <li><a href="tarjetas.html"><i class="ph ph-caret-right"></i> Tarjetas</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Más Recursos</h4>
+                <ul>
+                    <li><a href="textos.html"><i class="ph ph-caret-right"></i> Textos</a></li>
+                    <li><a href="fondos.html"><i class="ph ph-caret-right"></i> Fondos</a></li>
+                    <li><a href="landings.html"><i class="ph ph-caret-right"></i> Landings</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="#"><i class="ph ph-envelope"></i> hola@witcreativo.com</a></li>
+                    <li><a href="#"><i class="ph ph-globe"></i> witcreativo.com</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>© 2026 WIT Creativo. Todos los derechos reservados.</div>
+            <div class="footer-social">
+                <a href="#"><i class="ph ph-instagram-logo"></i></a>
+                <a href="#"><i class="ph ph-behance-logo"></i></a>
+                <a href="#"><i class="ph ph-dribbble-logo"></i></a>
+                <a href="#"><i class="ph ph-github-logo"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Menú móvil
+        function toggleMenu() {
+            document.getElementById('mainNav').classList.toggle('active');
+        }
+
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mainNav').classList.remove('active');
+            });
+        });
+
+        // Header scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.style.boxShadow = window.pageYOffset > 100 
+                ? '0 4px 30px rgba(0,0,0,0.05)' 
+                : 'none';
+        });
+
+        // ========== CARGAR ÚLTIMOS 3 DE CADA CATEGORÍA ==========
+        const categorias = {
+            banners: { carpeta: 'banner', icono: 'ph-image', gridId: 'grid-banners' },
+            botones: { carpeta: 'botones', icono: 'ph-hand-pointing', gridId: 'grid-botones' },
+            listas: { carpeta: 'listas', icono: 'ph-list-checks', gridId: 'grid-listas' },
+            tarjetas: { carpeta: 'tarjetas', icono: 'ph-squares-four', gridId: 'grid-tarjetas' },
+            textos: { carpeta: 'textos', icono: 'ph-text-aa', gridId: 'grid-textos' },
+            fondos: { carpeta: 'fondos', icono: 'ph-paint-bucket', gridId: 'grid-fondos' }
+        };
+
+        let totalRecursos = 0;
+
+        async function cargarCategoria(key, config) {
+            try {
+                const response = await fetch(`${config.carpeta}/data.json`);
+                if (!response.ok) throw new Error('No data.json');
+                const data = await response.json();
+                
+                const items = data[key] || [];
+                totalRecursos += items.length;
+                
+                // Actualizar contador
+                document.getElementById('statRecursos').textContent = totalRecursos + '+';
+
+                // Ordenar: nuevos primero, luego últimos
+                const ordenados = items.sort((a, b) => {
+                    if (a.nuevo && !b.nuevo) return -1;
+                    if (!a.nuevo && b.nuevo) return 1;
+                    return 0;
+                });
+
+                // Tomar los últimos 3
+                const ultimos3 = ordenados.slice(0, 3);
+                const grid = document.getElementById(config.gridId);
+
+                ultimos3.forEach((item, index) => {
+                    const card = document.createElement('article');
+                    card.className = 'preview-card';
+                    card.style.transitionDelay = `${index * 0.1}s`;
+                    
+                    const tagsHtml = item.tags.map(tag => 
+                        `<span class="tag ${tag}">${tag.toUpperCase()}</span>`
+                    ).join('');
+                    
+                    const nuevoBadge = item.nuevo ? '<span class="preview-badge-new">NUEVO</span>' : '';
+
+                    card.innerHTML = `
+                        ${nuevoBadge}
+                        <div class="preview-frame">
+                            <iframe src="${config.carpeta}/${item.archivo}" loading="lazy"></iframe>
+                        </div>
+                        <div class="preview-info">
+                            <h3>${item.titulo}</h3>
+                            <p>${item.descripcion}</p>
+                            <div class="preview-meta">
+                                <div class="preview-tags">${tagsHtml}</div>
+                                <div class="preview-arrow"><i class="ph ph-arrow-up-right"></i></div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    card.onclick = () => {
+                        location.href = `${config.carpeta}/${item.archivo}`;
+                    };
+                    
+                    grid.appendChild(card);
+                });
+
+                // Animar entrada
+                setTimeout(() => {
+                    grid.querySelectorAll('.preview-card').forEach(c => c.classList.add('visible'));
+                }, 100);
+
+            } catch (error) {
+                console.log(`Categoría ${key} aún no tiene data.json`);
+                // Mostrar placeholders si no hay data.json
+                const grid = document.getElementById(config.gridId);
+                grid.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:40px; color:var(--texto-terciario);">
+                        <i class="ph ph-hourglass" style="font-size:48px; opacity:0.3; margin-bottom:16px; display:block;"></i>
+                        Próximamente recursos de ${key}
+                    </div>
+                `;
+            }
+        }
+
+        // Cargar todas las categorías
+        Object.entries(categorias).forEach(([key, config]) => {
+            cargarCategoria(key, config);
+        });
+
+        // Actualizar contador de categorías con data.json disponibles
+        setTimeout(() => {
+            const categoriasActivas = document.querySelectorAll('.preview-grid .preview-card').length > 0 ? 6 : 0;
+            // El contador se actualiza dinámicamente según lo que cargue
+        }, 1000);
+    </script>
+
+</body>
+</html>
+
+/* ========== BOTÓN VER SERVICIO ========== */
+
+.btn-barra {
+    display: inline-block;
+    position: relative;
+    padding-bottom: 8px;
+
+}
+
+/* Barra inferior */
+.btn-barra::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 20%; /* Barra corta inicial */
+    height: 3px;
+    background-color: #1a1a1a;
+    transition: width 0.4s ease;
+}
+
+/* Hover - barra se expande */
+.btn-barra:hover::after {
+  width: 100%;
+}
+
+/* ========== PESOS DE FUENTE ========== */
+
+.titulo-estudio .parte-light {
+    font-weight: 300;
+}
+
+.titulo-estudio .parte-bold {
+    font-weight: 700;
+}
+
+/* ========== COLOR ========== */
+
+.titulo-estudio,
+.titulo-estudio span {
+    color: #ffffff !important;
+    font-size: 40px;
+}
+
+.titulo-estudio.titulo-negro,
+.titulo-estudio.titulo-negro span {
+    color: #1a1a1a !important;
+}
+
+.titulo-estudio.titulo-blanco,
+.titulo-estudio.titulo-blanco span {
+    color: #ffffff !important;
+}
+<h2 class="titulo-estudio titulo-negro">
+    <span class="parte-bold">Diseño,</span><br>
+    <span class="parte-light">técnica y</span><br>
+    <span class="parte-light">ejecución</span>
+</h2>

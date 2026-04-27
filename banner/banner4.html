@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wit Creativo - Kit Digital</title>
+
+    <!-- Three.js para la malla 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+        background: #f5f5f5;
+        color: #333;
+        overflow-x: hidden;
+      }
+
+      /* ========== ESCRITORIO Y TABLET (base) ========== */
+      .hero-wrapper {
+        position: relative;
+        width: 100%;
+        height: 600px;
+        min-height: 500px;
+        background: #0a0a0a;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        padding: 0 8%;
+        box-sizing: border-box;
+      }
+
+      #particles-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+
+      #mesh-canvas {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 55%;
+        height: 100%;
+        z-index: 2;
+        opacity: 0.5;
+        pointer-events: auto;
+        cursor: grab;
+      }
+
+      #mesh-canvas:active {
+        cursor: grabbing;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 10;
+        max-width: 800px;
+      }
+
+      /* TÍTULO CON ANIMACIÓN */
+      .hero-title {
+        font-family:
+          "Inter",
+          -apple-system,
+          sans-serif;
+        font-size: clamp(3.5rem, 5vw, 5rem);
+        font-weight: 300;
+        line-height: 1.1;
+        color: #ffffff;
+        margin: 0 0 30px 0;
+        letter-spacing: -0.02em;
+      }
+
+      /* Contenedor de cada línea animada */
+      .line-wrapper {
+        display: block;
+        overflow: hidden;
+        margin-bottom: 0.1em;
+      }
+
+      /* Palabras individuales que caen */
+      .fall-word {
+        display: inline-block;
+        transform: translateY(-100%);
+        opacity: 0;
+        animation: fallIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      }
+
+      @keyframes fallIn {
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      /* Delays para cada palabra */
+      .fall-word:nth-child(1) {
+        animation-delay: 0.1s;
+      }
+      .fall-word:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .fall-word:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+
+      /* KIT DIGITAL - Entrada desde la izquierda */
+      .hero-title .highlight {
+        color: #ffd700;
+        font-weight: 500;
+        position: relative;
+        display: inline-block;
+        transform: translateX(-100px);
+        opacity: 0;
+        animation: slideFromLeft 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s
+          forwards;
+      }
+
+      @keyframes slideFromLeft {
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      /* Barra amarilla animada */
+      .hero-title .highlight::after {
+        content: "";
+        position: absolute;
+        left: -5px;
+        right: -5px;
+        bottom: 5px;
+        height: 30%;
+        background: rgba(255, 215, 0, 0.3);
+        z-index: -1;
+        transform: scaleX(0);
+        transform-origin: left;
+        animation: highlightBar 0.6s ease-out 1s forwards;
+      }
+
+      @keyframes highlightBar {
+        to {
+          transform: scaleX(1);
+        }
+      }
+
+      /* Botón con animación de entrada */
+      .hero-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 28px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 50px;
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 400;
+        background: transparent;
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeUp 0.6s ease-out 1.2s forwards;
+      }
+
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hero-button:hover {
+        background: #ffd700;
+        border-color: #ffd700;
+        color: #0a0a0a;
+      }
+
+      .button-icon {
+        width: 32px;
+        height: 32px;
+        border: 1px solid currentColor;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .hero-button:hover .button-icon {
+        border-color: #0a0a0a;
+        transform: translateX(3px);
+      }
+
+      /* ========== MÓVIL (hasta 768px) ========== */
+      @media (max-width: 768px) {
+        .hero-wrapper {
+          height: auto;
+          /* Sin min-height fijo, se ajusta al contenido */
+          padding: 40px 6% 30px; /* Padding inferior reducido de 60px a 30px */
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+        }
+
+        .hero-content {
+          max-width: 100%;
+          margin-bottom: 20px; /* Reducido de 40px a 20px */
+          order: 1;
+        }
+
+        .hero-title {
+          font-size: clamp(2.5rem, 8vw, 3.5rem);
+          line-height: 1.15;
+        }
+
+        /* Malla más grande pero con menos espacio debajo */
+        #mesh-canvas {
+          position: relative;
+          width: 100%;
+          height: 400px; /* Reducido de 450px a 400px */
+          opacity: 0.7;
+          right: auto;
+          top: auto;
+          order: 2;
+          flex-shrink: 0;
+          margin-bottom: 0; /* Sin margen inferior */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- HERO SECTION -->
+    <div class="hero-wrapper">
+      <!-- Canvas de partículas -->
+      <canvas id="particles-canvas"></canvas>
+
+      <!-- Canvas de malla 3D -->
+      <canvas id="mesh-canvas"></canvas>
+
+      <!-- Contenido -->
+      <div class="hero-content">
+        <h1 class="hero-title">
+          <span class="line-wrapper">
+            <span class="fall-word">Los</span>
+            <span class="fall-word">mejores</span>
+            <span class="fall-word">agentes</span>
+          </span>
+          <span class="line-wrapper">
+            <span class="fall-word">digitalizadores</span>
+            <span class="fall-word">del</span>
+          </span>
+          <span class="line-wrapper">
+            <span class="highlight">Kit Digital</span>
+          </span>
+        </h1>
+        <a href="#" class="hero-button">
+          <span class="button-icon">→</span>
+          Solicitar información
+        </a>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const wrapper = document.querySelector(".hero-wrapper");
+        if (!wrapper) return;
+
+        const canvas = wrapper.querySelector("#particles-canvas");
+        const ctx = canvas.getContext("2d");
+        const meshCanvas = wrapper.querySelector("#mesh-canvas");
+
+        let width, height;
+        let particles = [];
+        let mouseRelative = { x: null, y: null };
+
+        const particleCount = 50;
+        const connectionDistance = 100;
+        const mouseDistance = 150;
+
+        function resize() {
+          const rect = wrapper.getBoundingClientRect();
+          width = canvas.width = rect.width;
+          height = canvas.height = rect.height;
+        }
+
+        class Particle {
+          constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.vx = (Math.random() - 0.5) * 0.6;
+            this.vy = (Math.random() - 0.5) * 0.6;
+            this.size = Math.random() * 2 + 0.5;
+            this.density = Math.random() * 15 + 5;
+          }
+
+          update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > width) this.vx *= -1;
+            if (this.y < 0 || this.y > height) this.vy *= -1;
+
+            if (mouseRelative.x != null) {
+              let dx = mouseRelative.x - this.x;
+              let dy = mouseRelative.y - this.y;
+              let distance = Math.sqrt(dx * dx + dy * dy);
+              if (distance < mouseDistance) {
+                const force = (mouseDistance - distance) / mouseDistance;
+                const push = force * this.density;
+                this.x -= (dx / distance) * push;
+                this.y -= (dy / distance) * push;
+              }
+            }
+          }
+
+          draw() {
+            ctx.fillStyle = "rgba(255, 215, 0, 0.6)";
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        function initParticles() {
+          particles = [];
+          for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+          }
+        }
+
+        function connectParticles() {
+          for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+              let dx = particles[i].x - particles[j].x;
+              let dy = particles[i].y - particles[j].y;
+              let distance = Math.sqrt(dx * dx + dy * dy);
+              if (distance < connectionDistance) {
+                let opacity = 1 - distance / connectionDistance;
+                ctx.strokeStyle = `rgba(255, 215, 0, ${opacity * 0.3})`;
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.stroke();
+              }
+            }
+          }
+        }
+
+        function animateParticles() {
+          ctx.clearRect(0, 0, width, height);
+          particles.forEach((p) => {
+            p.update();
+            p.draw();
+          });
+          connectParticles();
+          requestAnimationFrame(animateParticles);
+        }
+
+        wrapper.addEventListener("mousemove", (e) => {
+          const rect = wrapper.getBoundingClientRect();
+          mouseRelative.x = e.clientX - rect.left;
+          mouseRelative.y = e.clientY - rect.top;
+        });
+
+        wrapper.addEventListener("mouseleave", () => {
+          mouseRelative.x = null;
+          mouseRelative.y = null;
+        });
+
+        const resizeObserver = new ResizeObserver(() => {
+          resize();
+          initParticles();
+        });
+        resizeObserver.observe(wrapper);
+
+        resize();
+        initParticles();
+        animateParticles();
+
+        /* ========== MALLA 3D INTERACTIVA ========== */
+        if (meshCanvas && typeof THREE !== "undefined") {
+          const scene = new THREE.Scene();
+          const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+
+          const renderer = new THREE.WebGLRenderer({
+            canvas: meshCanvas,
+            alpha: true,
+            antialias: true,
+          });
+
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+          const geometry = new THREE.TorusKnotGeometry(6, 2, 150, 20);
+          const material = new THREE.MeshBasicMaterial({
+            color: 0xffd700,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.6,
+          });
+
+          const mesh = new THREE.Mesh(geometry, material);
+          scene.add(mesh);
+
+          const innerGeometry = new THREE.TorusKnotGeometry(4, 1.5, 100, 16);
+          const innerMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffa500,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3,
+          });
+          const innerMesh = new THREE.Mesh(innerGeometry, innerMaterial);
+          scene.add(innerMesh);
+
+          camera.position.z = 20;
+          camera.position.x = 3;
+
+          let isDragging = false;
+          let previousMousePosition = { x: 0, y: 0 };
+          let targetRotation = { x: 0, y: 0 };
+          let currentRotation = { x: 0, y: 0 };
+          let autoRotate = true;
+          let dragVelocity = { x: 0, y: 0 };
+
+          function updateRendererSize() {
+            const rect = wrapper.getBoundingClientRect();
+            const isMobile = window.innerWidth <= 768;
+
+            let canvasWidth, canvasHeight;
+
+            if (isMobile) {
+              // Móvil: 100% ancho, 450px alto (más grande)
+              canvasWidth = rect.width;
+              canvasHeight = 450;
+            } else {
+              // Desktop/Tablet: 55% ancho, altura del wrapper
+              canvasWidth = rect.width * 0.55;
+              canvasHeight = rect.height;
+            }
+
+            camera.aspect = canvasWidth / canvasHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(canvasWidth, canvasHeight);
+          }
+
+          meshCanvas.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            autoRotate = false;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+            meshCanvas.style.cursor = "grabbing";
+          });
+
+          document.addEventListener("mousemove", (e) => {
+            if (!isDragging) return;
+            const deltaX = e.clientX - previousMousePosition.x;
+            const deltaY = e.clientY - previousMousePosition.y;
+            const sensitivity = 0.008;
+            targetRotation.y += deltaX * sensitivity;
+            targetRotation.x += deltaY * sensitivity;
+            dragVelocity.x = deltaY * sensitivity;
+            dragVelocity.y = deltaX * sensitivity;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+          });
+
+          document.addEventListener("mouseup", () => {
+            if (isDragging) {
+              isDragging = false;
+              meshCanvas.style.cursor = "grab";
+              setTimeout(() => {
+                if (!isDragging) autoRotate = true;
+              }, 2000);
+            }
+          });
+
+          meshCanvas.addEventListener(
+            "touchstart",
+            (e) => {
+              isDragging = true;
+              autoRotate = false;
+              previousMousePosition = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+              };
+            },
+            { passive: false },
+          );
+
+          meshCanvas.addEventListener(
+            "touchmove",
+            (e) => {
+              if (!isDragging) return;
+              e.preventDefault();
+              const deltaX = e.touches[0].clientX - previousMousePosition.x;
+              const deltaY = e.touches[0].clientY - previousMousePosition.y;
+              const sensitivity = 0.008;
+              targetRotation.y += deltaX * sensitivity;
+              targetRotation.x += deltaY * sensitivity;
+              dragVelocity.x = deltaY * sensitivity;
+              dragVelocity.y = deltaX * sensitivity;
+              previousMousePosition = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY,
+              };
+            },
+            { passive: false },
+          );
+
+          meshCanvas.addEventListener("touchend", () => {
+            isDragging = false;
+            setTimeout(() => {
+              if (!isDragging) autoRotate = true;
+            }, 2000);
+          });
+
+          meshCanvas.addEventListener("mousemove", (e) => {
+            if (isDragging) return;
+            const rect = meshCanvas.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            targetRotation.y += x * 0.002;
+            targetRotation.x += y * 0.002;
+          });
+
+          function animateMesh() {
+            requestAnimationFrame(animateMesh);
+
+            if (autoRotate) {
+              targetRotation.x += 0.002;
+              targetRotation.y += 0.004;
+            } else if (!isDragging) {
+              dragVelocity.x *= 0.95;
+              dragVelocity.y *= 0.95;
+              targetRotation.x += dragVelocity.x;
+              targetRotation.y += dragVelocity.y;
+              if (
+                Math.abs(dragVelocity.x) < 0.0001 &&
+                Math.abs(dragVelocity.y) < 0.0001
+              ) {
+                dragVelocity.x = 0;
+                dragVelocity.y = 0;
+              }
+            }
+
+            const lerpFactor = 0.08;
+            currentRotation.x +=
+              (targetRotation.x - currentRotation.x) * lerpFactor;
+            currentRotation.y +=
+              (targetRotation.y - currentRotation.y) * lerpFactor;
+
+            mesh.rotation.x = currentRotation.x;
+            mesh.rotation.y = currentRotation.y;
+            mesh.rotation.z = currentRotation.y * 0.3;
+
+            innerMesh.rotation.x = currentRotation.x * 1.2;
+            innerMesh.rotation.y = currentRotation.y * 1.2;
+            innerMesh.rotation.z = -currentRotation.y * 0.2;
+
+            const velocity =
+              Math.abs(dragVelocity.x) + Math.abs(dragVelocity.y);
+            const scale = 1 + velocity * 0.5;
+            mesh.scale.setScalar(1 + (scale - 1) * 0.3);
+            innerMesh.scale.setScalar(1 - (scale - 1) * 0.2);
+
+            renderer.render(scene, camera);
+          }
+
+          updateRendererSize();
+          animateMesh();
+
+          const meshResizeObserver = new ResizeObserver(() => {
+            updateRendererSize();
+          });
+          meshResizeObserver.observe(wrapper);
+        }
+      })();
+    </script>
+  </body>
+</html>

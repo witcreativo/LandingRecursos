@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parallax Layers</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .banner-wrapper {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(180deg, #faf9f7 0%, #f0ece6 100%);
+        }
+
+        /* Capas de parallax */
+        .parallax-layer {
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            top: -10%;
+            left: -10%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .layer-1 {
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        .layer-2 {
+            z-index: 2;
+            opacity: 0.6;
+        }
+
+        .layer-3 {
+            z-index: 3;
+            opacity: 0.8;
+        }
+
+        /* Círculos decorativos */
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+        }
+
+        .circle-1 {
+            width: 400px; height: 400px;
+            background: linear-gradient(135deg, var(--rosa-pastel), var(--lavanda));
+            top: 10%; left: 10%;
+        }
+
+        .circle-2 {
+            width: 300px; height: 300px;
+            background: linear-gradient(135deg, var(--menta), var(--turquesa));
+            bottom: 20%; right: 15%;
+        }
+
+        .circle-3 {
+            width: 200px; height: 200px;
+            background: linear-gradient(135deg, var(--amarillo-suave), var(--rosa-pastel));
+            top: 40%; right: 30%;
+        }
+
+        /* Formas geométricas */
+        .shape {
+            position: absolute;
+            opacity: 0.15;
+        }
+
+        .shape-1 {
+            width: 120px; height: 120px;
+            border: 3px solid #e91e63;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            top: 20%; left: 60%;
+            animation: morph 8s ease-in-out infinite;
+        }
+
+        .shape-2 {
+            width: 80px; height: 80px;
+            background: #9c27b0;
+            border-radius: 50%;
+            bottom: 30%; left: 20%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape-3 {
+            width: 60px; height: 60px;
+            border: 2px solid #00bcd4;
+            transform: rotate(45deg);
+            top: 60%; right: 20%;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes morph {
+            0%, 100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+            50% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Contenido */
+        .banner-content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 40px;
+        }
+
+        .banner-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--blanco);
+            border: 1px solid var(--borde-suave);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--texto-secundario);
+            margin-bottom: 32px;
+            box-shadow: var(--sombra-suave);
+        }
+
+        .banner-content h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 700;
+            color: var(--texto-principal);
+            letter-spacing: -2px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .banner-content h1 span {
+            background: linear-gradient(135deg, #e91e63, #9c27b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .banner-content p {
+            font-size: 1.2rem;
+            color: var(--texto-secundario);
+            max-width: 500px;
+            font-weight: 300;
+            margin-bottom: 40px;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--texto-terciario);
+            font-size: 0.8rem;
+            animation: bounce 2s infinite;
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--texto-terciario), transparent);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner-wrapper" id="banner">
+        <div class="parallax-layer layer-1" data-speed="0.2">
+            <div class="circle circle-1"></div>
+        </div>
+        <div class="parallax-layer layer-2" data-speed="0.5">
+            <div class="circle circle-2"></div>
+            <div class="shape shape-1"></div>
+        </div>
+        <div class="parallax-layer layer-3" data-speed="0.8">
+            <div class="circle circle-3"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+
+        <div class="banner-content">
+            <div class="banner-badge">🌊 Efecto Parallax</div>
+            <h1>Capas de<br><span>profundidad</span></h1>
+            <p>Múltiples capas visuales que se mueven a diferentes velocidades creando una sensación de profundidad inmersiva.</p>
+        </div>
+
+        <div class="scroll-indicator">Scroll</div>
+    </div>
+
+    <script>
+        const banner = document.getElementById('banner');
+        const layers = document.querySelectorAll('.parallax-layer');
+
+        banner.addEventListener('mousemove', (e) => {
+            const rect = banner.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+            layers.forEach(layer => {
+                const speed = parseFloat(layer.dataset.speed);
+                const moveX = x * speed * 50;
+                const moveY = y * speed * 50;
+                layer.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            });
+        });
+
+        banner.addEventListener('mouseleave', () => {
+            layers.forEach(layer => {
+                layer.style.transform = 'translate(0, 0)';
+                layer.style.transition = 'transform 0.5s ease';
+            });
+        });
+
+        banner.addEventListener('mouseenter', () => {
+            layers.forEach(layer => {
+                layer.style.transition = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Interactivo</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            background: #1a1a2e;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0; left: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            pointer-events: none;
+        }
+
+        .content h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 700;
+            color: rgba(255,255,255,0.95);
+            letter-spacing: -2px;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        }
+
+        .content p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.7);
+            max-width: 500px;
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gridCanvas"></canvas>
+
+    <div class="content">
+        <h1>Grid Interactivo</h1>
+        <p>Grid de puntos que responden al movimiento del ratón con efecto de onda expansiva.</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gridCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let dots = [];
+        let mouse = { x: -1000, y: -1000 };
+        const spacing = 40;
+        const dotRadius = 2;
+        const maxDist = 150;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initDots();
+        }
+
+        window.addEventListener('resize', resize);
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('mouseleave', () => {
+            mouse.x = -1000;
+            mouse.y = -1000;
+        });
+
+        class Dot {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.baseX = x;
+                this.baseY = y;
+                this.size = dotRadius;
+                this.baseColor = { h: 280, s: 70, l: 60 };
+            }
+
+            update() {
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < maxDist) {
+                    const force = (maxDist - distance) / maxDist;
+                    const angle = Math.atan2(dy, dx);
+                    
+                    this.x = this.baseX - Math.cos(angle) * force * 20;
+                    this.y = this.baseY - Math.sin(angle) * force * 20;
+                    this.size = dotRadius + force * 4;
+                    
+                    // Cambio de color según proximidad
+                    const hue = 280 - force * 60; // De morado a rosa
+                    this.baseColor = { h: hue, s: 70 + force * 20, l: 60 + force * 20 };
+                } else {
+                    // Volver a posición original
+                    this.x += (this.baseX - this.x) * 0.1;
+                    this.y += (this.baseY - this.y) * 0.1;
+                    this.size += (dotRadius - this.size) * 0.1;
+                    this.baseColor.h += (280 - this.baseColor.h) * 0.05;
+                    this.baseColor.s += (70 - this.baseColor.s) * 0.05;
+                    this.baseColor.l += (60 - this.baseColor.l) * 0.05;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `hsl(${this.baseColor.h}, ${this.baseColor.s}%, ${this.baseColor.l}%)`;
+                ctx.fill();
+
+                // Brillo
+                ctx.beginPath();
+                ctx.arc(this.x - this.size * 0.3, this.y - this.size * 0.3, this.size * 0.3, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${this.baseColor.h}, ${this.baseColor.s}%, 90%, 0.6)`;
+                ctx.fill();
+            }
+        }
+
+        function initDots() {
+            dots = [];
+            const cols = Math.ceil(width / spacing) + 1;
+            const rows = Math.ceil(height / spacing) + 1;
+
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    dots.push(new Dot(i * spacing, j * spacing));
+                }
+            }
+        }
+
+        function connectDots() {
+            for (let i = 0; i < dots.length; i++) {
+                for (let j = i + 1; j < dots.length; j++) {
+                    const dx = dots[i].x - dots[j].x;
+                    const dy = dots[i].y - dots[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < spacing * 1.5) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(180, 140, 255, ${0.1 * (1 - distance / (spacing * 1.5))})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(dots[i].x, dots[i].y);
+                        ctx.lineTo(dots[j].x, dots[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(26, 26, 46, 0.3)';
+            ctx.fillRect(0, 0, width, height);
+
+            dots.forEach(dot => {
+                dot.update();
+                dot.draw();
+            });
+
+            connectDots();
+            requestAnimationFrame(animate);
+        }
+
+        resize();
+        animate();
+    </script>
+</body>
+</html>

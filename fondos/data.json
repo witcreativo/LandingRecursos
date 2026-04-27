@@ -1,0 +1,28 @@
+{
+  "fondos": [
+    {
+      "id": "fondo1",
+      "titulo": "Fondo 1 — Aurora Boreal",
+      "descripcion": "Degradados fluidos que simulan aurora boreal en movimiento. Colores pastel suaves que cambian continuamente.",
+      "archivo": "fondo1.html",
+      "tags": ["html", "css"],
+      "nuevo": true
+    },
+    {
+      "id": "fondo2",
+      "titulo": "Fondo 2 — Burbujas Flotantes",
+      "descripcion": "Burbujas de diferentes tamaños flotando con velocidades variadas. Efecto orgánico y relajante puro CSS.",
+      "archivo": "fondo2.html",
+      "tags": ["html", "css"],
+      "nuevo": true
+    },
+    {
+      "id": "fondo3",
+      "titulo": "Fondo 3 — Grid Interactivo",
+      "descripcion": "Grid de puntos que responden al movimiento del ratón con efecto de onda. Canvas 2D interactivo.",
+      "archivo": "fondo3.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    }
+  ]
+}

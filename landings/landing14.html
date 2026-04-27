@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wit Creativo | Orbitamos Ideas</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #060d18;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .bg-ambient {
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(88, 28, 135, 0.2) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(30, 60, 120, 0.15) 0%, transparent 50%),
+                linear-gradient(180deg, #0a1525 0%, #060d18 50%, #030810 100%);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        #three-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 70%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        @media (max-width: 1024px) {
+            #three-container {
+                width: 100%;
+                opacity: 0.5;
+            }
+        }
+
+        .logo-text {
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .logo-dot {
+            color: #FF006E;
+        }
+
+        .headline {
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+        }
+
+        .text-blue-accent {
+            color: #3B82F6;
+        }
+
+        .stat-number {
+            font-weight: 700;
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #6B7280;
+            margin-top: 0.4rem;
+            font-weight: 500;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="bg-ambient min-h-screen">
+
+        <div id="three-container"></div>
+
+        <div class="relative z-10 min-h-screen flex flex-col justify-center px-8 sm:px-12 lg:px-16 xl:px-24">
+
+            <div class="absolute top-8 left-8 sm:left-12 lg:left-16 xl:left-24">
+                <div class="flex items-center gap-1">
+                    <span class="logo-text text-xl text-white">wit</span>
+                    <span class="logo-dot text-2xl">.</span>
+                    <span class="logo-text text-xl text-gray-400 font-normal">creativo</span>
+                </div>
+                <div class="badge inline-block px-3 py-1.5 rounded-full mt-2">
+                    <span class="text-[11px] text-gray-300 tracking-widest font-medium">AGENCIA CREATIVA DIGITAL</span>
+                </div>
+            </div>
+
+            <div class="max-w-2xl">
+                <h1 class="headline text-[3.5rem] sm:text-6xl lg:text-7xl mb-6">
+                    <span class="block text-white">Orbitamos</span>
+                    <span class="block text-blue-accent">ideas</span>
+                    <span class="block text-white">que brillan</span>
+                </h1>
+
+                <p class="text-gray-400 text-base sm:text-lg max-w-lg mb-12 leading-relaxed">
+                    Diseñamos experiencias digitales que giran alrededor de tu marca, 
+                    creando universos visuales memorables.
+                </p>
+
+                <div class="flex gap-10 sm:gap-14">
+                    <div>
+                        <div class="stat-number text-white">150+</div>
+                        <div class="stat-label">Proyectos</div>
+                    </div>
+                    <div>
+                        <div class="stat-number text-white">8</div>
+                        <div class="stat-label">Años</div>
+                    </div>
+                    <div>
+                        <div class="stat-number text-white">98%</div>
+                        <div class="stat-label">Satisfacción</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // THREE.JS - DISCOS CRISTALINOS ORBITANDO
+        // Basado en el código de referencia
+        // ==========================================
+
+        const container = document.getElementById('three-container');
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.5;
+        renderer.setClearColor(0x000000, 0);
+        container.appendChild(renderer.domElement);
+
+        const scene = new THREE.Scene();
+
+        const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 200);
+        camera.position.set(2, 3, 16);
+        camera.lookAt(0, 0, 0);
+
+        // ==========================================
+        // ENVIRONMENT MAP
+        // ==========================================
+
+        const pmremGenerator = new THREE.PMREMGenerator(renderer);
+        const envScene = new THREE.Scene();
+        const envSphere = new THREE.Mesh(
+            new THREE.SphereGeometry(80, 32, 16),
+            new THREE.MeshBasicMaterial({ color: 0x050d1a, side: THREE.BackSide })
+        );
+        envScene.add(envSphere);
+
+        // Luces en el environment
+        const addSpot = (x, y, z, color, r) => {
+            const m = new THREE.Mesh(
+                new THREE.SphereGeometry(r, 8, 8),
+                new THREE.MeshBasicMaterial({ color })
+            );
+            m.position.set(x, y, z);
+            envScene.add(m);
+        };
+
+        addSpot(25, 30, 15, 0xffffff, 12);
+        addSpot(-20, 15, -10, 0x1a3a6a, 16);
+        addSpot(10, -20, 5, 0xb8860b, 8);
+        addSpot(0, 30, -20, 0x2244aa, 12);
+
+        const envTexture = pmremGenerator.fromScene(envScene).texture;
+        scene.environment = envTexture;
+
+        // ==========================================
+        // LUCES
+        // ==========================================
+
+        const keyLight = new THREE.DirectionalLight(0xffffff, 5);
+        keyLight.position.set(10, 15, 10);
+        scene.add(keyLight);
+
+        const blueLight = new THREE.DirectionalLight(0x3366ff, 2);
+        blueLight.position.set(-12, 4, -8);
+        scene.add(blueLight);
+
+        const goldLight = new THREE.PointLight(0xd4a017, 2.5, 30);
+        goldLight.position.set(4, -6, 6);
+        scene.add(goldLight);
+
+        scene.add(new THREE.AmbientLight(0x0d1a2e, 1.2));
+
+        // ==========================================
+        // MATERIALES
+        // ==========================================
+
+        // Borde metálico dorado
+        const goldRimMat = new THREE.MeshStandardMaterial({
+            color: 0xc8a84b,
+            metalness: 1.0,
+            roughness: 0.03,
+            envMap: envTexture,
+            envMapIntensity: 5.0,
+        });
+
+        // Borde metálico plateado
+        const silverRimMat = new THREE.MeshStandardMaterial({
+            color: 0xd0d8f0,
+            metalness: 1.0,
+            roughness: 0.03,
+            envMap: envTexture,
+            envMapIntensity: 5.0,
+        });
+
+        // Cristal interior
+        const glassMat = new THREE.MeshPhysicalMaterial({
+            color: 0x0a1428,
+            metalness: 0.0,
+            roughness: 0.0,
+            transmission: 0.85,
+            thickness: 0.5,
+            ior: 1.5,
+            reflectivity: 1.0,
+            envMap: envTexture,
+            envMapIntensity: 3.0,
+            transparent: true,
+            opacity: 0.75,
+            side: THREE.DoubleSide,
+        });
+
+        // ==========================================
+        // CREAR DISCO CRISTALINO
+        // ==========================================
+
+        function createCrystalDisc(outerR, rimThickness, useGold) {
+            const group = new THREE.Group();
+            const rimMat = useGold ? goldRimMat : silverRimMat;
+
+            // Disco interior de cristal
+            const discGeo = new THREE.CircleGeometry(outerR - rimThickness, 96);
+            const disc = new THREE.Mesh(discGeo, glassMat.clone());
+            disc.rotation.y = Math.PI;
+            group.add(disc);
+
+            const discBack = new THREE.Mesh(discGeo, glassMat.clone());
+            group.add(discBack);
+
+            // Borre metálico (torus)
+            const rimR = rimThickness / 2;
+            const centerR = outerR - rimR;
+            const rim = new THREE.Mesh(
+                new THREE.TorusGeometry(centerR, rimR, 32, 128),
+                rimMat
+            );
+            group.add(rim);
+
+            return group;
+        }
+
+        // ==========================================
+        // SISTEMA DE ÓRBITAS
+        // ==========================================
+
+        const orbitData = [
+            { radius: 1.2, outerR: 2.4, rimT: 0.2, gold: false, speed: 0.55, tiltX: 0.3, tiltZ: 0.1,  phase: 0.0,  selfSpin: 0.4  },
+            { radius: 2.2, outerR: 2.0, rimT: 0.18, gold: true,  speed: -0.4, tiltX: 1.1, tiltZ: 0.6,  phase: 1.1,  selfSpin: -0.3 },
+            { radius: 3.0, outerR: 2.6, rimT: 0.22, gold: false, speed: 0.3,  tiltX: 0.7, tiltZ: -0.4, phase: 2.3,  selfSpin: 0.5  },
+            { radius: 1.8, outerR: 1.8, rimT: 0.16, gold: true,  speed: -0.5, tiltX: -0.5, tiltZ: 0.9, phase: 0.7,  selfSpin: -0.35},
+            { radius: 2.6, outerR: 2.2, rimT: 0.2,  gold: false, speed: 0.45, tiltX: 1.4, tiltZ: -0.2, phase: 3.5,  selfSpin: 0.6  },
+            { radius: 1.5, outerR: 3.0, rimT: 0.25, gold: true,  speed: -0.35,tiltX: 0.2, tiltZ: 1.2,  phase: 1.8,  selfSpin: -0.25},
+            { radius: 3.5, outerR: 1.6, rimT: 0.15, gold: false, speed: 0.6,  tiltX: -0.8, tiltZ: 0.3, phase: 4.2,  selfSpin: 0.45 },
+            { radius: 2.0, outerR: 2.8, rimT: 0.22, gold: true,  speed: 0.38, tiltX: 1.0, tiltZ: -0.8, phase: 5.1,  selfSpin: -0.5 },
+            { radius: 2.8, outerR: 2.0, rimT: 0.18, gold: false, speed: -0.42,tiltX: -0.3, tiltZ: 1.0, phase: 2.9,  selfSpin: 0.3  },
+            { radius: 1.0, outerR: 3.2, rimT: 0.28, gold: true,  speed: 0.52, tiltX: 0.6, tiltZ: -1.1, phase: 0.4,  selfSpin: -0.4 },
+        ];
+
+        const pivots = [];
+        const discs = [];
+
+        orbitData.forEach((d) => {
+            // Pivot = plano de órbita
+            const pivot = new THREE.Group();
+            pivot.rotation.x = d.tiltX;
+            pivot.rotation.z = d.tiltZ;
+            scene.add(pivot);
+
+            const disc = createCrystalDisc(d.outerR, d.rimT, d.gold);
+            disc.position.x = d.radius * 2.2;
+            disc.rotation.y = Math.PI / 2;
+            pivot.add(disc);
+
+            pivots.push({ pivot, data: d });
+            discs.push({ disc, data: d });
+        });
+
+        // ==========================================
+        // ANIMACIÓN
+        // ==========================================
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const elapsed = clock.getElapsedTime();
+
+            // Órbita lenta de cámara
+            const camAngle = elapsed * 0.1;
+            camera.position.x = Math.sin(camAngle) * 4 + 1;
+            camera.position.y = 3 + Math.sin(elapsed * 0.07) * 1.5;
+            camera.position.z = 16 + Math.cos(camAngle) * 2;
+            camera.lookAt(0, 0, 0);
+
+            // Órbita de pivots (discos giran alrededor del centro)
+            pivots.forEach(({ pivot, data }) => {
+                pivot.rotation.y = data.phase + elapsed * data.speed;
+            });
+
+            // Giro propio de cada disco + wobble
+            discs.forEach(({ disc, data }) => {
+                disc.rotation.z = elapsed * data.selfSpin;
+                disc.rotation.x = Math.sin(elapsed * 0.3 + data.phase) * 0.15;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Resize
+        window.addEventListener('resize', () => {
+            const w = container.clientWidth;
+            const h = container.clientHeight;
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
+            renderer.setSize(w, h);
+        });
+
+        // ==========================================
+        // GSAP ANIMACIONES UI
+        // ==========================================
+
+        gsap.from('h1 span', {
+            y: 50,
+            opacity: 0,
+            duration: 0.9,
+            stagger: 0.12,
+            ease: 'power3.out',
+            delay: 0.3
+        });
+
+        gsap.from('p', {
+            y: 30,
+            opacity: 0,
+            duration: 0.7,
+            ease: 'power3.out',
+            delay: 0.8
+        });
+
+        gsap.from('.stat-number, .stat-label', {
+            y: 20,
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.05,
+            ease: 'power3.out',
+            delay: 1.1
+        });
+    </script>
+</body>
+</html>

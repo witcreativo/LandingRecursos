@@ -1,0 +1,164 @@
+{
+  "landings": [
+    {
+      "id": "landing1",
+      "titulo": "Landing 1 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing1.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": true
+    },
+    {
+      "id": "landing2",
+      "titulo": "Landing 2 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing2.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": true
+    },
+    {
+      "id": "landing3",
+      "titulo": "Landing 3 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing3.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": true
+    },
+    {
+      "id": "landing4",
+      "titulo": "Landing 4 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing4.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": true
+    },
+    {
+      "id": "landing5",
+      "titulo": "Landing 5 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing5.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": true
+    },
+    {
+      "id": "landing6",
+      "titulo": "Landing 6 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing6.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": true
+    },
+    {
+      "id": "landing7",
+      "titulo": "Landing 7 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing7.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing8",
+      "titulo": "Landing 8 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing8.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing9",
+      "titulo": "Landing 9 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing9.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing10",
+      "titulo": "Landing 10 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing10.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing11",
+      "titulo": "Landing 11 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing11.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing12",
+      "titulo": "Landing 12 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing12.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing13",
+      "titulo": "Landing 13 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing13.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing14",
+      "titulo": "Landing 14 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing14.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing15",
+      "titulo": "Landing 15 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing15.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing16",
+      "titulo": "Landing 16 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing16.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing17",
+      "titulo": "Landing 17 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing17.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing18",
+      "titulo": "Landing 18 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing18.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing19",
+      "titulo": "Landing 19 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing19.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    },
+    {
+      "id": "landing20",
+      "titulo": "Landing 20 — [PON TU TÍTULO]",
+      "descripcion": "[PON TU DESCRIPCIÓN]",
+      "archivo": "landing20.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": false
+    }
+  ]
+}

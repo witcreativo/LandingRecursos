@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wit Creativo | Diseño que Desafía la Gravedad</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --neon-pink: #FF006E;
+            --neon-yellow: #FFBE0B;
+            --neon-blue: #3A86FF;
+            --neon-purple: #8338EC;
+            --neon-orange: #FB5607;
+            --neon-cyan: #00BBF9;
+            --dark-bg: #0a0a0f;
+            --darker-bg: #050508;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--darker-bg);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Cursor Personalizado */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--neon-cyan);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease-out, background 0.2s, border-color 0.2s;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(0,187,249,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.3s ease-out;
+        }
+
+        .cursor.hover {
+            transform: scale(2.5);
+            background: var(--neon-pink);
+            border-color: var(--neon-pink);
+            mix-blend-mode: normal;
+        }
+
+        .cursor-follower.hover {
+            transform: scale(1.5);
+            background: radial-gradient(circle, rgba(255,0,110,0.4) 0%, transparent 70%);
+        }
+
+        /* Fondo Morphing Canvas */
+        #morphing-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0f0a1a 100%);
+        }
+
+        /* Partículas Canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Three.js Container */
+        #three-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @media (max-width: 1024px) {
+            #three-container {
+                width: 100%;
+                opacity: 0.3;
+            }
+        }
+
+        /* Texto Gradient Animado */
+        .gradient-text {
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-yellow), var(--neon-blue), var(--neon-purple), var(--neon-pink));
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 6s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Botones Neón */
+        .btn-neon {
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-neon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-neon:hover::before {
+            left: 100%;
+        }
+
+        .btn-neon:hover {
+            box-shadow: 0 0 30px rgba(255, 0, 110, 0.5), 0 0 60px rgba(255, 0, 110, 0.3);
+            border-color: var(--neon-pink);
+            transform: translateY(-2px);
+        }
+
+        .btn-neon-primary {
+            background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+            border: none;
+        }
+
+        .btn-neon-primary:hover {
+            box-shadow: 0 0 40px rgba(255, 0, 110, 0.6), 0 0 80px rgba(131, 56, 236, 0.4);
+        }
+
+        /* Efecto Derrame en Tarjetas */
+        .card-spill {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .card-spill::before {
+            content: '';
+            position: absolute;
+            top: var(--y, 50%);
+            left: var(--x, 50%);
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--neon-cyan) 0%, var(--neon-blue) 50%, transparent 70%);
+            opacity: 0;
+            transition: width 0.6s, height 0.6s, opacity 0.3s;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+        }
+
+        .card-spill:hover::before {
+            width: 300%;
+            height: 300%;
+            opacity: 0.15;
+        }
+
+        .card-spill:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(0, 187, 249, 0.3);
+        }
+
+        .card-spill > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Animaciones de entrada */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(50px);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        /* Líneas decorativas */
+        .line-deco {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            animation: linePulse 3s ease infinite;
+        }
+
+        @keyframes linePulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-purple);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-pink);
+        }
+
+        /* Floating shapes */
+        .float-shape {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Glitch effect para títulos */
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            animation: glitch-1 2s infinite linear alternate-reverse;
+            color: var(--neon-cyan);
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-2 3s infinite linear alternate-reverse;
+            color: var(--neon-pink);
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(20% 0 30% 0); transform: translate(-2px, 2px); }
+            40% { clip-path: inset(50% 0 20% 0); transform: translate(2px, -2px); }
+            60% { clip-path: inset(10% 0 60% 0); transform: translate(-2px, 0); }
+            80% { clip-path: inset(80% 0 5% 0); transform: translate(2px, 2px); }
+        }
+
+        @keyframes glitch-2 {
+            0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+            20% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -2px); }
+            40% { clip-path: inset(30% 0 40% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(10% 0 70% 0); transform: translate(2px, 0); }
+            80% { clip-path: inset(40% 0 30% 0); transform: translate(-2px, -2px); }
+        }
+
+        /* Grid de servicios */
+        .service-icon {
+            transition: all 0.3s ease;
+        }
+
+        .card-spill:hover .service-icon {
+            transform: scale(1.2) rotate(10deg);
+            color: var(--neon-cyan);
+        }
+
+        /* Stats counter */
+        .stat-number {
+            font-family: 'Space Grotesk', monospace;
+            font-weight: 700;
+        }
+
+        /* Testimonios */
+        .testimonial-card {
+            transition: all 0.4s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        /* Navegación flotante */
+        .nav-float {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-float.scrolled {
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
+            padding: 10px 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cursor, .cursor-follower {
+                display: none;
+            }
+            * {
+                cursor: auto;
+            }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <!-- Cursor personalizado -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Canvas de fondo morphing -->
+    <canvas id="morphing-canvas"></canvas>
+
+    <!-- Canvas de partículas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Contenedor Three.js -->
+    <div id="three-container"></div>
+
+    <!-- Navegación -->
+    <nav class="nav-float glass px-6 py-4 rounded-full">
+        <div class="flex items-center gap-8">
+            <div class="text-2xl font-bold gradient-text">Wit</div>
+            <div class="hidden md:flex gap-6 text-sm font-medium">
+                <a href="#inicio" class="hover:text-[#00BBF9] transition-colors">Inicio</a>
+                <a href="#servicios" class="hover:text-[#00BBF9] transition-colors">Servicios</a>
+                <a href="#trabajos" class="hover:text-[#00BBF9] transition-colors">Trabajos</a>
+                <a href="#contacto" class="hover:text-[#00BBF9] transition-colors">Contacto</a>
+            </div>
+            <button class="btn-neon px-4 py-2 rounded-full text-sm font-semibold hidden sm:block">
+                Empezar Proyecto
+            </button>
+        </div>
+    </nav>
+
+    <!-- SECCIÓN HERO -->
+    <section id="inicio" class="min-h-screen flex items-center relative z-10 px-4 sm:px-6 lg:px-12 xl:px-20 pt-20">
+        <div class="w-full lg:w-1/2 max-w-3xl">
+            <div class="reveal-left">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6 border border-[#FF006E]/30">
+                    <span class="w-2 h-2 rounded-full bg-[#FF006E] animate-pulse"></span>
+                    <span class="text-sm font-medium tracking-wider uppercase">Agencia Creativa Digital</span>
+                </div>
+            </div>
+
+            <h1 class="reveal text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black leading-none mb-6 glitch" data-text="WIT CREATIVO">
+                <span class="gradient-text">WIT</span><br>
+                <span class="text-white">CREATIVO</span>
+            </h1>
+
+            <p class="reveal text-lg sm:text-xl text-gray-300 mb-8 max-w-xl leading-relaxed">
+                Diseñamos experiencias digitales que desafían la gravedad. 
+                Fusionamos estrategia, arte y tecnología para crear marcas 
+                que orbitan en su propia galaxia.
+            </p>
+
+            <div class="reveal flex flex-wrap gap-4">
+                <button class="btn-neon btn-neon-primary px-8 py-4 rounded-full font-bold text-lg group">
+                    <span class="flex items-center gap-2">
+                        Despegar Ahora
+                        <i class="fas fa-rocket group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                </button>
+                <button class="btn-neon px-8 py-4 rounded-full font-semibold text-lg">
+                    Ver Universo
+                </button>
+            </div>
+
+            <div class="reveal mt-12 flex items-center gap-8">
+                <div class="text-center">
+                    <div class="stat-number text-3xl font-bold text-[#FF006E]">150+</div>
+                    <div class="text-sm text-gray-400">Proyectos</div>
+                </div>
+                <div class="w-px h-12 bg-gradient-to-b from-transparent via-gray-500 to-transparent"></div>
+                <div class="text-center">
+                    <div class="stat-number text-3xl font-bold text-[#3A86FF]">98%</div>
+                    <div class="text-sm text-gray-400">Satisfacción</div>
+                </div>
+                <div class="w-px h-12 bg-gradient-to-b from-transparent via-gray-500 to-transparent"></div>
+                <div class="text-center">
+                    <div class="stat-number text-3xl font-bold text-[#FFBE0B]">12</div>
+                    <div class="text-sm text-gray-400">Premios</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN SERVICIOS -->
+    <section id="servicios" class="py-24 px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">
+                    <span class="gradient-text">Servicios</span> Orbitales
+                </h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                    Cada proyecto es una misión espacial. Equipamos tu marca con la tecnología 
+                    y creatividad necesarias para conquistar nuevos mundos.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Servicio 1 -->
+                <div class="card-spill glass rounded-2xl p-8 reveal-scale" style="--x: 50%; --y: 50%;">
+                    <div class="service-icon w-16 h-16 rounded-2xl bg-gradient-to-br from-[#FF006E] to-[#8338EC] flex items-center justify-center text-2xl mb-6">
+                        <i class="fas fa-paint-brush text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Identidad Visual</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Diseñamos sistemas visuales completos que comunican la esencia única de tu marca 
+                        en cada punto de contacto.
+                    </p>
+                    <div class="mt-6 flex items-center gap-2 text-[#FF006E] font-semibold group cursor-pointer">
+                        <span>Explorar</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Servicio 2 -->
+                <div class="card-spill glass rounded-2xl p-8 reveal-scale" style="--x: 50%; --y: 50%;">
+                    <div class="service-icon w-16 h-16 rounded-2xl bg-gradient-to-br from-[#3A86FF] to-[#00BBF9] flex items-center justify-center text-2xl mb-6">
+                        <i class="fas fa-code text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Desarrollo Web</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Experiencias digitales de alto rendimiento con animaciones fluidas, 
+                        interacciones memorables y código impecable.
+                    </p>
+                    <div class="mt-6 flex items-center gap-2 text-[#3A86FF] font-semibold group cursor-pointer">
+                        <span>Explorar</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Servicio 3 -->
+                <div class="card-spill glass rounded-2xl p-8 reveal-scale" style="--x: 50%; --y: 50%;">
+                    <div class="service-icon w-16 h-16 rounded-2xl bg-gradient-to-br from-[#FFBE0B] to-[#FB5607] flex items-center justify-center text-2xl mb-6">
+                        <i class="fas fa-bullhorn text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Marketing Digital</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Estrategias data-driven que amplifican tu mensaje y conectan 
+                        con audiencias en todos los canales digitales.
+                    </p>
+                    <div class="mt-6 flex items-center gap-2 text-[#FFBE0B] font-semibold group cursor-pointer">
+                        <span>Explorar</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Servicio 4 -->
+                <div class="card-spill glass rounded-2xl p-8 reveal-scale" style="--x: 50%; --y: 50%;">
+                    <div class="service-icon w-16 h-16 rounded-2xl bg-gradient-to-br from-[#8338EC] to-[#FF006E] flex items-center justify-center text-2xl mb-6">
+                        <i class="fas fa-cube text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Motion 3D</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Animaciones tridimensionales y experiencias inmersivas que 
+                        elevan tu contenido a dimensiones superiores.
+                    </p>
+                    <div class="mt-6 flex items-center gap-2 text-[#8338EC] font-semibold group cursor-pointer">
+                        <span>Explorar</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Servicio 5 -->
+                <div class="card-spill glass rounded-2xl p-8 reveal-scale" style="--x: 50%; --y: 50%;">
+                    <div class="service-icon w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00BBF9] to-[#3A86FF] flex items-center justify-center text-2xl mb-6">
+                        <i class="fas fa-mobile-alt text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Apps Móviles</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Aplicaciones nativas y multiplataforma con interfaces intuitivas 
+                        y experiencias de usuario excepcionales.
+                    </p>
+                    <div class="mt-6 flex items-center gap-2 text-[#00BBF9] font-semibold group cursor-pointer">
+                        <span>Explorar</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Servicio 6 -->
+                <div class="card-spill glass rounded-2xl p-8 reveal-scale" style="--x: 50%; --y: 50%;">
+                    <div class="service-icon w-16 h-16 rounded-2xl bg-gradient-to-br from-[#FB5607] to-[#FFBE0B] flex items-center justify-center text-2xl mb-6">
+                        <i class="fas fa-lightbulb text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Consultoría UX</h3>
+                    <p class="text-gray-400 leading-relaxed">
+                        Auditorías experta y estrategias de optimización para maximizar 
+                        la conversión y satisfacción del usuario.
+                    </p>
+                    <div class="mt-6 flex items-center gap-2 text-[#FB5607] font-semibold group cursor-pointer">
+                        <span>Explorar</span>
+                        <i class="fas fa-arrow-right group-hover:translate-x-2 transition-transform"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN ESTADÍSTICAS -->
+    <section class="py-20 relative z-10 overflow-hidden">
+        <div class="line-deco w-full mb-12"></div>
+        <div class="px-4 sm:px-6 lg:px-12 xl:px-20">
+            <div class="max-w-7xl mx-auto">
+                <div class="glass-strong rounded-3xl p-8 sm:p-12 lg:p-16 reveal">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                        <div class="reveal-scale">
+                            <div class="stat-number text-5xl sm:text-6xl lg:text-7xl font-black gradient-text mb-2" data-target="500">0</div>
+                            <div class="text-gray-400 uppercase tracking-wider text-sm">Marcas Impulsadas</div>
+                        </div>
+                        <div class="reveal-scale">
+                            <div class="stat-number text-5xl sm:text-6xl lg:text-7xl font-black text-[#FF006E] mb-2" data-target="50">0</div>
+                            <div class="text-gray-400 uppercase tracking-wider text-sm">Expertos Creativos</div>
+                        </div>
+                        <div class="reveal-scale">
+                            <div class="stat-number text-5xl sm:text-6xl lg:text-7xl font-black text-[#3A86FF] mb-2" data-target="8">0</div>
+                            <div class="text-gray-400 uppercase tracking-wider text-sm">Años de Trayectoria</div>
+                        </div>
+                        <div class="reveal-scale">
+                            <div class="stat-number text-5xl sm:text-6xl lg:text-7xl font-black text-[#FFBE0B] mb-2" data-target="24">0</div>
+                            <div class="text-gray-400 uppercase tracking-wider text-sm">Horas de Soporte</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="line-deco w-full mt-12"></div>
+    </section>
+
+    <!-- SECCIÓN TRABAJOS DESTACADOS -->
+    <section id="trabajos" class="py-24 px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 gap-6">
+                <div class="reveal-left">
+                    <h2 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">
+                        Obras de <span class="gradient-text">Arte</span><br>Digital
+                    </h2>
+                    <p class="text-gray-400 text-lg max-w-xl">
+                        Cada proyecto es una constelación única. Explora nuestro universo creativo.
+                    </p>
+                </div>
+                <button class="reveal-right btn-neon px-6 py-3 rounded-full font-semibold">
+                    Ver Todos los Proyectos
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Proyecto 1 -->
+                <div class="group relative overflow-hidden rounded-3xl reveal">
+                    <div class="aspect-[4/3] bg-gradient-to-br from-[#FF006E]/20 to-[#8338EC]/20 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-32 h-32 rounded-full bg-gradient-to-r from-[#FF006E] to-[#8338EC] opacity-50 blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-8 z-20">
+                            <div class="text-[#FF006E] text-sm font-bold uppercase tracking-wider mb-2">Fintech</div>
+                            <h3 class="text-3xl font-bold mb-2">Nebula Pay</h3>
+                            <p class="text-gray-300">Rediseño completo de identidad y plataforma de pagos digitales</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proyecto 2 -->
+                <div class="group relative overflow-hidden rounded-3xl reveal">
+                    <div class="aspect-[4/3] bg-gradient-to-br from-[#3A86FF]/20 to-[#00BBF9]/20 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-32 h-32 rounded-full bg-gradient-to-r from-[#3A86FF] to-[#00BBF9] opacity-50 blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-8 z-20">
+                            <div class="text-[#3A86FF] text-sm font-bold uppercase tracking-wider mb-2">E-commerce</div>
+                            <h3 class="text-3xl font-bold mb-2">Quantum Store</h3>
+                            <p class="text-gray-300">Experiencia de compra inmersiva con realidad aumentada</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proyecto 3 -->
+                <div class="group relative overflow-hidden rounded-3xl reveal">
+                    <div class="aspect-[4/3] bg-gradient-to-br from-[#FFBE0B]/20 to-[#FB5607]/20 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-32 h-32 rounded-full bg-gradient-to-r from-[#FFBE0B] to-[#FB5607] opacity-50 blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-8 z-20">
+                            <div class="text-[#FFBE0B] text-sm font-bold uppercase tracking-wider mb-2">Entretenimiento</div>
+                            <h3 class="text-3xl font-bold mb-2">Vortex Studios</h3>
+                            <p class="text-gray-300">Plataforma streaming con interfaz holográfica</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Proyecto 4 -->
+                <div class="group relative overflow-hidden rounded-3xl reveal">
+                    <div class="aspect-[4/3] bg-gradient-to-br from-[#8338EC]/20 to-[#FF006E]/20 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10"></div>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-32 h-32 rounded-full bg-gradient-to-r from-[#8338EC] to-[#FF006E] opacity-50 blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-8 z-20">
+                            <div class="text-[#8338EC] text-sm font-bold uppercase tracking-wider mb-2">Healthcare</div>
+                            <h3 class="text-3xl font-bold mb-2">MediCore AI</h3>
+                            <p class="text-gray-300">Dashboard inteligente para diagnóstico médico asistido</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN TESTIMONIOS -->
+    <section class="py-24 px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-4">
+                    Voces del <span class="gradient-text">Cosmos</span>
+                </h2>
+                <p class="text-gray-400 text-lg">Lo que nuestros clientes dicen de su viaje espacial</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonio 1 -->
+                <div class="testimonial-card glass rounded-2xl p-8 reveal-scale">
+                    <div class="flex gap-1 mb-4">
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                    </div>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        "Wit Creativo transformó nuestra visión en una realidad digital que superó todas las expectativas. 
+                        Su atención al detalle es cósmica."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-[#FF006E] to-[#8338EC] flex items-center justify-center font-bold">
+                            AL
+                        </div>
+                        <div>
+                            <div class="font-bold">Ana López</div>
+                            <div class="text-sm text-gray-400">CEO, Nebula Pay</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonio 2 -->
+                <div class="testimonial-card glass rounded-2xl p-8 reveal-scale">
+                    <div class="flex gap-1 mb-4">
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                    </div>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        "El equipo entendió perfectamente nuestra necesidad de innovación. 
+                        El resultado fue una plataforma que nuestros usuarios adoran."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-[#3A86FF] to-[#00BBF9] flex items-center justify-center font-bold">
+                            MR
+                        </div>
+                        <div>
+                            <div class="font-bold">Miguel Ruiz</div>
+                            <div class="text-sm text-gray-400">CTO, Quantum Store</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Testimonio 3 -->
+                <div class="testimonial-card glass rounded-2xl p-8 reveal-scale">
+                    <div class="flex gap-1 mb-4">
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                        <i class="fas fa-star text-[#FFBE0B]"></i>
+                    </div>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        "Profesionalismo creativo sin igual. Cada interacción, cada pixel, 
+                        cada animación está pensado para impactar."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-[#FFBE0B] to-[#FB5607] flex items-center justify-center font-bold">
+                            SC
+                        </div>
+                        <div>
+                            <div class="font-bold">Sofía Castro</div>
+                            <div class="text-sm text-gray-400">Directora, Vortex Studios</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN CTA FINAL -->
+    <section id="contacto" class="py-32 px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
+        <div class="max-w-5xl mx-auto text-center">
+            <div class="reveal">
+                <h2 class="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-black mb-6">
+                    ¿Listo para el<br>
+                    <span class="gradient-text">Despegue?</span>
+                </h2>
+                <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+                    Tu marca merece orbitar en las estrellas. Conectemos y hagamos 
+                    que el universo entero te vea brillar.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="btn-neon btn-neon-primary px-10 py-5 rounded-full font-bold text-xl group">
+                        <span class="flex items-center justify-center gap-3">
+                            Iniciar Misión
+                            <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+                        </span>
+                    </button>
+                    <button class="btn-neon px-10 py-5 rounded-full font-semibold text-xl">
+                        <span class="flex items-center justify-center gap-3">
+                            <i class="fas fa-calendar"></i>
+                            Agendar Call
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-20 pt-10 border-t border-white/10 reveal">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div class="text-3xl font-bold gradient-text">Wit Creativo</div>
+                    <div class="flex gap-6">
+                        <a href="#" class="w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-[#FF006E] hover:border-[#FF006E] transition-all">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-[#3A86FF] hover:border-[#3A86FF] transition-all">
+                            <i class="fab fa-linkedin-in text-xl"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-[#00BBF9] hover:border-[#00BBF9] transition-all">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-[#8338EC] hover:border-[#8338EC] transition-all">
+                            <i class="fab fa-dribbble text-xl"></i>
+                        </a>
+                    </div>
+                    <div class="text-gray-400 text-sm">
+                        © 2026 Wit Creativo. Todos los derechos reservados.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // ==========================================
+        // CURSOR PERSONALIZADO CON EFECTO MAGNÉTICO
+        // ==========================================
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let followerX = 0, followerY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            // Cursor principal con retardo mínimo
+            cursorX += (mouseX - cursorX) * 0.2;
+            cursorY += (mouseY - cursorY) * 0.2;
+            cursor.style.left = cursorX - 10 + 'px';
+            cursor.style.top = cursorY - 10 + 'px';
+
+            // Follower con retardo suave (efecto magnético)
+            followerX += (mouseX - followerX) * 0.1;
+            followerY += (mouseY - followerY) * 0.1;
+            cursorFollower.style.left = followerX - 20 + 'px';
+            cursorFollower.style.top = followerY - 20 + 'px';
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Efecto hover en elementos interactivos
+        const interactiveElements = document.querySelectorAll('button, a, .card-spill, .testimonial-card');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('hover');
+                cursorFollower.classList.add('hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('hover');
+                cursorFollower.classList.remove('hover');
+            });
+        });
+
+        // ==========================================
+        // CANVAS MORPHING DINÁMICO
+        // ==========================================
+        const morphingCanvas = document.getElementById('morphing-canvas');
+        const morphCtx = morphingCanvas.getContext('2d');
+
+        let width, height;
+
+        function resizeMorphing() {
+            width = morphingCanvas.width = window.innerWidth;
+            height = morphingCanvas.height = window.innerHeight;
+        }
+        resizeMorphing();
+        window.addEventListener('resize', resizeMorphing);
+
+        // Formas orgánicas que morphing
+        class OrganicShape {
+            constructor(x, y, radius, color) {
+                this.x = x;
+                this.y = y;
+                this.baseRadius = radius;
+                this.radius = radius;
+                this.color = color;
+                this.angle = Math.random() * Math.PI * 2;
+                this.speed = 0.002 + Math.random() * 0.003;
+                this.vertices = 8;
+                this.noiseOffset = Math.random() * 1000;
+                this.morphSpeed = 0.01 + Math.random() * 0.02;
+            }
+
+            update(time) {
+                this.angle += this.speed;
+                this.noiseOffset += this.morphSpeed;
+
+                // Movimiento orbital suave
+                this.x += Math.sin(this.angle) * 0.5;
+                this.y += Math.cos(this.angle * 0.7) * 0.5;
+
+                // Radio pulsante
+                this.radius = this.baseRadius + Math.sin(time * 0.001 + this.noiseOffset) * 30;
+            }
+
+            draw(ctx, time) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle * 0.5);
+
+                ctx.beginPath();
+                for (let i = 0; i <= this.vertices; i++) {
+                    const angle = (i / this.vertices) * Math.PI * 2;
+                    const noise = Math.sin(time * 0.002 + this.noiseOffset + i) * 0.3 + 1;
+                    const r = this.radius * noise;
+                    const x = Math.cos(angle) * r;
+                    const y = Math.sin(angle) * r;
+
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        const prevAngle = ((i - 1) / this.vertices) * Math.PI * 2;
+                        const prevNoise = Math.sin(time * 0.002 + this.noiseOffset + (i - 1)) * 0.3 + 1;
+                        const prevR = this.radius * prevNoise;
+                        const prevX = Math.cos(prevAngle) * prevR;
+                        const prevY = Math.sin(prevAngle) * prevR;
+
+                        const cpX = (prevX + x) / 2 + Math.sin(time * 0.003 + i) * 20;
+                        const cpY = (prevY + y) / 2 + Math.cos(time * 0.003 + i) * 20;
+
+                        ctx.quadraticCurveTo(cpX, cpY, x, y);
+                    }
+                }
+                ctx.closePath();
+
+                // Gradiente radial
+                const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.radius * 1.5);
+                gradient.addColorStop(0, this.color + '40');
+                gradient.addColorStop(0.5, this.color + '20');
+                gradient.addColorStop(1, 'transparent');
+
+                ctx.fillStyle = gradient;
+                ctx.fill();
+
+                // Borde brillante
+                ctx.strokeStyle = this.color + '60';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.restore();
+            }
+        }
+
+        const shapes = [
+            new OrganicShape(width * 0.2, height * 0.3, 150, '#FF006E'),
+            new OrganicShape(width * 0.8, height * 0.6, 200, '#3A86FF'),
+            new OrganicShape(width * 0.5, height * 0.8, 120, '#8338EC'),
+            new OrganicShape(width * 0.3, height * 0.7, 180, '#00BBF9'),
+            new OrganicShape(width * 0.7, height * 0.2, 140, '#FFBE0B')
+        ];
+
+        function animateMorphing(time) {
+            morphCtx.fillStyle = 'rgba(5, 5, 8, 0.1)';
+            morphCtx.fillRect(0, 0, width, height);
+
+            shapes.forEach(shape => {
+                shape.update(time);
+                shape.draw(morphCtx, time);
+            });
+
+            requestAnimationFrame(animateMorphing);
+        }
+        animateMorphing(0);
+
+        // ==========================================
+        // PARTÍCULAS INTERACTIVAS
+        // ==========================================
+        const particlesCanvas = document.getElementById('particles-canvas');
+        const pCtx = particlesCanvas.getContext('2d');
+
+        let pWidth, pHeight;
+
+        function resizeParticles() {
+            pWidth = particlesCanvas.width = window.innerWidth;
+            pHeight = particlesCanvas.height = window.innerHeight;
+        }
+        resizeParticles();
+        window.addEventListener('resize', resizeParticles);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * pWidth;
+                this.y = Math.random() * pHeight;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                this.color = ['#FF006E', '#3A86FF', '#00BBF9', '#8338EC', '#FFBE0B'][Math.floor(Math.random() * 5)];
+            }
+
+            update(mouseX, mouseY) {
+                // Movimiento base
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Interacción con mouse
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 150) {
+                    const force = (150 - distance) / 150;
+                    this.x -= dx * force * 0.02;
+                    this.y -= dy * force * 0.02;
+                }
+
+                // Rebote en bordes
+                if (this.x < 0 || this.x > pWidth) this.speedX *= -1;
+                if (this.y < 0 || this.y > pHeight) this.speedY *= -1;
+            }
+
+            draw(ctx) {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color + Math.floor(this.opacity * 255).toString(16).padStart(2, '0');
+                ctx.fill();
+            }
+        }
+
+        const particles = Array.from({ length: 100 }, () => new Particle());
+
+        function animateParticles() {
+            pCtx.clearRect(0, 0, pWidth, pHeight);
+
+            particles.forEach(p => {
+                p.update(mouseX, mouseY);
+                p.draw(pCtx);
+            });
+
+            // Conexiones entre partículas cercanas
+            pCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            pCtx.lineWidth = 0.5;
+
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        pCtx.beginPath();
+                        pCtx.moveTo(particles[i].x, particles[i].y);
+                        pCtx.lineTo(particles[j].x, particles[j].y);
+                        pCtx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ==========================================
+        // THREE.JS - OBJETO 3D INTERACTIVO
+        // ==========================================
+        const threeContainer = document.getElementById('three-container');
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, threeContainer.clientWidth / threeContainer.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+        renderer.setSize(threeContainer.clientWidth, threeContainer.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        threeContainer.appendChild(renderer.domElement);
+
+        // Crear toroide con bordes neón
+        const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+
+        // Material wireframe con brillo
+        const material = new THREE.MeshBasicMaterial({
+            color: 0xFF006E,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        const torusKnot = new THREE.Mesh(geometry, material);
+        scene.add(torusKnot);
+
+        // Partículas alrededor
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 2000;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 50;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.1,
+            color: 0x00BBF9,
+            transparent: true,
+            opacity: 0.6
+        });
+
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        camera.position.z = 30;
+
+        // Luz ambiental
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        // Mouse interaction para rotación
+        let targetRotationX = 0;
+        let targetRotationY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            targetRotationX = (e.clientY / window.innerHeight - 0.5) * 0.5;
+            targetRotationY = (e.clientX / window.innerWidth - 0.5) * 0.5;
+        });
+
+        function animate3D() {
+            requestAnimationFrame(animate3D);
+
+            // Rotación automática suave
+            torusKnot.rotation.x += 0.005;
+            torusKnot.rotation.y += 0.005;
+
+            // Rotación influenciada por mouse
+            torusKnot.rotation.x += (targetRotationX - torusKnot.rotation.x) * 0.05;
+            torusKnot.rotation.y += (targetRotationY - torusKnot.rotation.y) * 0.05;
+
+            // Rotación de partículas
+            particlesMesh.rotation.y -= 0.002;
+            particlesMesh.rotation.x += 0.001;
+
+            // Cambio de color dinámico
+            const time = Date.now() * 0.001;
+            material.color.setHSL((time * 0.1) % 1, 0.8, 0.5);
+
+            renderer.render(scene, camera);
+        }
+        animate3D();
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = threeContainer.clientWidth / threeContainer.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(threeContainer.clientWidth, threeContainer.clientHeight);
+        });
+
+        // ==========================================
+        // GSAP SCROLLTRIGGER ANIMACIONES
+        // ==========================================
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animaciones de revelación
+        gsap.utils.toArray('.reveal').forEach((elem, i) => {
+            gsap.fromTo(elem, 
+                { opacity: 0, y: 50 },
+                {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    delay: i * 0.1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: elem,
+                        start: 'top 85%',
+                        toggleActions: 'play none none reverse'
+                    }
+                }
+            );
+        });
+
+        gsap.utils.toArray('.reveal-left').forEach((elem) => {
+            gsap.fromTo(elem,
+                { opacity: 0, x: -50 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: elem,
+                        start: 'top 85%'
+                    }
+                }
+            );
+        });
+
+        gsap.utils.toArray('.reveal-right').forEach((elem) => {
+            gsap.fromTo(elem,
+                { opacity: 0, x: 50 },
+                {
+                    opacity: 1,
+                    x: 0,
+                    duration: 1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: elem,
+                        start: 'top 85%'
+                    }
+                }
+            );
+        });
+
+        gsap.utils.toArray('.reveal-scale').forEach((elem, i) => {
+            gsap.fromTo(elem,
+                { opacity: 0, scale: 0.8 },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.8,
+                    delay: i * 0.1,
+                    ease: 'back.out(1.7)',
+                    scrollTrigger: {
+                        trigger: elem,
+                        start: 'top 85%'
+                    }
+                }
+            );
+        });
+
+        // Contador animado
+        const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+        statNumbers.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-target'));
+
+            ScrollTrigger.create({
+                trigger: stat,
+                start: 'top 80%',
+                onEnter: () => {
+                    gsap.to(stat, {
+                        innerHTML: target,
+                        duration: 2,
+                        snap: { innerHTML: 1 },
+                        ease: 'power2.out'
+                    });
+                }
+            });
+        });
+
+        // Navegación flotante
+        const nav = document.querySelector('.nav-float');
+        ScrollTrigger.create({
+            start: 100,
+            onUpdate: (self) => {
+                if (self.scroll() > 100) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            }
+        });
+
+        // ==========================================
+        // EFECTO DERRAME EN TARJETAS
+        // ==========================================
+        document.querySelectorAll('.card-spill').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+                card.style.setProperty('--x', x + '%');
+                card.style.setProperty('--y', y + '%');
+            });
+        });
+
+        // ==========================================
+        // SMOOTH SCROLL PARA NAVEGACIÓN
+        // ==========================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    gsap.to(window, {
+                        duration: 1,
+                        scrollTo: { y: target, offsetY: 80 },
+                        ease: 'power3.inOut'
+                    });
+                }
+            });
+        });
+
+        // Cargar GSAP ScrollToPlugin dinámicamente
+        const scrollToScript = document.createElement('script');
+        scrollToScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js';
+        document.head.appendChild(scrollToScript);
+    </script>
+</body>
+</html>

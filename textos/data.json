@@ -1,0 +1,28 @@
+{
+  "textos": [
+    {
+      "id": "texto1",
+      "titulo": "Texto 1 — Máquina de Escribir",
+      "descripcion": "Efecto de máquina de escribir con cursor parpadeante. Ideal para títulos hero y presentaciones.",
+      "archivo": "texto1.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": true
+    },
+    {
+      "id": "texto2",
+      "titulo": "Texto 2 — Reveal por Letras",
+      "descripcion": "Texto que se revela letra por letra con delay escalonado al entrar en viewport.",
+      "archivo": "texto2.html",
+      "tags": ["html", "css", "js"],
+      "nuevo": true
+    },
+    {
+      "id": "texto3",
+      "titulo": "Texto 3 — Gradiente Animado",
+      "descripcion": "Título con fondo de gradiente que se desplaza continuamente. Efecto hipnótico y moderno.",
+      "archivo": "texto3.html",
+      "tags": ["html", "css"],
+      "nuevo": false
+    }
+  ]
+}

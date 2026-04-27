@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wit Creativo - Construcción Dinámica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            background: #0a0a0f;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        body::-webkit-scrollbar-track {
+            background: #0f0f1a;
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #60a5fa, #a78bfa);
+            border-radius: 4px;
+        }
+
+        .banner-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 500vh;
+            background: #0a0a0f;
+        }
+
+        .banner-container {
+            position: sticky;
+            top: 0;
+            display: grid;
+            grid-template-columns: 38% 62%;
+            height: 100vh;
+            background: linear-gradient(135deg, #0a0a0f 0%, #0f0f1a 50%, #1a1a2e 100%);
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .banner-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+                height: auto;
+                min-height: 100vh;
+            }
+        }
+
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+            background: linear-gradient(135deg, rgba(10, 10, 15, 0.95), rgba(15, 15, 26, 0.9));
+            backdrop-filter: blur(12px);
+            height: 100%;
+            overflow-y: auto;
+            border-right: 1px solid rgba(96, 165, 250, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid rgba(96, 165, 250, 0.2);
+                height: auto;
+                min-height: 300px;
+            }
+        }
+
+        .logo-cell {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(96, 165, 250, 0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            opacity: 0.5;
+            color: #94a3b8;
+        }
+
+        .headline-cell {
+            margin-bottom: 2rem;
+        }
+
+        .headline-cell h1 {
+            font-size: clamp(2.5rem, 4vw, 4rem);
+            font-weight: 700;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+        }
+
+        .headline-cell h1 span {
+            display: block;
+            position: relative;
+        }
+
+        .headline-cell h1 .line-1 {
+            background: linear-gradient(135deg, #60a5fa, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .headline-cell h1 .line-2 {
+            background: linear-gradient(135deg, #a78bfa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .headline-cell h1 .line-3 {
+            background: linear-gradient(135deg, #f472b6, #fb923c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .headline-cell p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            opacity: 0.7;
+            color: #cbd5e1;
+        }
+
+        .controls-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .progress-section {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(96, 165, 250, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: #94a3b8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-percentage {
+            color: #60a5fa;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .scroll-hint {
+            text-align: center;
+            margin: 1rem 0;
+            font-size: 0.7rem;
+            color: #64748b;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .scroll-hint i {
+            display: inline-block;
+            animation: bounce 2s infinite;
+            margin: 0 8px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+
+        .element-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .element-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #64748b;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .element-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(96, 165, 250, 0.1), transparent);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        .element-item:hover::before {
+            width: 100%;
+        }
+
+        .element-item i {
+            width: 28px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .element-item:hover {
+            color: #cbd5e1;
+            transform: translateX(5px);
+        }
+
+        .element-item.active {
+            color: #ffffff;
+            background: linear-gradient(90deg, rgba(96, 165, 250, 0.15), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            box-shadow: 0 0 20px rgba(96, 165, 250, 0.1);
+        }
+
+        .element-item.active i {
+            color: #60a5fa;
+            text-shadow: 0 0 15px rgba(96, 165, 250, 0.8);
+        }
+
+        #three-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 30% 40%, #1a1a2e 0%, #0a0a0f 100%);
+        }
+
+        .layer-indicator {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #ffffff;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            letter-spacing: 0.05em;
+        }
+
+        .layer-number {
+            color: #60a5fa;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 0 4px;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a0a0f;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loading-text {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #60a5fa;
+            margin-top: 1rem;
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-top: 1rem;
+            border-radius: 1px;
+            overflow: hidden;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            width: 0%;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner-wrapper">
+        <div class="banner-container">
+            <div class="left-panel">
+                <div>
+                    <div class="logo-cell">
+                        <span class="logo">WIT CREATIVO</span>
+                        <span class="tagline">DIGITAL STUDIO</span>
+                    </div>
+
+                    <div class="headline-cell">
+                        <h1>
+                            <span class="line-1">BUILD</span>
+                            <span class="line-2">YOUR</span>
+                            <span class="line-3">VISION</span>
+                        </h1>
+                        <p>Desplázate hacia abajo para activar cada capa. Observa cómo la estructura cobra vida con movimiento y energía.</p>
+                    </div>
+                </div>
+
+                <div class="controls-cell">
+                    <div class="progress-section">
+                        <div class="progress-label">
+                            <span>PROGRESO</span>
+                            <span class="progress-percentage" id="progress-text">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+
+                        <div class="scroll-hint">
+                            <i class="fas fa-mouse"></i> SCROLL TO BUILD <i class="fas fa-arrow-down"></i>
+                        </div>
+
+                        <div class="element-list">
+                            <div class="element-item" data-layer="0">
+                                <i class="fas fa-crown"></i>
+                                <span>BASE DORADA</span>
+                            </div>
+                            <div class="element-item" data-layer="1">
+                                <i class="fas fa-infinity"></i>
+                                <span>ENERGÍA INFINITA</span>
+                            </div>
+                            <div class="element-item" data-layer="2">
+                                <i class="fas fa-atom"></i>
+                                <span>ÓRBITAS CELESTES</span>
+                            </div>
+                            <div class="element-item" data-layer="3">
+                                <i class="fas fa-water"></i>
+                                <span>FLUIDEZ VÍTREA</span>
+                            </div>
+                            <div class="element-item" data-layer="4">
+                                <i class="fas fa-spa"></i>
+                                <span>LEVITACIÓN</span>
+                            </div>
+                            <div class="element-item" data-layer="5">
+                                <i class="fas fa-gem"></i>
+                                <span>NÚCLEO SAGRADO</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="three-container">
+                <div class="loading-overlay" id="loading">
+                    <div class="loading-text">INICIANDO EXPERIENCIA</div>
+                    <div class="loading-bar">
+                        <div class="loading-progress" id="loading-progress"></div>
+                    </div>
+                </div>
+                <div class="layer-indicator">
+                    <i class="fas fa-layer-group"></i> CAPA <span class="layer-number" id="layer-num">0</span>/06
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Three.js - Experiencia Dinámica y Estilizada
+        const container = document.getElementById('three-container');
+        const progressText = document.getElementById('progress-text');
+        const progressFill = document.getElementById('progress-fill');
+        const layerNum = document.getElementById('layer-num');
+        const elementItems = document.querySelectorAll('.element-item');
+        const loadingOverlay = document.getElementById('loading');
+        const loadingProgress = document.getElementById('loading-progress');
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = null;
+        scene.fog = new THREE.FogExp2(0x0a0a0f, 0.02);
+
+        // Camera
+        const camera = new THREE.PerspectiveCamera(42, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.set(0, 3, 15);
+        camera.lookAt(0, 2, 0);
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        // Materiales Premium
+        const materials = {
+            goldBase: new THREE.MeshStandardMaterial({
+                color: 0xffd700,
+                metalness: 0.95,
+                roughness: 0.25,
+                emissive: 0x442200,
+                emissiveIntensity: 0.15
+            }),
+            energyBlue: new THREE.MeshStandardMaterial({
+                color: 0x3b82f6,
+                emissive: 0x1e40af,
+                emissiveIntensity: 0.9,
+                metalness: 0.7,
+                roughness: 0.2,
+                transparent: true
+            }),
+            energyPink: new THREE.MeshStandardMaterial({
+                color: 0xec4899,
+                emissive: 0x831843,
+                emissiveIntensity: 0.9,
+                metalness: 0.7,
+                roughness: 0.2
+            }),
+            glassFluid: new THREE.MeshPhysicalMaterial({
+                color: 0x60a5fa,
+                metalness: 0.2,
+                roughness: 0.08,
+                transparent: true,
+                opacity: 0.55,
+                clearcoat: 1,
+                clearcoatRoughness: 0.1
+            }),
+            chromeRing: new THREE.MeshStandardMaterial({
+                color: 0xe2e8f0,
+                metalness: 0.98,
+                roughness: 0.05,
+                envMapIntensity: 1
+            }),
+            coreGlow: new THREE.MeshStandardMaterial({
+                color: 0x8b5cf6,
+                emissive: 0x6d28d9,
+                emissiveIntensity: 0.8,
+                metalness: 0.85,
+                roughness: 0.12
+            }),
+            floatingCrystal: new THREE.MeshStandardMaterial({
+                color: 0xc084fc,
+                emissive: 0x7c3aed,
+                emissiveIntensity: 0.5,
+                metalness: 0.6,
+                roughness: 0.2,
+                transparent: true,
+                opacity: 0.85
+            })
+        };
+
+        // Lighting System
+        const ambientLight = new THREE.AmbientLight(0x1a1a2e, 0.4);
+        scene.add(ambientLight);
+
+        const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+        mainLight.position.set(5, 12, 8);
+        mainLight.castShadow = true;
+        mainLight.receiveShadow = true;
+        scene.add(mainLight);
+
+        const fillLight = new THREE.PointLight(0x4466cc, 0.6);
+        fillLight.position.set(-4, 5, 5);
+        scene.add(fillLight);
+
+        const backLight = new THREE.PointLight(0xff66aa, 0.5);
+        backLight.position.set(0, 4, -6);
+        scene.add(backLight);
+
+        const rimLight = new THREE.PointLight(0x22ddff, 0.4);
+        rimLight.position.set(5, 3, -4);
+        scene.add(rimLight);
+
+        const corePulseLight = new THREE.PointLight(0x8b5cf6, 0.8, 12);
+        corePulseLight.position.set(0, 2.5, 0);
+        scene.add(corePulseLight);
+
+        // Partículas de fondo
+        const starField = new THREE.Points(
+            new THREE.BufferGeometry(),
+            new THREE.PointsMaterial({ color: 0xffffff, size: 0.05, transparent: true, opacity: 0.4 })
+        );
+        const starCount = 800;
+        const starPositions = new Float32Array(starCount * 3);
+        for (let i = 0; i < starCount; i++) {
+            starPositions[i*3] = (Math.random() - 0.5) * 200;
+            starPositions[i*3+1] = (Math.random() - 0.5) * 60;
+            starPositions[i*3+2] = (Math.random() - 0.5) * 80 - 40;
+        }
+        starField.geometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+        scene.add(starField);
+
+        // Grupos de capas
+        const buildLayers = [];
+        const allElements = [];
+
+        function addToLayer(layer, element, layerIndex, startY, endY, customData = {}) {
+            element.userData = {
+                layer: layerIndex,
+                startY: startY,
+                endY: endY,
+                ...customData
+            };
+            element.position.y = startY;
+            element.scale.setScalar(0);
+            element.visible = false;
+            layer.add(element);
+            allElements.push(element);
+        }
+
+        // ========== CAPA 0: BASE DORADA ==========
+        const layer0 = new THREE.Group();
+        
+        // Plataforma principal
+        const mainPlatform = new THREE.Mesh(
+            new THREE.CylinderGeometry(4.2, 4.8, 0.3, 64),
+            materials.goldBase
+        );
+        mainPlatform.position.y = -2.5;
+        mainPlatform.castShadow = true;
+        mainPlatform.receiveShadow = true;
+        addToLayer(layer0, mainPlatform, 0, -8, -2.5);
+        
+        // Anillo decorativo base
+        const baseRing = new THREE.Mesh(
+            new THREE.TorusGeometry(4.5, 0.12, 64, 120),
+            materials.chromeRing
+        );
+        baseRing.rotation.x = Math.PI / 2;
+        baseRing.position.y = -2.3;
+        addToLayer(layer0, baseRing, 0, -8, -2.3);
+        
+        // Pilares decorativos
+        const pillarPositions = [[-3, -1.5], [3, -1.5], [-2.2, -1.8], [2.2, -1.8]];
+        pillarPositions.forEach(pos => {
+            const pillar = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.22, 0.3, 2.2, 12),
+                materials.chromeRing
+            );
+            pillar.position.set(pos[0], pos[1], pos[1] * 0.8);
+            pillar.castShadow = true;
+            addToLayer(layer0, pillar, 0, -6, pos[1]);
+        });
+        
+        buildLayers.push(layer0);
+        scene.add(layer0);
+
+        // ========== CAPA 1: ENERGÍA INFINITA ==========
+        const layer1 = new THREE.Group();
+        
+        // Cinta de Möbius (infinito)
+        const infinityPoints = [];
+        for (let t = 0; t <= Math.PI * 2; t += 0.05) {
+            const x = Math.sin(t) * 2.5;
+            const z = Math.cos(t) * 2.5;
+            const y = Math.sin(t * 2) * 0.8;
+            infinityPoints.push(new THREE.Vector3(x, y, z));
+        }
+        const infinityCurve = new THREE.CatmullRomCurve3(infinityPoints);
+        const mobiusTube = new THREE.Mesh(
+            new THREE.TubeGeometry(infinityCurve, 80, 0.08, 12, true),
+            materials.energyBlue
+        );
+        addToLayer(layer1, mobiusTube, 1, -5, -0.8);
+        
+        // Esferas de energía orbitando
+        for (let i = 0; i < 6; i++) {
+            const energyOrb = new THREE.Mesh(
+                new THREE.SphereGeometry(0.18, 32, 32),
+                materials.energyPink
+            );
+            const angle = (i / 6) * Math.PI * 2;
+            energyOrb.userData = { orbitAngle: angle, orbitRadius: 3.2, orbitSpeed: 1.2 };
+            addToLayer(layer1, energyOrb, 1, -5, -0.5);
+        }
+        
+        buildLayers.push(layer1);
+        scene.add(layer1);
+
+        // ========== CAPA 2: ÓRBITAS CELESTES ==========
+        const layer2 = new THREE.Group();
+        
+        const orbits = [
+            { radius: 2.8, yPos: 0.8, speed: 0.008, color: materials.chromeRing },
+            { radius: 2.0, yPos: 1.3, speed: -0.012, color: materials.goldBase },
+            { radius: 1.2, yPos: 1.8, speed: 0.015, color: materials.energyBlue }
+        ];
+        
+        orbits.forEach(orbit => {
+            const ringMesh = new THREE.Mesh(
+                new THREE.TorusGeometry(orbit.radius, 0.1, 96, 140),
+                orbit.color
+            );
+            ringMesh.rotation.x = Math.PI / 2.5;
+            ringMesh.rotation.z = Math.PI / 4;
+            ringMesh.userData = { rotSpeed: orbit.speed, rotY: orbit.speed * 0.8 };
+            addToLayer(layer2, ringMesh, 2, 6, orbit.yPos);
+        });
+        
+        buildLayers.push(layer2);
+        scene.add(layer2);
+
+        // ========== CAPA 3: FLUIDEZ VÍTREA ==========
+        const layer3 = new THREE.Group();
+        
+        // Barras de vidrio fluidas
+        const fluidBars = [
+            { pos: [0, 2.2, 0], size: [4.5, 0.12, 0.12], rot: 0, color: materials.glassFluid },
+            { pos: [2.2, 1.6, 1.5], size: [0.12, 2.8, 0.12], rot: Math.PI / 5, color: materials.glassFluid },
+            { pos: [-2, 1.9, -1.2], size: [0.12, 2.5, 0.12], rot: -Math.PI / 6, color: materials.glassFluid },
+            { pos: [0, 2.8, 1.8], size: [3.2, 0.1, 0.1], rot: Math.PI / 3, color: materials.glassFluid }
+        ];
+        
+        fluidBars.forEach(bar => {
+            const barMesh = new THREE.Mesh(
+                new THREE.BoxGeometry(bar.size[0], bar.size[1], bar.size[2]),
+                bar.color
+            );
+            barMesh.position.set(bar.pos[0], bar.pos[1], bar.pos[2]);
+            if (bar.rot) barMesh.rotation.z = bar.rot;
+            barMesh.castShadow = true;
+            addToLayer(layer3, barMesh, 3, 7.5, bar.pos[1]);
+        });
+        
+        buildLayers.push(layer3);
+        scene.add(layer3);
+
+        // ========== CAPA 4: LEVITACIÓN ==========
+        const layer4 = new THREE.Group();
+        
+        // Cristales flotantes
+        const crystals = [
+            { pos: [-2.8, 3.8, 1.8], size: 0.4, offset: 0, color: materials.floatingCrystal },
+            { pos: [2.5, 3.2, -2], size: 0.35, offset: Math.PI, color: materials.energyBlue },
+            { pos: [0, 4.5, 2.2], size: 0.45, offset: Math.PI / 2, color: materials.energyPink },
+            { pos: [-1.5, 3.5, -2.5], size: 0.3, offset: Math.PI * 1.5, color: materials.floatingCrystal },
+            { pos: [1.8, 4, 1.5], size: 0.38, offset: Math.PI / 3, color: materials.goldBase }
+        ];
+        
+        crystals.forEach(crystal => {
+            const crystalMesh = new THREE.Mesh(
+                new THREE.IcosahedronGeometry(crystal.size, 0),
+                crystal.color
+            );
+            crystalMesh.position.set(crystal.pos[0], crystal.pos[1], crystal.pos[2]);
+            crystalMesh.userData = { floatOffset: crystal.offset, floatSpeed: 1.5 };
+            crystalMesh.castShadow = true;
+            addToLayer(layer4, crystalMesh, 4, 9.5, crystal.pos[1]);
+        });
+        
+        buildLayers.push(layer4);
+        scene.add(layer4);
+
+        // ========== CAPA 5: NÚCLEO SAGRADO ==========
+        const layer5 = new THREE.Group();
+        
+        // Núcleo central - alta resolución
+        const coreGeo = new THREE.SphereGeometry(0.95, 128, 128);
+        const coreMat = new THREE.MeshStandardMaterial({
+            color: 0xa78bfa,
+            emissive: 0x6d28d9,
+            emissiveIntensity: 0.7,
+            metalness: 0.88,
+            roughness: 0.1,
+            transparent: true,
+            opacity: 0.94
+        });
+        const coreSphere = new THREE.Mesh(coreGeo, coreMat);
+        coreSphere.position.set(0, 2.6, 0);
+        addToLayer(layer5, coreSphere, 5, 10.5, 2.6);
+        
+        // Aura externa
+        const auraGeo = new THREE.SphereGeometry(1.15, 64, 64);
+        const auraMat = new THREE.MeshBasicMaterial({
+            color: 0x8b5cf6,
+            transparent: true,
+            opacity: 0.12,
+            side: THREE.BackSide
+        });
+        const aura = new THREE.Mesh(auraGeo, auraMat);
+        aura.position.set(0, 2.6, 0);
+        addToLayer(layer5, aura, 5, 10.5, 2.6);
+        
+        // Partículas orbitantes
+        const particleCount = 48;
+        for (let i = 0; i < particleCount; i++) {
+            const particle = new THREE.Mesh(
+                new THREE.SphereGeometry(0.07, 24, 24),
+                new THREE.MeshStandardMaterial({ color: 0xc084fc, emissive: 0x7c3aed, emissiveIntensity: 0.6 })
+            );
+            const angle = (i / particleCount) * Math.PI * 2;
+            particle.userData = { orbitAngle: angle, orbitRadius: 1.6, speed: 1.8, yOffset: 0 };
+            addToLayer(layer5, particle, 5, 10.5, 2.6);
+        }
+        
+        buildLayers.push(layer5);
+        scene.add(layer5);
+
+        // ========== CONTROL POR SCROLL ==========
+        let currentProgress = 0;
+        
+        function updateScene(progress) {
+            currentProgress = Math.min(1, Math.max(0, progress));
+            const percentage = Math.round(currentProgress * 100);
+            
+            progressText.textContent = percentage + '%';
+            progressFill.style.width = percentage + '%';
+            
+            const currentLayer = Math.min(5, Math.floor(currentProgress * 6));
+            layerNum.textContent = String(currentLayer + 1).padStart(2, '0');
+            
+            elementItems.forEach((item, index) => {
+                if (index <= currentLayer) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+            
+            allElements.forEach(el => {
+                const layerIndex = el.userData.layer;
+                const layerStart = layerIndex / 6;
+                const layerEnd = (layerIndex + 1) / 6;
+                
+                if (currentProgress >= layerStart - 0.05) {
+                    el.visible = true;
+                    let localProgress = (currentProgress - (layerStart - 0.05)) / (layerEnd - (layerStart - 0.05));
+                    localProgress = Math.min(1, Math.max(0, localProgress));
+                    
+                    const easeProgress = 1 - Math.pow(1 - localProgress, 2);
+                    
+                    const startY = el.userData.startY;
+                    const endY = el.userData.endY;
+                    el.position.y = startY + (endY - startY) * easeProgress;
+                    
+                    let scale;
+                    if (localProgress < 0.7) {
+                        scale = localProgress / 0.7;
+                    } else {
+                        const bounce = (localProgress - 0.7) / 0.3;
+                        scale = 1 + Math.sin(bounce * Math.PI) * 0.1;
+                    }
+                    el.scale.setScalar(Math.max(0, Math.min(1.12, scale)));
+                } else {
+                    el.visible = false;
+                }
+            });
+        }
+        
+        function handleScroll() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const maxScroll = document.body.scrollHeight - window.innerHeight;
+            let progress = maxScroll > 0 ? scrollTop / maxScroll : 0;
+            updateScene(progress);
+        }
+        
+        window.addEventListener('scroll', handleScroll);
+        
+        // Mouse interaction
+        let targetCameraX = 0;
+        let targetCameraY = 2.8;
+        
+        container.addEventListener('mousemove', (event) => {
+            const rect = container.getBoundingClientRect();
+            const mouseX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            const mouseY = ((event.clientY - rect.top) / rect.height) * 2 - 1;
+            targetCameraX = mouseX * 1.8;
+            targetCameraY = 2.8 + mouseY * 1.2;
+        });
+        
+        // Animation Loop
+        let time = 0;
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.016;
+            
+            // Animar estrellas de fondo
+            starField.rotation.y += 0.0005;
+            starField.rotation.x += 0.0003;
+            
+            // Animar elementos de capa 1 (energía infinita)
+            layer1.children.forEach(child => {
+                if (child.visible && child.userData.orbitAngle !== undefined) {
+                    child.userData.orbitAngle += 0.03;
+                    const angle = child.userData.orbitAngle;
+                    const x = Math.cos(angle) * child.userData.orbitRadius;
+                    const z = Math.sin(angle) * child.userData.orbitRadius;
+                    const y = Math.sin(angle * 2) * 0.5;
+                    child.position.set(x, -0.5 + y, z);
+                }
+            });
+            
+            // Rotar anillos (capa 2)
+            layer2.children.forEach(ring => {
+                if (ring.visible && ring.userData.rotSpeed) {
+                    ring.rotation.z += ring.userData.rotSpeed;
+                    ring.rotation.y += ring.userData.rotY || 0.005;
+                }
+            });
+            
+            // Cristales flotantes (capa 4)
+            layer4.children.forEach(crystal => {
+                if (crystal.visible && crystal.userData.floatOffset !== undefined) {
+                    const floatY = Math.sin(time * crystal.userData.floatSpeed + crystal.userData.floatOffset) * 0.12;
+                    crystal.position.y = crystal.userData.endY + floatY;
+                    crystal.rotation.y += 0.01;
+                    crystal.rotation.x += 0.008;
+                }
+            });
+            
+            // Núcleo y partículas (capa 5)
+            if (layer5.children[0] && layer5.children[0].visible) {
+                const coreSphere = layer5.children[0];
+                const pulse = 1 + Math.sin(time * 4.5) * 0.04;
+                coreSphere.scale.setScalar(pulse);
+                coreSphere.material.emissiveIntensity = 0.7 + Math.sin(time * 5) * 0.2;
+                coreSphere.rotation.y += 0.005;
+                
+                corePulseLight.intensity = 0.8 + Math.sin(time * 5) * 0.5;
+                
+                if (layer5.children[1] && layer5.children[1].visible) {
+                    layer5.children[1].scale.setScalar(1 + Math.sin(time * 3.5) * 0.06);
+                }
+            }
+            
+            // Partículas orbitando alrededor del núcleo
+            for (let i = 2; i < layer5.children.length; i++) {
+                const particle = layer5.children[i];
+                if (particle.visible && particle.userData.orbitAngle !== undefined) {
+                    particle.userData.orbitAngle += 0.025;
+                    const angle = particle.userData.orbitAngle;
+                    const x = Math.cos(angle) * particle.userData.orbitRadius;
+                    const z = Math.sin(angle) * particle.userData.orbitRadius;
+                    const y = Math.sin(angle * 1.5) * 0.25;
+                    particle.position.set(x, 2.6 + y, z);
+                    particle.rotation.x += 0.03;
+                    particle.rotation.z += 0.02;
+                }
+            }
+            
+            // Cámara suave
+            camera.position.x += (targetCameraX - camera.position.x) * 0.05;
+            camera.position.y += (targetCameraY - camera.position.y) * 0.05;
+            camera.lookAt(0, 2.5, 0);
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Loading
+        let loadProgress = 0;
+        const loadInterval = setInterval(() => {
+            loadProgress += 10;
+            loadingProgress.style.width = loadProgress + '%';
+            
+            if (loadProgress >= 100) {
+                clearInterval(loadInterval);
+                setTimeout(() => {
+                    loadingOverlay.classList.add('hidden');
+                    updateScene(0);
+                }, 200);
+            }
+        }, 45);
+        
+        window.addEventListener('resize', () => {
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+        });
+        
+        animate();
+        console.log('✨ Experiencia 3D Dinámica Inicializada');
+    </script>
+</body>
+</html>

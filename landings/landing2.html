@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calahorra - Infinite Scroll Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: auto;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0a0a;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* Navegación */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10000;
+            mix-blend-mode: difference;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 400;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.6;
+        }
+
+        /* Contenedor de scroll - altura para 6 bloques */
+        .scroll-container {
+            position: relative;
+            height: 600vh; /* 6 secciones * 100vh */
+        }
+
+        /* Cada bloque: fijo, cubriendo toda la pantalla */
+        .block {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            z-index: 1;
+            will-change: transform;
+        }
+
+        /* Wrapper del contenido - siempre 100vh */
+        .block-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            transform: translateY(100%);
+            will-change: transform;
+        }
+
+        /* El primer bloque visible desde el inicio - FORZADO */
+        .block:first-child {
+            z-index: 9999 !important;
+        }
+
+        .block:first-child .block-content {
+            transform: translateY(0) !important;
+            opacity: 1 !important;
+        }
+
+        /* Asegurar que la imagen del primer bloque cubra todo */
+        .block:first-child .media-bg {
+            transform: none !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+
+        /* Videos e imágenes de fondo - cubriendo todo */
+        .media-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        /* Overlay gradiente */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                rgba(0,0,0,0.3) 0%, 
+                rgba(0,0,0,0) 30%, 
+                rgba(0,0,0,0) 70%, 
+                rgba(0,0,0,0.4) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Texto de sección */
+        .block-text {
+            position: absolute;
+            bottom: 15%;
+            left: 5%;
+            z-index: 3;
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            mix-blend-mode: difference;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .block-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .block-text span {
+            display: block;
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            opacity: 0.7;
+        }
+
+        /* Footer final */
+        .footer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: #0a0a0a;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transform: translateY(100%);
+            will-change: transform;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer h2 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .footer p {
+            font-size: 1rem;
+            opacity: 0.6;
+            margin-bottom: 3rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* Flecha para subir */
+        .scroll-top {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.3s ease;
+            animation: bounceUp 2s infinite;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-10px);
+        }
+
+        .scroll-top svg {
+            width: 40px;
+            height: 40px;
+            stroke: white;
+            stroke-width: 1;
+            fill: none;
+        }
+
+        .scroll-top span {
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        @keyframes bounceUp {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* Indicador de scroll */
+        .scroll-hint {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 10001;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            mix-blend-mode: difference;
+            animation: bounce 2s infinite;
+            opacity: 1;
+            transition: opacity 0.3s;
+        }
+
+        .scroll-hint.hidden {
+            opacity: 0;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1.5rem;
+            }
+            
+            .nav-links {
+                gap: 1.5rem;
+            }
+            
+            .block-text {
+                left: 1.5rem;
+                bottom: 20%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navegación -->
+    <nav>
+        <div class="logo">Calahorra</div>
+        <div class="nav-links">
+            <a href="#">Index</a>
+            <a href="#">About</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Indicador -->
+    <div class="scroll-hint">Scroll</div>
+
+    <!-- Bloque 1: Imagen 3 (CABECERA - visible desde el inicio) -->
+    <div class="block" data-index="0" style="z-index: 10;">
+        <div class="block-content">
+            <img class="media-bg" src="imagen3.jpg" alt="Calahorra cabecera">
+            <div class="overlay"></div>
+            <div class="block-text visible">
+                <span>00 — Bienvenidos</span>
+                La Calahorra<br>Granada
+            </div>
+        </div>
+    </div>
+
+    <!-- Bloque 2: Video 1 -->
+    <div class="block" data-index="1" style="z-index: 20;">
+        <div class="block-content">
+            <video class="media-bg" autoplay muted loop playsinline>
+                <source src="calahorra1.mp4" type="video/mp4">
+            </video>
+            <div class="overlay"></div>
+            <div class="block-text">
+                <span>01 — Introducción</span>
+                Calahorra *<br>El Origen
+            </div>
+        </div>
+    </div>
+
+    <!-- Bloque 3: Foto 1 -->
+    <div class="block" data-index="2" style="z-index: 30;">
+        <div class="block-content">
+            <img class="media-bg" src="imagen1.jpg" alt="Calahorra imagen 1">
+            <div class="overlay"></div>
+            <div class="block-text">
+                <span>02 — Panorámica</span>
+                Vista Aérea *<br>Atardecer
+            </div>
+        </div>
+    </div>
+
+    <!-- Bloque 4: Video 2 -->
+    <div class="block" data-index="3" style="z-index: 40;">
+        <div class="block-content">
+            <video class="media-bg" muted loop playsinline>
+                <source src="calahorra2.mp4" type="video/mp4">
+            </video>
+            <div class="overlay"></div>
+            <div class="block-text">
+                <span>03 — Historia</span>
+                Calahorra *<br>Castillo
+            </div>
+        </div>
+    </div>
+
+    <!-- Bloque 5: Foto 2 -->
+    <div class="block" data-index="4" style="z-index: 50;">
+        <div class="block-content">
+            <img class="media-bg" src="imagen2.jpg" alt="Calahorra imagen 2">
+            <div class="overlay"></div>
+            <div class="block-text">
+                <span>04 — Patrimonio</span>
+                Arquitectura
+            </div>
+        </div>
+    </div>
+
+    <!-- Bloque 6: Video 3 -->
+    <div class="block" data-index="5" style="z-index: 60;">
+        <div class="block-content">
+            <video class="media-bg" muted loop playsinline>
+                <source src="calahorra3.mp4" type="video/mp4">
+            </video>
+            <div class="overlay"></div>
+            <div class="block-text">
+                <span>05 — Tradición</span>
+                Calahorra *<br>Cultura Viva
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer final -->
+    <div class="footer" id="footer">
+        <div class="footer-content">
+            <h2>La Calahorra</h2>
+            <p>Granada, España</p>
+            <div class="scroll-top" onclick="scrollToTop()">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 19V5M5 12l7-7 7 7"/>
+                </svg>
+                <span>Volver arriba</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Spacer para scroll -->
+    <div class="scroll-container"></div>
+
+    <script>
+        const blocks = document.querySelectorAll('.block');
+        const videos = document.querySelectorAll('video');
+        const scrollHint = document.querySelector('.scroll-hint');
+        const footer = document.getElementById('footer');
+        const totalBlocks = blocks.length;
+        
+        // Inicializar videos
+        videos[0].play().catch(e => console.log('Autoplay prevented'));
+
+        // Función para subir al inicio
+        window.scrollToTop = function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        };
+
+        // Función principal de scroll
+        function handleScroll() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            let scrollPercent = scrollTop / docHeight;
+
+            // FORZAR primer bloque siempre visible - NUNCA moverlo
+            const firstBlock = blocks[0];
+            const firstContent = firstBlock.querySelector('.block-content');
+            const firstText = firstBlock.querySelector('.block-text');
+            firstContent.style.transform = 'translateY(0)';
+            firstText.classList.add('visible');
+            
+            // Calcular progreso basado en bloques (0-6, donde 6 es el footer)
+            const totalProgress = scrollPercent * (totalBlocks + 1);
+            
+            // Procesar bloques del 1 al 5 (el 0 ya está fijado arriba)
+            for (let i = 1; i < blocks.length; i++) {
+                const block = blocks[i];
+                const content = block.querySelector('.block-content');
+                const text = block.querySelector('.block-text');
+                const blockProgress = totalProgress - i;
+                
+                if (blockProgress <= 0) {
+                    // Bloque aún no llega (está abajo)
+                    content.style.transform = 'translateY(100%)';
+                    text.classList.remove('visible');
+                } else if (blockProgress >= 1) {
+                    // Bloque completamente visible
+                    content.style.transform = 'translateY(0)';
+                    text.classList.add('visible');
+                    
+                    // Reproducir video si es el bloque actual
+                    const video = block.querySelector('video');
+                    if (video && blockProgress >= 0.5 && blockProgress <= 1.5) {
+                        video.play().catch(e => {});
+                    }
+                } else {
+                    // Bloque revelándose gradualmente
+                    const translateY = (1 - blockProgress) * 100;
+                    content.style.transform = `translateY(${translateY}%)`;
+                    
+                    if (blockProgress > 0.5) {
+                        text.classList.add('visible');
+                    } else {
+                        text.classList.remove('visible');
+                    }
+                }
+            }
+            
+            // Controlar footer (aparece después del último bloque)
+            const footerProgress = totalProgress - totalBlocks;
+            if (footerProgress > 0) {
+                const translateY = (1 - Math.min(footerProgress, 1)) * 100;
+                footer.style.transform = `translateY(${translateY}%)`;
+                scrollHint.classList.add('hidden');
+            } else {
+                footer.style.transform = 'translateY(100%)';
+            }
+            
+            // Ocultar indicador en scroll
+            if (scrollPercent > 0.02 && footerProgress <= 0) {
+                scrollHint.classList.add('hidden');
+            } else if (scrollPercent <= 0.02) {
+                scrollHint.classList.remove('hidden');
+            }
+        }
+
+        // Scroll suave
+        let targetScroll = 0;
+        let currentScroll = 0;
+        let isScrolling = false;
+
+        function smoothScroll() {
+            const diff = targetScroll - currentScroll;
+            
+            if (Math.abs(diff) > 0.5) {
+                currentScroll += diff * 0.08;
+                window.scrollTo(0, currentScroll);
+                requestAnimationFrame(smoothScroll);
+            } else {
+                currentScroll = targetScroll;
+                isScrolling = false;
+            }
+        }
+
+        // Evento wheel
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            
+            const scrollAmount = e.deltaY * 1.5;
+            targetScroll = Math.max(0, Math.min(
+                document.body.scrollHeight - window.innerHeight,
+                window.scrollY + scrollAmount
+            ));
+            
+            if (!isScrolling) {
+                isScrolling = true;
+                smoothScroll();
+            }
+        }, { passive: false });
+
+        // Scroll nativo
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    handleScroll();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Touch para móvil
+        let touchStartY = 0;
+        
+        window.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            const touchY = e.touches[0].clientY;
+            const diff = touchStartY - touchY;
+            window.scrollBy({ top: diff * 0.5, behavior: 'auto' });
+            touchStartY = touchY;
+        }, { passive: true });
+
+        // Keyboard
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                window.scrollBy({ top: window.innerHeight * 0.2, behavior: 'smooth' });
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                window.scrollBy({ top: -window.innerHeight * 0.2, behavior: 'smooth' });
+            }
+        });
+
+        // Precargar imágenes
+        const images = document.querySelectorAll('.media-bg[src]');
+        images.forEach(img => {
+            if (img.tagName === 'IMG') {
+                const preload = new Image();
+                preload.src = img.src;
+            }
+        });
+
+        // Inicializar
+        handleScroll();
+    </script>
+
+</body>
+</html>

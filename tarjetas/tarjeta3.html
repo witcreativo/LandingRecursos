@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hover Zoom</title>
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #faf9f7, #f0f0f0);
+            font-family: 'Outfit', sans-serif;
+            padding: 40px 20px;
+        }
+
+        .zoom-card {
+            width: 340px;
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+        }
+
+        .zoom-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+        }
+
+        .zoom-image {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .zoom-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .zoom-card:hover .zoom-image img {
+            transform: scale(1.15);
+        }
+
+        .zoom-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent 60%);
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .zoom-card:hover .zoom-overlay {
+            opacity: 1;
+        }
+
+        .zoom-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #e91e63;
+            backdrop-filter: blur(10px);
+        }
+
+        .zoom-content {
+            padding: 28px;
+        }
+
+        .zoom-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .zoom-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #e91e63, #9c27b0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .zoom-author {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2d2d2d;
+        }
+
+        .zoom-date {
+            font-size: 0.8rem;
+            color: #9e9e9e;
+        }
+
+        .zoom-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2d2d2d;
+            line-height: 1.3;
+            margin-bottom: 12px;
+            transition: color 0.3s;
+        }
+
+        .zoom-card:hover .zoom-title {
+            color: #e91e63;
+        }
+
+        .zoom-desc {
+            font-size: 0.9rem;
+            color: #6b6b6b;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .zoom-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .zoom-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            color: #9e9e9e;
+        }
+
+        .zoom-stat i {
+            font-size: 18px;
+        }
+
+        .zoom-arrow {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--crema);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--texto-secundario);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+
+        .zoom-card:hover .zoom-arrow {
+            opacity: 1;
+            transform: translateX(0);
+            background: linear-gradient(135deg, #e91e63, #9c27b0);
+            color: #fff;
+        }
+
+        /* Imagen de placeholder con gradiente */
+        .zoom-image {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .zoom-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect fill="%23667eea" width="400" height="300"/><circle fill="%23764ba2" opacity="0.5" cx="200" cy="150" r="100"/><circle fill="%23f093fb" opacity="0.3" cx="100" cy="100" r="60"/><circle fill="%234facfe" opacity="0.3" cx="300" cy="200" r="80"/></svg>') center/cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="zoom-card">
+        <div class="zoom-image">
+            <div class="zoom-overlay">
+                <span class="zoom-tag"><i class="ph ph-heart"></i> 234 likes</span>
+            </div>
+        </div>
+        <div class="zoom-content">
+            <div class="zoom-meta">
+                <div class="zoom-avatar"><i class="ph ph-paint-brush"></i></div>
+                <div>
+                    <div class="zoom-author">WIT Creativo</div>
+                    <div class="zoom-date">Hace 2 días</div>
+                </div>
+            </div>
+            <div class="zoom-title">Diseño de interfaces modernas</div>
+            <div class="zoom-desc">
+                Cómo crear experiencias de usuario que enamoran desde el primer scroll. Tips y recursos.
+            </div>
+            <div class="zoom-footer">
+                <div class="zoom-stat"><i class="ph ph-eye"></i> 1.2k vistas</div>
+                <div class="zoom-stat"><i class="ph ph-chat-circle"></i> 45 comentarios</div>
+                <div class="zoom-arrow"><i class="ph ph-arrow-right"></i></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

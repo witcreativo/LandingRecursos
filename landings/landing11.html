@@ -1,0 +1,2044 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WitLaw | Abogados Internacionales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700&family=Montserrat:wght@100;200;300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/index.js"></script>
+  <style>
+    :root {
+      --magenta: #c4268c;
+      --magenta-light: #d94fa8;
+      --black: #0a0a0a;
+      --white: #ffffff;
+      --gray: #888888;
+      --gray-light: #f5f5f5;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--black);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 25px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.4s ease;
+    }
+
+    .navbar.scrolled {
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 15px 60px;
+    }
+
+    .logo {
+      display: flex;
+      flex-direction: column;
+      color: var(--white);
+    }
+
+    .logo-main {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px;
+      font-weight: 200;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+    }
+
+    .logo-main span {
+      font-weight: 600;
+    }
+
+    .logo-sub {
+      font-size: 10px;
+      font-weight: 300;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 40px;
+    }
+
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      position: relative;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--white);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.7;
+    }
+
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .menu-toggle span {
+      width: 25px;
+      height: 1px;
+      background: var(--white);
+      transition: all 0.3s ease;
+    }
+
+    /* ===== HERO SLIDER ===== */
+    .hero-slider {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--black);
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .slide-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: opacity 1.5s ease, transform 8s ease;
+    }
+
+    .slide-layer.img1 {
+      z-index: 1;
+      opacity: 1;
+      transition: opacity 2s ease;
+    }
+
+    .slide-layer.img2 {
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+
+    .slide.active.reveal .slide-layer.img1 {
+      opacity: 0;
+      transition: opacity 2s ease 0.5s;
+    }
+
+    .slide.active.reveal .slide-layer.img2 {
+      opacity: 1;
+      transition: opacity 2s ease 0.5s;
+    }
+
+    .slide-darken {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to left, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 40%, rgba(0, 0, 0, 0.1) 100%);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* ===== TEXTO SLIDER ===== */
+    .slide-content {
+      position: absolute;
+      top: 50%;
+      right: 80px;
+      transform: translateY(-50%);
+      z-index: 10;
+      max-width: 70%;
+      text-align: right;
+    }
+
+    .slide-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+      font-weight: 200;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 30px;
+      opacity: 0;
+    }
+
+    .slide.active .slide-label {
+      animation: fadeInUp 0.8s ease 0.3s forwards;
+    }
+
+    /* TITULO: palo recto, fino, GRANDE */
+    .slide-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(50px, 9vw, 100px);
+      font-weight: 100;
+      color: var(--white);
+      line-height: 1.0;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      text-align: right;
+    }
+
+    .slide-title .line {
+      display: block;
+      margin-bottom: 8px;
+      min-height: 1em;
+    }
+
+    .slide-title .line .char {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: none;
+    }
+
+    .slide-title .line .char.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.15s ease;
+    }
+
+    .slide-title .line .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 0.9em;
+      background: rgba(255, 255, 255, 0.8);
+      margin-left: 4px;
+      vertical-align: middle;
+      opacity: 0;
+      animation: cursorBlink 0.8s step-end infinite;
+    }
+
+    .slide-title .line .cursor.active {
+      opacity: 1;
+    }
+
+    .slide-subtitle {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(14px, 1.5vw, 18px);
+      font-weight: 200;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 40px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0;
+    }
+
+    .slide.active .slide-subtitle {
+      animation: fadeInUp 1s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes cursorBlink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .side-indicators {
+      position: absolute;
+      left: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .side-indicator {
+      width: 10px;
+      height: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .side-indicator.active {
+      background: var(--white);
+      border-color: var(--white);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .side-indicator.active::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      animation: pulse 2s ease infinite;
+    }
+
+    .slide-counter {
+      position: absolute;
+      right: 80px;
+      bottom: 140px;
+      z-index: 100;
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 100;
+      letter-spacing: 4px;
+    }
+
+    .slide-counter .current {
+      font-size: 36px;
+      font-weight: 100;
+    }
+
+    .slide-counter .total {
+      opacity: 0.4;
+    }
+
+    .spin-square {
+      position: absolute;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: 50px;
+      height: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: spinSquare 8s linear infinite;
+    }
+
+    .spin-square span {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 100;
+      color: var(--white);
+      animation: spinSquare 8s linear infinite reverse;
+    }
+
+    .play-pause {
+      position: absolute;
+      bottom: 40px;
+      left: 60px;
+      z-index: 100;
+      color: var(--white);
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 10px;
+      transition: opacity 0.3s ease;
+    }
+
+    .play-pause:hover {
+      opacity: 0.7;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      font-weight: 200;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      cursor: pointer;
+      animation: bounce 2s ease infinite;
+    }
+
+    @keyframes spinSquare {
+      from {
+        transform: translateX(-50%) rotate(0deg);
+      }
+
+      to {
+        transform: translateX(-50%) rotate(360deg);
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.3);
+        opacity: 0.3;
+      }
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      50% {
+        transform: translateX(-50%) translateY(10px);
+      }
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+
+    /* ===== SERVICIOS ===== */
+    .servicios {
+      padding: 150px 60px;
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .servicios::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(196, 38, 140, 0.3), transparent);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 100px;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s ease;
+    }
+
+    .section-header.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-label {
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--magenta);
+      margin-bottom: 20px;
+      display: inline-block;
+      position: relative;
+    }
+
+    .section-label::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 40px;
+      height: 1px;
+      background: var(--magenta);
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 100;
+      color: var(--black);
+      line-height: 1.1;
+      letter-spacing: 2px;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      padding: 50px 35px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
+      overflow: hidden;
+      background: var(--white);
+      opacity: 0;
+      transform: translateY(50px) rotateX(15deg);
+    }
+
+    .service-card.visible {
+      opacity: 1;
+      transform: translateY(0) rotateX(0deg);
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--magenta);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.6s ease;
+    }
+
+    .service-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(196, 38, 140, 0.05) 0%, transparent 70%);
+      transition: all 0.5s ease;
+      opacity: 0;
+    }
+
+    .service-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .service-card:hover::after {
+      opacity: 1;
+      transform: scale(2);
+    }
+
+    .service-card:hover {
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.1);
+      transform: translateY(-10px);
+      border-color: rgba(196, 38, 140, 0.2);
+    }
+
+    .service-icon {
+      font-size: 40px;
+      color: var(--magenta);
+      margin-bottom: 30px;
+      transition: all 0.4s ease;
+      display: inline-block;
+    }
+
+    .service-card:hover .service-icon {
+      transform: scale(1.1) rotate(-5deg);
+    }
+
+    .service-card h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .service-card:hover h3 {
+      color: var(--magenta);
+    }
+
+    .service-card p {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--gray);
+    }
+
+    .service-number {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 48px;
+      font-weight: 100;
+      color: rgba(0, 0, 0, 0.04);
+      line-height: 1;
+      transition: all 0.4s ease;
+    }
+
+    .service-card:hover .service-number {
+      color: rgba(196, 38, 140, 0.1);
+      transform: scale(1.1);
+    }
+
+    /* ===== ABOUT ===== */
+    .about {
+      padding: 150px 60px;
+      background: var(--gray-light);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .about::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -100px;
+      width: 300px;
+      height: 300px;
+      border: 1px solid rgba(196, 38, 140, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease infinite;
+    }
+
+    .about-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .about-content {
+      opacity: 0;
+      transform: translateX(-80px);
+      transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .about-content.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .about-content .section-label,
+    .about-content .section-title {
+      text-align: left;
+    }
+
+    .about-content .section-label::after {
+      left: 0;
+      transform: none;
+    }
+
+    .about-content .section-title {
+      margin-bottom: 40px;
+      font-weight: 200;
+    }
+
+    .about-content p {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 2;
+      color: var(--gray);
+      margin-bottom: 25px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+    }
+
+    .about-content.visible p {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .about-content.visible p:nth-child(3) {
+      transition-delay: 0.3s;
+    }
+
+    .about-content.visible p:nth-child(4) {
+      transition-delay: 0.5s;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 50px;
+    }
+
+    .stat-item {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease;
+    }
+
+    .about-content.visible .stat-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .about-content.visible .stat-item:nth-child(1) {
+      transition-delay: 0.6s;
+    }
+
+    .about-content.visible .stat-item:nth-child(2) {
+      transition-delay: 0.7s;
+    }
+
+    .about-content.visible .stat-item:nth-child(3) {
+      transition-delay: 0.8s;
+    }
+
+    .about-content.visible .stat-item:nth-child(4) {
+      transition-delay: 0.9s;
+    }
+
+    .stat-item h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 52px;
+      font-weight: 100;
+      color: var(--magenta);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .stat-item p {
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--black);
+      margin: 0;
+    }
+
+    .about-image {
+      position: relative;
+      opacity: 0;
+      transform: translateX(80px) scale(0.9);
+      transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1) 0.2s;
+    }
+
+    .about-image.visible {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+
+    .about-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: all 0.5s ease;
+    }
+
+    .about-image::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      left: -30px;
+      width: 100%;
+      height: 100%;
+      border: 1px solid var(--magenta);
+      z-index: -1;
+      transition: all 0.6s ease;
+    }
+
+    .about-image::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      width: 80px;
+      height: 80px;
+      background: var(--magenta);
+      opacity: 0.1;
+      z-index: -1;
+      transition: all 0.5s ease;
+    }
+
+    .about-image:hover::before {
+      top: -15px;
+      left: -15px;
+      border-width: 2px;
+    }
+
+    .about-image:hover::after {
+      transform: scale(1.2);
+      opacity: 0.15;
+    }
+
+    .about-image:hover img {
+      transform: scale(1.02);
+    }
+
+    /* ===== VALORES ===== */
+    .valores {
+      padding: 150px 60px;
+      background: var(--white);
+      position: relative;
+    }
+
+    .valores-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .valor-item {
+      padding: 70px 40px;
+      text-align: center;
+      border-right: 1px solid rgba(0, 0, 0, 0.06);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      opacity: 0;
+      transform: translateY(40px) scale(0.95);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .valor-item.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .valor-item:nth-child(1) {
+      transition-delay: 0s;
+    }
+
+    .valor-item:nth-child(2) {
+      transition-delay: 0.15s;
+    }
+
+    .valor-item:nth-child(3) {
+      transition-delay: 0.3s;
+    }
+
+    .valor-item:nth-child(4) {
+      transition-delay: 0.45s;
+    }
+
+    .valor-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(196, 38, 140, 0.03) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .valor-item:hover::before {
+      opacity: 1;
+    }
+
+    .valor-item:hover {
+      background: var(--gray-light);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+      z-index: 1;
+    }
+
+    .valor-icon {
+      font-size: 44px;
+      color: var(--magenta);
+      margin-bottom: 30px;
+      transition: all 0.5s ease;
+      display: inline-block;
+    }
+
+    .valor-item:hover .valor-icon {
+      transform: translateY(-5px) scale(1.1);
+    }
+
+    .valor-item h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .valor-item p {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--gray);
+    }
+
+    /* ===== CTA ===== */
+    .cta {
+      padding: 180px 60px;
+      background: var(--black);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 20% 50%, rgba(196, 38, 140, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, rgba(196, 38, 140, 0.05) 0%, transparent 50%);
+    }
+
+    .cta::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-radius: 50%;
+      animation: pulse 4s ease infinite;
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s ease;
+    }
+
+    .cta-content.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cta h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(32px, 4.5vw, 56px);
+      font-weight: 100;
+      color: var(--white);
+      margin-bottom: 30px;
+      line-height: 1.2;
+      letter-spacing: 2px;
+    }
+
+    .cta p {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 50px;
+      line-height: 1.9;
+      letter-spacing: 1px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 20px 55px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: var(--white);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--white);
+      transition: left 0.5s ease;
+      z-index: -1;
+    }
+
+    .btn:hover::before {
+      left: 0;
+    }
+
+    .btn:hover {
+      color: var(--black);
+    }
+
+    .btn-primary {
+      background: var(--magenta);
+      border-color: var(--magenta);
+    }
+
+    .btn-primary::before {
+      background: var(--magenta-light);
+    }
+
+    .btn-primary:hover {
+      color: var(--white);
+      border-color: var(--magenta-light);
+    }
+
+    /* ===== CONTACTO ===== */
+    .contacto {
+      padding: 150px 60px;
+      background: var(--white);
+      position: relative;
+    }
+
+    .contacto::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(196, 38, 140, 0.2), transparent);
+    }
+
+    .contacto-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+    }
+
+    .contacto-info {
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: all 1s ease;
+    }
+
+    .contacto-info.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .contacto-info h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 42px;
+      font-weight: 100;
+      margin-bottom: 40px;
+      line-height: 1.2;
+    }
+
+    .contacto-info>p {
+      font-size: 15px;
+      font-weight: 300;
+      line-height: 2;
+      color: var(--gray);
+      margin-bottom: 50px;
+    }
+
+    .contacto-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 25px;
+      margin-bottom: 35px;
+      opacity: 0;
+      transform: translateX(-30px);
+      transition: all 0.6s ease;
+    }
+
+    .contacto-info.visible .contacto-detail {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .contacto-info.visible .contacto-detail:nth-child(3) {
+      transition-delay: 0.2s;
+    }
+
+    .contacto-info.visible .contacto-detail:nth-child(4) {
+      transition-delay: 0.3s;
+    }
+
+    .contacto-info.visible .contacto-detail:nth-child(5) {
+      transition-delay: 0.4s;
+    }
+
+    .contacto-info.visible .contacto-detail:nth-child(6) {
+      transition-delay: 0.5s;
+    }
+
+    .contacto-detail i {
+      font-size: 24px;
+      color: var(--magenta);
+      flex-shrink: 0;
+      margin-top: 3px;
+      transition: all 0.3s ease;
+    }
+
+    .contacto-detail:hover i {
+      transform: scale(1.2);
+    }
+
+    .contacto-detail div strong {
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .contacto-detail div span {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--gray);
+    }
+
+    .contacto-form {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1s ease 0.3s;
+    }
+
+    .contacto-form.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .form-group {
+      margin-bottom: 35px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      color: var(--black);
+      transition: color 0.3s ease;
+    }
+
+    .form-group:focus-within label {
+      color: var(--magenta);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 15px 0;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      border: none;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      outline: none;
+      transition: all 0.4s ease;
+      background: transparent;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--magenta);
+      border-bottom-width: 2px;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-group::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--magenta);
+      transition: width 0.4s ease;
+    }
+
+    .form-group:focus-within::after {
+      width: 100%;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 80px 60px 40px;
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px;
+    }
+
+    .footer-brand .logo {
+      margin-bottom: 25px;
+    }
+
+    .footer-brand p {
+      font-size: 13px;
+      font-weight: 300;
+      line-height: 1.9;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .footer-col h4 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 30px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col ul li {
+      margin-bottom: 15px;
+    }
+
+    .footer-col ul li a {
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 300;
+      transition: all 0.3s ease;
+      display: inline-block;
+    }
+
+    .footer-col ul li a:hover {
+      color: var(--white);
+      transform: translateX(5px);
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-top: 50px;
+      margin-top: 70px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-bottom p {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.25);
+    }
+
+    /* ===== MOBILE ===== */
+    @media (max-width: 968px) {
+      .navbar {
+        padding: 20px 30px;
+      }
+
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        height: 100vh;
+        background: rgba(10, 10, 10, 0.98);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        transition: right 0.4s ease;
+      }
+
+      .nav-links.open {
+        right: 0;
+      }
+
+      .nav-links a {
+        font-size: 14px;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      .side-indicators {
+        left: 20px;
+      }
+
+      .slide-content {
+        right: 30px;
+        max-width: 85%;
+      }
+
+      .slide-title {
+        font-size: clamp(40px, 10vw, 70px);
+        letter-spacing: 5px;
+      }
+
+      .servicios,
+      .about,
+      .valores,
+      .cta,
+      .contacto {
+        padding: 100px 30px;
+      }
+
+      .about-container,
+      .contacto-container {
+        grid-template-columns: 1fr;
+        gap: 60px;
+      }
+
+      .footer-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .valores-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .footer-container {
+        grid-template-columns: 1fr;
+      }
+
+      .about-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .slide-counter {
+        display: none;
+      }
+
+      .slide-content {
+        max-width: 90%;
+        right: 20px;
+      }
+
+      .slide-title {
+        font-size: clamp(36px, 11vw, 50px);
+        letter-spacing: 3px;
+      }
+
+      .valores-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <base target="_blank">
+</head>
+
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="logo">
+      <div class="logo-main">Wit<span>Law</span></div>
+      <div class="logo-sub">Abogados Internacionales</div>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+    <div class="menu-toggle" id="menuToggle">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- ===== HERO SLIDER ===== -->
+  <section class="hero-slider" id="inicio">
+
+    <!-- Slide 1: Elefante -->
+    <div class="slide active" data-index="0">
+      <div class="slide-layer img1" style="background-image: url('images/elefante.webp')"></div>
+      <div class="slide-layer img2" style="background-image: url('images/elefante1.webp')"></div>
+      <div class="slide-darken"></div>
+      <div class="slide-content">
+        <div class="slide-label">Vision Global</div>
+        <div class="slide-title">
+          <span class="line" data-text="VER LO QUE OTROS"></span>
+          <span class="line" data-text="NO VEN"></span>
+        </div>
+        <div class="slide-subtitle">Detectamos riesgos invisibles antes de que entres al mercado</div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Lobos -->
+    <div class="slide" data-index="1">
+      <div class="slide-layer img1" style="background-image: url('images/lobo.webp')"></div>
+      <div class="slide-layer img2" style="background-image: url('images/lobo1.webp')"></div>
+      <div class="slide-darken"></div>
+      <div class="slide-content">
+        <div class="slide-label">Confianza en Equipo</div>
+        <div class="slide-title">
+          <span class="line" data-text="DOS AL FRENTE"></span>
+          <span class="line" data-text="TODO UN EQUIPO"></span>
+          <span class="line" data-text="DETRAS"></span>
+        </div>
+        <div class="slide-subtitle">Cercania y respaldo de un equipo multidisciplinar a tu servicio</div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Rinoceronte -->
+    <div class="slide" data-index="2">
+      <div class="slide-layer img1" style="background-image: url('images/rinoceronte.webp')"></div>
+      <div class="slide-layer img2" style="background-image: url('images/rinoceronte1.webp')"></div>
+      <div class="slide-darken"></div>
+      <div class="slide-content">
+        <div class="slide-label">Anticipacion</div>
+        <div class="slide-title">
+          <span class="line" data-text="LLEGAR ANTES"></span>
+          <span class="line" data-text="DE QUE EL PROBLEMA"></span>
+          <span class="line" data-text="EXISTA"></span>
+        </div>
+        <div class="slide-subtitle">Rapidez y vision preventiva para clientes internacionales</div>
+      </div>
+    </div>
+
+    <!-- Slide 4: Cocodrilo -->
+    <div class="slide" data-index="3">
+      <div class="slide-layer img1" style="background-image: url('images/cocodrilo.webp')"></div>
+      <div class="slide-layer img2" style="background-image: url('images/cocodrilo1.webp')"></div>
+      <div class="slide-darken"></div>
+      <div class="slide-content">
+        <div class="slide-label">Firmeza Legal</div>
+        <div class="slide-title">
+          <span class="line" data-text="CUANDO HAY QUE IR"></span>
+          <span class="line" data-text="DE FRENTE"></span>
+          <span class="line" data-text="VAMOS DE FRENTE"></span>
+        </div>
+        <div class="slide-subtitle">Seguridad en negociaciones y defensa decidida de tus intereses</div>
+      </div>
+    </div>
+
+    <!-- Slide 5: Jirafa -->
+    <div class="slide" data-index="4">
+      <div class="slide-layer img1" style="background-image: url('images/jirafa.webp')"></div>
+      <div class="slide-layer img2" style="background-image: url('images/jirafa1.webp')"></div>
+      <div class="slide-darken"></div>
+      <div class="slide-content">
+        <div class="slide-label">Vision Estrategica</div>
+        <div class="slide-title">
+          <span class="line" data-text="VER LA OPORTUNIDAD"></span>
+          <span class="line" data-text="DESDE DONDE OTROS"></span>
+          <span class="line" data-text="NO LLEGAN"></span>
+        </div>
+        <div class="slide-subtitle">Perspectiva privilegiada para inversion y desarrollo estrategico</div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Cebra -->
+    <div class="slide" data-index="5">
+      <div class="slide-layer img1" style="background-image: url('images/cebra.webp')"></div>
+      <div class="slide-layer img2" style="background-image: url('images/cebra1.webp')"></div>
+      <div class="slide-darken"></div>
+      <div class="slide-content">
+        <div class="slide-label">Experiencia sin Friccion</div>
+        <div class="slide-title">
+          <span class="line" data-text="HACER FACIL"></span>
+          <span class="line" data-text="LO QUE PARA OTROS"></span>
+          <span class="line" data-text="ES IMPOSIBLE"></span>
+        </div>
+        <div class="slide-subtitle">Simplificacion de procesos legales complejos con elegancia</div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Ballena -->
+    <div class="slide" data-index="6">
+      <div class="slide-layer img1" style="background-image: url('images/ballena.webp')"></div>
+      <div class="slide-layer img2" style="background-image: url('images/ballena1.webp')"></div>
+      <div class="slide-darken"></div>
+      <div class="slide-content">
+        <div class="slide-label">Tranquilidad</div>
+        <div class="slide-title">
+          <span class="line" data-text="IR DESPACIO"></span>
+          <span class="line" data-text="CUANDO TODO PARECE"></span>
+          <span class="line" data-text="IR DEMASIADO RAPIDO"></span>
+        </div>
+        <div class="slide-subtitle">Control y serenidad en operaciones inmobiliarias complejas</div>
+      </div>
+    </div>
+
+    <div class="side-indicators" id="sideIndicators"></div>
+    <div class="slide-counter">
+      <span class="current" id="currentSlide">01</span>
+      <span class="total"> / 07</span>
+    </div>
+    <button class="play-pause" id="playPause">
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="1.5"
+        id="pauseIcon">
+        <rect x="6" y="4" width="4" height="16" />
+        <rect x="14" y="4" width="4" height="16" />
+      </svg>
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="currentColor" stroke-width="1.5"
+        id="playIcon" style="display:none">
+        <polygon points="5,3 19,12 5,21" />
+      </svg>
+    </button>
+    <div class="spin-square"><span>W</span></div>
+    <div class="scroll-indicator" onclick="document.getElementById('servicios').scrollIntoView({behavior:'smooth'})">
+      <span>Scroll</span>
+      <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1">
+        <path d="M12 5v14M5 12l7 7 7-7" />
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===== SERVICIOS ===== -->
+  <section class="servicios" id="servicios">
+    <div class="section-header" id="serviciosHeader">
+      <div class="section-label">Que Hacemos</div>
+      <div class="section-title">Servicios Legales<br>Internacionales</div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" data-delay="0">
+        <span class="service-number">01</span>
+        <div class="service-icon"><i class="ph ph-house-line"></i></div>
+        <h3>Derecho Inmobiliario</h3>
+        <p>Compraventa de propiedades, due diligence, licencias y permisos. Acompanamos cada paso del proceso con
+          minuciosidad absoluta.</p>
+      </div>
+      <div class="service-card" data-delay="1">
+        <span class="service-number">02</span>
+        <div class="service-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
+        <h3>Inversion Extranjera</h3>
+        <p>Asesoramiento integral a inversores internacionales. Estructuracion de operaciones, fiscalidad y cumplimiento
+          normativo.</p>
+      </div>
+      <div class="service-card" data-delay="2">
+        <span class="service-number">03</span>
+        <div class="service-icon"><i class="ph ph-scroll"></i></div>
+        <h3>Contratos Mercantiles</h3>
+        <p>Redaccion, negociacion y revision de contratos. Protegemos tus intereses con la maxima precision legal.</p>
+      </div>
+      <div class="service-card" data-delay="3">
+        <span class="service-number">04</span>
+        <div class="service-icon"><i class="ph ph-passport"></i></div>
+        <h3>Residencia y Visados</h3>
+        <p>Golden Visa, permisos de residencia y trabajo, nacionalidad. Gestion completa del proceso migratorio.</p>
+      </div>
+      <div class="service-card" data-delay="4">
+        <span class="service-number">05</span>
+        <div class="service-icon"><i class="ph ph-shield-check"></i></div>
+        <h3>Cumplimiento Normativo</h3>
+        <p>Prevencion de blanqueo de capitales, proteccion de datos, compliance. Adaptamos tu empresa a la normativa
+          espanola.</p>
+      </div>
+      <div class="service-card" data-delay="5">
+        <span class="service-number">06</span>
+        <div class="service-icon"><i class="ph ph-scales"></i></div>
+        <h3>Litigios y Arbitraje</h3>
+        <p>Defensa de intereses en procesos judiciales y arbitrales. Estrategia legal personalizada para cada caso.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section class="about" id="nosotros">
+    <div class="about-container">
+      <div class="about-content" id="aboutContent">
+        <div class="section-label">Quienes Somos</div>
+        <div class="section-title">Mas de una decada<br>protegiendo inversiones<br>internacionales</div>
+        <p>En WitLaw combinamos el rigor juridico con una vision estrategica del negocio. Entendemos que cada cliente
+          internacional enfrenta desafios unicos al operar en Espana, y por eso ofrecemos un acompanamiento integral que
+          va mas alla del asesoramiento legal tradicional.</p>
+        <p>Nuestro equipo multidisciplinar trabaja como una extension de tu empresa, anticipando obstaculos y
+          transformando complejidad en oportunidades. No reaccionamos ante los problemas: los prevenimos.</p>
+        <div class="about-stats">
+          <div class="stat-item">
+            <h4 class="counter" data-target="500">0</h4>
+            <p>Operaciones Cerradas</p>
+          </div>
+          <div class="stat-item">
+            <h4 class="counter" data-target="35">0</h4>
+            <p>Paises Atendidos</p>
+          </div>
+          <div class="stat-item">
+            <h4 class="counter" data-target="12">0</h4>
+            <p>Anos de Experiencia</p>
+          </div>
+          <div class="stat-item">
+            <h4 class="counter" data-target="98">0</h4>
+            <p>% Clientes Satisfechos</p>
+          </div>
+        </div>
+      </div>
+      <div class="about-image" id="aboutImage">
+        <img src="images/lobo1.webp" alt="WitLaw Equipo">
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== VALORES ===== -->
+  <section class="valores">
+    <div class="section-header" id="valoresHeader">
+      <div class="section-label">Nuestros Valores</div>
+      <div class="section-title">El ADN de WitLaw</div>
+    </div>
+    <div class="valores-grid">
+      <div class="valor-item">
+        <div class="valor-icon"><i class="ph ph-eye"></i></div>
+        <h3>Anticipacion</h3>
+        <p>Vemos mas alla del presente para proteger tu futuro. Cada decision se toma con la mirada puesta en lo que
+          vendra.</p>
+      </div>
+      <div class="valor-item">
+        <div class="valor-icon"><i class="ph ph-barbell"></i></div>
+        <h3>Firmeza</h3>
+        <p>Defendemos tus intereses con determinacion. En la negociacion y en el litigio, somos incansables.</p>
+      </div>
+      <div class="valor-item">
+        <div class="valor-icon"><i class="ph ph-lightbulb"></i></div>
+        <h3>Claridad</h3>
+        <p>Traducimos la complejidad legal en lenguaje comprensible. Sabes donde estas en cada momento.</p>
+      </div>
+      <div class="valor-item">
+        <div class="valor-icon"><i class="ph ph-handshake"></i></div>
+        <h3>Cercania</h3>
+        <p>Estamos a tu lado, incluso cuando estas al otro lado del mundo. Comunicacion constante y transparente.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta">
+    <div class="cta-content" id="ctaContent">
+      <h2>Tu proxima inversion en Espana empieza con una conversacion</h2>
+      <p>Cuentanos tu proyecto y te mostraremos como podemos ayudarte a hacerlo realidad sin sorpresas ni contratiempos.
+      </p>
+      <a href="#contacto" class="btn">Consulta Gratuita</a>
+    </div>
+  </section>
+
+  <!-- ===== CONTACTO ===== -->
+  <section class="contacto" id="contacto">
+    <div class="contacto-container">
+      <div class="contacto-info" id="contactoInfo">
+        <div class="section-label">Contacto</div>
+        <h3>Hablemos de<br>tu proyecto</h3>
+        <p>Estamos aqui para responder tus preguntas y ayudarte a navegar el entorno legal espanol con total confianza.
+        </p>
+        <div class="contacto-detail">
+          <i class="ph ph-paper-plane-right"></i>
+          <div>
+            <strong>Email</strong>
+            <span>hola@witlaw.es</span>
+          </div>
+        </div>
+        <div class="contacto-detail">
+          <i class="ph ph-phone"></i>
+          <div>
+            <strong>Telefono</strong>
+            <span>+34 958 000 000</span>
+          </div>
+        </div>
+        <div class="contacto-detail">
+          <i class="ph ph-map-pin"></i>
+          <div>
+            <strong>Oficina</strong>
+            <span>Calle Margarita 45, 18000 Granada, Espana</span>
+          </div>
+        </div>
+      </div>
+      <form class="contacto-form" id="contactoForm">
+        <div class="form-group">
+          <label>Nombre</label>
+          <input type="text" placeholder="Tu nombre completo">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="tu@email.com">
+        </div>
+        <div class="form-group">
+          <label>Telefono</label>
+          <input type="tel" placeholder="+34 600 000 000">
+        </div>
+        <div class="form-group">
+          <label>Asunto</label>
+          <input type="text" placeholder="Compraventa, inversion, visado...">
+        </div>
+        <div class="form-group">
+          <label>Mensaje</label>
+          <textarea placeholder="Cuentanos sobre tu proyecto..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-main">Wit<span>Law</span></div>
+        </div>
+        <p>Abogados especializados en derecho internacional, inmobiliario y de inversiones. Protegiendo tus intereses en
+          Espana desde 2013.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="#">Derecho Inmobiliario</a></li>
+          <li><a href="#">Inversion Extranjera</a></li>
+          <li><a href="#">Contratos Mercantiles</a></li>
+          <li><a href="#">Residencia y Visados</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#">Sobre Nosotros</a></li>
+          <li><a href="#">Equipo</a></li>
+          <li><a href="#">Casos de Exito</a></li>
+          <li><a href="#">Blog Legal</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Aviso Legal</a></li>
+          <li><a href="#">Politica de Privacidad</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>WitLaw Abogados 2026. Todos los derechos reservados.</p>
+      <p>Granada, Espana</p>
+    </div>
+  </footer>
+
+  <script>
+    // ===== MAQUINA DE ESCRIBIR CON JS =====
+function typeWriterEffect(slide) {
+  const lines = slide.querySelectorAll('.line');
+  let totalDelay = 500;
+  
+  lines.forEach((line, lineIndex) => {
+    const text = line.getAttribute('data-text');
+    line.innerHTML = '';
+    
+    const chars = [];
+    for (let i = 0; i < text.length; i++) {
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
+      line.appendChild(span);
+      chars.push(span);
+    }
+    
+    // Cursor al final de la linea
+        // const cursor = document.createElement('span');
+        // cursor.className = 'cursor';
+        // line.appendChild(cursor);
+    
+    // Animar letras
+    chars.forEach((char, charIndex) => {
+      setTimeout(() => {
+        char.classList.add('visible');
+      }, totalDelay + (charIndex * 70));
+    });
+    
+    // Activar cursor SOLO al final de TODAS las lineas, no de cada una
+    if (lineIndex === lines.length - 1) {
+      setTimeout(() => {
+        cursor.classList.add('active');
+      }, totalDelay + (chars.length * 70));
+    }
+    
+    totalDelay += (chars.length * 70) + 200;
+  });
+  
+  // Mostrar subtitle al final
+  const subtitle = slide.querySelector('.slide-subtitle');
+  if (subtitle) {
+    setTimeout(() => {
+      subtitle.style.opacity = '1';
+    }, totalDelay + 300);
+  }
+}
+
+    function resetTypeWriter(slide) {
+      const lines = slide.querySelectorAll('.line');
+      lines.forEach(line => {
+        const text = line.getAttribute('data-text');
+        line.innerHTML = '';
+        // Restaurar texto original para que se vea vacio
+      });
+      const subtitle = slide.querySelector('.slide-subtitle');
+      if (subtitle) {
+        subtitle.style.opacity = '';
+      }
+    }
+
+    // ===== SLIDER =====
+    const slides = document.querySelectorAll('.slide');
+    const indicatorsContainer = document.getElementById('sideIndicators');
+    const currentSlideEl = document.getElementById('currentSlide');
+    const playPauseBtn = document.getElementById('playPause');
+    const pauseIcon = document.getElementById('pauseIcon');
+    const playIcon = document.getElementById('playIcon');
+
+    let currentSlide = 0;
+    let isPlaying = true;
+    let slideInterval;
+    const SLIDE_DURATION = 10000;
+
+    // Crear indicadores
+    slides.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'side-indicator' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goToSlide(i));
+      indicatorsContainer.appendChild(dot);
+    });
+
+    const indicators = document.querySelectorAll('.side-indicator');
+
+    function updateSlide() {
+      slides.forEach((slide, i) => {
+        slide.classList.remove('active', 'reveal');
+        indicators[i].classList.remove('active');
+        resetTypeWriter(slide);
+      });
+
+      slides[currentSlide].classList.add('active');
+      indicators[currentSlide].classList.add('active');
+      currentSlideEl.textContent = String(currentSlide + 1).padStart(2, '0');
+
+      // Iniciar efecto maquina de escribir
+      typeWriterEffect(slides[currentSlide]);
+
+      setTimeout(() => {
+        slides[currentSlide].classList.add('reveal');
+      }, 4000);
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      updateSlide();
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateSlide();
+      resetInterval();
+    }
+
+    function startInterval() {
+      slideInterval = setInterval(nextSlide, SLIDE_DURATION);
+    }
+
+    function resetInterval() {
+      if (isPlaying) {
+        clearInterval(slideInterval);
+        startInterval();
+      }
+    }
+
+    playPauseBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        pauseIcon.style.display = 'block';
+        playIcon.style.display = 'none';
+        startInterval();
+      } else {
+        pauseIcon.style.display = 'none';
+        playIcon.style.display = 'block';
+        clearInterval(slideInterval);
+      }
+    });
+
+    // Inicializar primer slide
+    setTimeout(() => {
+      slides[0].classList.add('reveal');
+    }, 4000);
+
+    typeWriterEffect(slides[0]);
+    startInterval();
+
+    // ===== NAVBAR SCROLL =====
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.pageYOffset > 100);
+    });
+
+    // ===== MOBILE MENU =====
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    // ===== SCROLL ANIMATIONS =====
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          if (entry.target.id === 'aboutContent') {
+            animateCounters();
+          }
+        }
+      });
+    }, observerOptions);
+
+document.querySelectorAll('#serviciosHeader, .service-card, #aboutContent, #aboutImage, #valoresHeader, .valor-item, #ctaContent, #contactoInfo, #contactoForm').forEach(el => {
+  observer.observe(el);
+});
+
+    const serviceCards = document.querySelectorAll('.service-card');
+    serviceCards.forEach((card, index) => {
+      card.style.transitionDelay = (index * 0.1) + 's';
+    });
+
+    // ===== CONTADORES ANIMADOS =====
+    let countersAnimated = false;
+    function animateCounters() {
+      if (countersAnimated) return;
+      countersAnimated = true;
+      const counters = document.querySelectorAll('.counter');
+      counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        const duration = 2000;
+        const step = target / (duration / 16);
+        let current = 0;
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) {
+            counter.textContent = target + (target === 98 ? '' : '+');
+            clearInterval(timer);
+          } else {
+            counter.textContent = Math.floor(current);
+          }
+        }, 16);
+      });
+    }
+
+    // ===== FORM =====
+    document.getElementById('contactoForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Gracias por tu mensaje. Te contactaremos pronto.');
+    });
+  </script>
+
+</body>
+
+</html>
