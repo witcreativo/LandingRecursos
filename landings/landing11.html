@@ -1,36 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WitLaw | Abogados Internacionales</title>
+  <title>Alcázar Internacional | Asesoría Legal y Fiscal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700&family=Montserrat:wght@100;200;300;400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700&family=Montserrat:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/index.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     :root {
       --magenta: #c4268c;
       --magenta-light: #d94fa8;
+      --magenta-dark: #9e1d70;
       --black: #0a0a0a;
       --white: #ffffff;
       --gray: #888888;
       --gray-light: #f5f5f5;
+      --gray-dark: #1a1a1a;
+      --gold: #c9a96e;
+      --gold-light: #e0c896;
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Montserrat', sans-serif;
       color: var(--black);
@@ -41,8 +34,7 @@
     /* ===== NAVBAR ===== */
     .navbar {
       position: fixed;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       z-index: 1000;
       padding: 25px 60px;
@@ -51,19 +43,12 @@
       align-items: center;
       transition: all 0.4s ease;
     }
-
     .navbar.scrolled {
       background: rgba(10, 10, 10, 0.95);
       backdrop-filter: blur(10px);
       padding: 15px 60px;
     }
-
-    .logo {
-      display: flex;
-      flex-direction: column;
-      color: var(--white);
-    }
-
+    .logo { display: flex; flex-direction: column; color: var(--white); }
     .logo-main {
       font-family: 'Montserrat', sans-serif;
       font-size: 28px;
@@ -71,26 +56,20 @@
       letter-spacing: 6px;
       text-transform: uppercase;
     }
-
-    .logo-main span {
-      font-weight: 600;
-    }
-
+    .logo-main span { font-weight: 600; }
     .logo-sub {
-      font-size: 10px;
+      /*font-size: 10px;*/
       font-weight: 300;
       letter-spacing: 3px;
       text-transform: uppercase;
       opacity: 0.8;
       margin-top: 2px;
     }
-
     .nav-links {
       display: flex;
       list-style: none;
       gap: 40px;
     }
-
     .nav-links a {
       color: var(--white);
       text-decoration: none;
@@ -101,26 +80,16 @@
       position: relative;
       transition: opacity 0.3s ease;
     }
-
     .nav-links a::after {
       content: '';
       position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 0;
-      height: 1px;
+      bottom: -5px; left: 0;
+      width: 0; height: 1px;
       background: var(--white);
       transition: width 0.3s ease;
     }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    .nav-links a:hover {
-      opacity: 0.7;
-    }
-
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a:hover { opacity: 0.7; }
     .menu-toggle {
       display: none;
       flex-direction: column;
@@ -128,15 +97,13 @@
       cursor: pointer;
       z-index: 1001;
     }
-
     .menu-toggle span {
-      width: 25px;
-      height: 1px;
+      width: 25px; height: 1px;
       background: var(--white);
       transition: all 0.3s ease;
     }
 
-    /* ===== HERO SLIDER ===== */
+    /* ===== HERO SLIDER - NO TOCAR ===== */
     .hero-slider {
       position: relative;
       width: 100%;
@@ -144,94 +111,65 @@
       overflow: hidden;
       background: var(--black);
     }
-
     .slide {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.8s ease, visibility 0.8s ease;
     }
-
     .slide.active {
       opacity: 1;
       visibility: visible;
     }
-
     .slide-layer {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background-size: cover;
       background-position: center;
       transition: opacity 1.5s ease, transform 8s ease;
     }
-
-    .slide-layer.img1 {
-      z-index: 1;
-      opacity: 1;
-      transition: opacity 2s ease;
-    }
-
-    .slide-layer.img2 {
-      z-index: 2;
-      opacity: 0;
-      transition: opacity 2s ease;
-    }
-
+    .slide-layer.img1 { z-index: 1; opacity: 1; transition: opacity 2s ease; }
+    .slide-layer.img2 { z-index: 2; opacity: 0; transition: opacity 2s ease; }
     .slide.active.reveal .slide-layer.img1 {
       opacity: 0;
       transition: opacity 2s ease 0.5s;
     }
-
     .slide.active.reveal .slide-layer.img2 {
       opacity: 1;
       transition: opacity 2s ease 0.5s;
     }
-
     .slide-darken {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(to left, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 40%, rgba(0, 0, 0, 0.1) 100%);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(to left, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.1) 100%);
       pointer-events: none;
       z-index: 3;
     }
-
-    /* ===== TEXTO SLIDER ===== */
     .slide-content {
       position: absolute;
-      top: 50%;
-      right: 80px;
+      top: 50%; right: 80px;
       transform: translateY(-50%);
       z-index: 10;
       max-width: 70%;
       text-align: right;
     }
-
     .slide-label {
       font-family: 'Outfit', sans-serif;
       font-size: 12px;
       font-weight: 200;
       letter-spacing: 8px;
       text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255,255,255,0.5);
       margin-bottom: 30px;
       opacity: 0;
     }
-
     .slide.active .slide-label {
       animation: fadeInUp 0.8s ease 0.3s forwards;
     }
-
-    /* TITULO: palo recto, fino, GRANDE */
     .slide-title {
       font-family: 'Outfit', sans-serif;
       font-size: clamp(50px, 9vw, 100px);
@@ -242,80 +180,39 @@
       text-transform: uppercase;
       text-align: right;
     }
-
     .slide-title .line {
       display: block;
       margin-bottom: 8px;
       min-height: 1em;
     }
-
     .slide-title .line .char {
       display: inline-block;
       opacity: 0;
       transform: translateY(20px);
       transition: none;
     }
-
     .slide-title .line .char.visible {
       opacity: 1;
       transform: translateY(0);
       transition: all 0.15s ease;
     }
-
-    .slide-title .line .cursor {
-      display: inline-block;
-      width: 3px;
-      height: 0.9em;
-      background: rgba(255, 255, 255, 0.8);
-      margin-left: 4px;
-      vertical-align: middle;
-      opacity: 0;
-      animation: cursorBlink 0.8s step-end infinite;
-    }
-
-    .slide-title .line .cursor.active {
-      opacity: 1;
-    }
-
     .slide-subtitle {
       font-family: 'Outfit', sans-serif;
       font-size: clamp(14px, 1.5vw, 18px);
       font-weight: 200;
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255,255,255,0.6);
       margin-top: 40px;
       letter-spacing: 3px;
       text-transform: uppercase;
       opacity: 0;
     }
-
     .slide.active .slide-subtitle {
       animation: fadeInUp 1s ease forwards;
     }
-
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    @keyframes cursorBlink {
-
-      0%,
-      100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0;
-      }
-    }
-
     .side-indicators {
       position: absolute;
       left: 40px;
@@ -326,35 +223,28 @@
       flex-direction: column;
       gap: 15px;
     }
-
     .side-indicator {
-      width: 10px;
-      height: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      width: 10px; height: 10px;
+      border: 1px solid rgba(255,255,255,0.5);
       border-radius: 50%;
       cursor: pointer;
       transition: all 0.4s ease;
       position: relative;
     }
-
     .side-indicator.active {
       background: var(--white);
       border-color: var(--white);
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
-
     .side-indicator.active::before {
       content: '';
       position: absolute;
-      top: -4px;
-      left: -4px;
-      width: 16px;
-      height: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      top: -4px; left: -4px;
+      width: 16px; height: 16px;
+      border: 1px solid rgba(255,255,255,0.3);
       border-radius: 50%;
       animation: pulse 2s ease infinite;
     }
-
     .slide-counter {
       position: absolute;
       right: 80px;
@@ -366,31 +256,21 @@
       font-weight: 100;
       letter-spacing: 4px;
     }
-
-    .slide-counter .current {
-      font-size: 36px;
-      font-weight: 100;
-    }
-
-    .slide-counter .total {
-      opacity: 0.4;
-    }
-
+    .slide-counter .current { font-size: 36px; font-weight: 100; }
+    .slide-counter .total { opacity: 0.4; }
     .spin-square {
       position: absolute;
       bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 100;
-      width: 50px;
-      height: 50px;
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      width: 50px; height: 50px;
+      border: 1px solid rgba(255,255,255,0.4);
       display: flex;
       align-items: center;
       justify-content: center;
       animation: spinSquare 8s linear infinite;
     }
-
     .spin-square span {
       font-family: 'Outfit', sans-serif;
       font-size: 24px;
@@ -398,11 +278,9 @@
       color: var(--white);
       animation: spinSquare 8s linear infinite reverse;
     }
-
     .play-pause {
       position: absolute;
-      bottom: 40px;
-      left: 60px;
+      bottom: 40px; left: 60px;
       z-index: 100;
       color: var(--white);
       cursor: pointer;
@@ -411,11 +289,7 @@
       padding: 10px;
       transition: opacity 0.3s ease;
     }
-
-    .play-pause:hover {
-      opacity: 0.7;
-    }
-
+    .play-pause:hover { opacity: 0.7; }
     .scroll-indicator {
       position: absolute;
       bottom: 40px;
@@ -435,86 +309,244 @@
       cursor: pointer;
       animation: bounce 2s ease infinite;
     }
-
     @keyframes spinSquare {
-      from {
-        transform: translateX(-50%) rotate(0deg);
-      }
-
-      to {
-        transform: translateX(-50%) rotate(360deg);
-      }
+      from { transform: translateX(-50%) rotate(0deg); }
+      to { transform: translateX(-50%) rotate(360deg); }
     }
-
     @keyframes pulse {
-
-      0%,
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-
-      50% {
-        transform: scale(1.3);
-        opacity: 0.3;
-      }
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.3; }
     }
-
     @keyframes bounce {
-
-      0%,
-      100% {
-        transform: translateX(-50%) translateY(0);
-      }
-
-      50% {
-        transform: translateX(-50%) translateY(10px);
-      }
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
     }
 
-    @keyframes float {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-15px);
-      }
+    /* ===== INTRO PARALLAX CON LOBOS ===== */
+    /* Fondo oscuro con cuadros degradados animados */
+    .intro-parallax {
+      position: relative;
+      min-height: 700px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      background: #0a0a0a;
+    }
+    /* Cuadros degradados flotantes de fondo */
+    .intro-parallax::before {
+      content: '';
+      position: absolute;
+      top: -20%; left: -10%;
+      width: 500px; height: 500px;
+      background: linear-gradient(135deg, rgba(196,38,140,0.4) 0%, rgba(201,169,110,0.2) 50%, transparent 100%);
+      filter: blur(80px);
+      border-radius: 50%;
+      animation: floatGradient1 12s ease-in-out infinite;
+      z-index: 1;
+    }
+    .intro-parallax::after {
+      content: '';
+      position: absolute;
+      bottom: -30%; right: -5%;
+      width: 600px; height: 600px;
+      background: linear-gradient(225deg, rgba(196,38,140,0.3) 0%, rgba(100,50,150,0.2) 50%, transparent 100%);
+      filter: blur(100px);
+      border-radius: 50%;
+      animation: floatGradient2 15s ease-in-out infinite;
+      z-index: 1;
+    }
+    @keyframes floatGradient1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(50px, 30px) scale(1.1); }
+      66% { transform: translate(-30px, -20px) scale(0.9); }
+    }
+    @keyframes floatGradient2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-40px, 20px) scale(1.2); }
+      66% { transform: translate(20px, -40px) scale(0.8); }
+    }
+    /* Cuadros adicionales con degradados */
+    .intro-gradient-squares {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .intro-gradient-squares .sq {
+      position: absolute;
+      border-radius: 20px;
+      opacity: 0.15;
+      filter: blur(40px);
+    }
+    .intro-gradient-squares .sq1 {
+      top: 10%; left: 5%;
+      width: 300px; height: 300px;
+      background: linear-gradient(135deg, #c4268c, #d94fa8);
+      animation: sqFloat1 10s ease-in-out infinite;
+    }
+    .intro-gradient-squares .sq2 {
+      top: 50%; right: 10%;
+      width: 250px; height: 250px;
+      background: linear-gradient(225deg, #c9a96e, #e0c896);
+      animation: sqFloat2 14s ease-in-out infinite;
+    }
+    .intro-gradient-squares .sq3 {
+      bottom: 10%; left: 30%;
+      width: 200px; height: 200px;
+      background: linear-gradient(45deg, #9e1d70, #c4268c);
+      animation: sqFloat3 11s ease-in-out infinite;
+    }
+    @keyframes sqFloat1 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(30px, -20px) rotate(5deg); }
+    }
+    @keyframes sqFloat2 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-20px, 30px) rotate(-5deg); }
+    }
+    @keyframes sqFloat3 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(15px, 15px) rotate(3deg); }
+    }
+    .intro-parallax-bg {
+      position: absolute;
+      top: -300px; left: 0;
+      width: 100%; height: 1200px;
+      background-image: url('images/cocodrilo.webp');
+      background-size: cover;
+      background-position: center 30%;
+      background-attachment: fixed;
+      filter: brightness(0.5) saturate(0.8);
+      z-index: 2;
+    }
+    .intro-parallax-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(to right, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0.3) 40%, rgba(10,10,10,0.15) 100%);
+      z-index: 3;
+    }
+    .intro-parallax-container {
+      position: relative;
+      z-index: 4;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 120px 80px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 100px;
+      align-items: center;
+      width: 100%;
+    }
+    .intro-parallax-text {
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .intro-parallax-text.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .intro-parallax-text p {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(20px, 2.5vw, 28px);
+      font-weight: 200;
+      line-height: 1.7;
+      color: var(--white);
+      letter-spacing: 1px;
+    }
+    .intro-parallax-text p span {
+      color: var(--magenta-light);
+      font-weight: 300;
+    }
+    .intro-parallax-image {
+      position: relative;
+      opacity: 0;
+      transform: translateX(60px) scale(0.9);
+      transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1) 0.3s;
+    }
+    .intro-parallax-image.visible {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+    .intro-parallax-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: grayscale(0.2);
+      transition: all 0.5s ease;
+    }
+    /* MISMO EFECTO DE BORDE QUE ABOUT */
+    .intro-parallax-image::before {
+      content: '';
+      position: absolute;
+      top: -25px; left: -25px;
+      width: 100%; height: 100%;
+      border: 1px solid var(--magenta);
+      z-index: -1;
+      transition: all 0.6s ease;
+    }
+    .intro-parallax-image::after {
+      content: '';
+      position: absolute;
+      bottom: -15px; right: -15px;
+      width: 60px; height: 60px;
+      background: var(--magenta);
+      opacity: 0.1;
+      z-index: -1;
+      transition: all 0.5s ease;
+    }
+    .intro-parallax-image:hover::before {
+      top: -12px; left: -12px;
+      border-width: 2px;
+    }
+    .intro-parallax-image:hover::after {
+      transform: scale(1.3);
+      opacity: 0.15;
+    }
+    .intro-parallax-image:hover img {
+      transform: scale(1.02);
+      filter: grayscale(0);
     }
 
     /* ===== SERVICIOS ===== */
+    /* Título en una sola línea */
     .servicios {
       padding: 150px 60px;
-      background: var(--white);
+      background: linear-gradient(135deg, #f8f5f0 0%, #f0ebe5 50%, #f5f0ea 100%);
       position: relative;
       overflow: hidden;
     }
-
     .servicios::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(196, 38, 140, 0.3), transparent);
+      top: 0; left: 0;
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(196,38,140,0.3), transparent);
     }
-
+    /* Canvas Three.js para cuadrados flotantes */
+    #servicios-canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
     .section-header {
       text-align: center;
       margin-bottom: 100px;
       opacity: 0;
       transform: translateY(40px);
       transition: all 1s ease;
+      position: relative;
+      z-index: 1;
     }
-
     .section-header.visible {
       opacity: 1;
       transform: translateY(0);
     }
-
     .section-label {
       font-family: 'Outfit', sans-serif;
       font-size: 11px;
@@ -526,18 +558,15 @@
       display: inline-block;
       position: relative;
     }
-
     .section-label::after {
       content: '';
       position: absolute;
       bottom: -10px;
       left: 50%;
       transform: translateX(-50%);
-      width: 40px;
-      height: 1px;
+      width: 40px; height: 1px;
       background: var(--magenta);
     }
-
     .section-title {
       font-family: 'Outfit', sans-serif;
       font-size: clamp(36px, 5vw, 64px);
@@ -546,83 +575,117 @@
       line-height: 1.1;
       letter-spacing: 2px;
     }
-
+    .servicios .section-title {
+      color: var(--black);
+    }
+    .servicios .section-label {
+      color: var(--magenta);
+    }
+    .servicios .section-label::after {
+      background: var(--magenta);
+    }
+    .section-title.single-line {
+      white-space: nowrap;
+    }
     .services-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 30px;
       max-width: 1200px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
+    /* ===== TARJETAS CRISTAL / GLASS - ESTILO CAPTURA ===== */
     .service-card {
       padding: 50px 35px;
-      border: 1px solid rgba(0, 0, 0, 0.06);
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 16px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
       transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
       position: relative;
       overflow: hidden;
-      background: var(--white);
       opacity: 0;
-      transform: translateY(50px) rotateX(15deg);
+      transform: translateY(80px) scale(0.9);
+      cursor: pointer;
+      z-index: 1;
     }
-
     .service-card.visible {
       opacity: 1;
-      transform: translateY(0) rotateX(0deg);
+      transform: translateY(0) scale(1);
     }
-
+    /* Borde brillante tipo captura */
     .service-card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: var(--magenta);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.6s ease;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1.5px;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.8) 0%,
+        rgba(196, 38, 140, 0.4) 25%,
+        rgba(201, 169, 110, 0.3) 50%,
+        rgba(196, 38, 140, 0.4) 75%,
+        rgba(255, 255, 255, 0.8) 100%
+      );
+      -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.5;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
     }
-
+    .service-card:hover::before {
+      opacity: 0.9;
+    }
+    /* Brillo cristal en hover */
     .service-card::after {
       content: '';
       position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 100px;
-      height: 100px;
-      background: radial-gradient(circle, rgba(196, 38, 140, 0.05) 0%, transparent 70%);
-      transition: all 0.5s ease;
-      opacity: 0;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 70%
+      );
+      transform: translateX(-100%) rotate(45deg);
+      transition: transform 0.8s ease;
+      pointer-events: none;
     }
-
-    .service-card:hover::before {
-      transform: scaleX(1);
-    }
-
     .service-card:hover::after {
-      opacity: 1;
-      transform: scale(2);
+      transform: translateX(100%) rotate(45deg);
     }
-
     .service-card:hover {
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.1);
-      transform: translateY(-10px);
-      border-color: rgba(196, 38, 140, 0.2);
-    }
-
-    .service-icon {
-      font-size: 40px;
-      color: var(--magenta);
-      margin-bottom: 30px;
-      transition: all 0.4s ease;
-      display: inline-block;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      box-shadow: 
+        0 20px 60px rgba(196, 38, 140, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      transform: translateY(-10px) scale(1.02);
+      border-color: rgba(196, 38, 140, 0.3);
     }
 
     .service-card:hover .service-icon {
-      transform: scale(1.1) rotate(-5deg);
+      transform: scale(1.15) rotate(-8deg);
+      color: var(--magenta-dark);
     }
-
+    .service-card:hover .service-icon::after {
+      transform: translate(-50%, -50%) scale(1.5);
+    }
     .service-card h3 {
       font-family: 'Outfit', sans-serif;
       font-size: 15px;
@@ -632,55 +695,432 @@
       margin-bottom: 20px;
       transition: color 0.3s ease;
     }
-
-    .service-card:hover h3 {
-      color: var(--magenta);
-    }
-
+    .service-card:hover h3 { color: var(--magenta); }
     .service-card p {
       font-size: 14px;
       font-weight: 300;
       line-height: 1.9;
       color: var(--gray);
     }
-
+    .service-card h3 {
+      color: var(--black);
+    }
+    .service-number {
+      color: rgba(0, 0, 0, 0.06);
+    }
+    .service-card:hover .service-number {
+      color: rgba(196, 38, 140, 0.15);
+    }
     .service-number {
       position: absolute;
-      top: 20px;
-      right: 25px;
+      top: 20px; right: 25px;
       font-family: 'Outfit', sans-serif;
       font-size: 48px;
       font-weight: 100;
-      color: rgba(0, 0, 0, 0.04);
+      color: rgba(0,0,0,0.04);
       line-height: 1;
       transition: all 0.4s ease;
     }
-
     .service-card:hover .service-number {
-      color: rgba(196, 38, 140, 0.1);
+      color: rgba(196,38,140,0.1);
       transform: scale(1.1);
+    }
+
+    /* ===== PARALLAX ELEFANTE - TU TRANQUILIDAD ===== */
+    .parallax-elefante {
+      position: relative;
+      min-height: 600px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .parallax-elefante-bg {
+      position: absolute;
+      top: -500px; left: 0;
+      width: 100%; height: 1300px;
+      background-image: url('images/cebra.webp');
+      background-size: cover;
+      background-position: center 30%;
+      background-attachment: fixed;
+      filter: brightness(0.6) saturate(0.8);
+    }
+    .parallax-elefante-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(to bottom, 
+        rgba(10,10,10,0.05) 0%, 
+        rgba(10,10,10,0.15) 50%, 
+        rgba(10,10,10,0.25) 100%
+      );
+    }
+    .parallax-elefante-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 900px;
+      padding: 0 40px;
+    }
+    /* Texto animado con efecto de revelado */
+    .parallax-elefante-content h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 100;
+      color: var(--white);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+    .parallax-elefante-content h2 .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(40px) rotateX(-90deg);
+      transform-origin: center top;
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+      margin-right: 0.3em;
+    }
+    .parallax-elefante-content h2 .word.visible {
+      opacity: 1;
+      transform: translateY(0) rotateX(0deg);
+    }
+    .parallax-elefante-content h2 .word.highlight {
+      color: var(--magenta-light);
+      font-weight: 300;
+    }
+    .parallax-elefante-content p {
+      font-size: 16px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.8;
+      letter-spacing: 1px;
+      margin-top: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 1s ease 0.8s;
+    }
+    .parallax-elefante-content p.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== ESPECIALIDADES - FLIP CARDS ===== */
+    .especialidades {
+      padding: 150px 60px;
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .especialidades::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(196,38,140,0.2), transparent);
+    }
+    .especialidades-blur {
+      position: absolute;
+      top: 20%; right: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(201,169,110,0.06) 0%, transparent 60%);
+      filter: blur(60px);
+      pointer-events: none;
+    }
+    .especialidades-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Flip Card Container */
+    .flip-card {
+      perspective: 1000px;
+      height: 320px;
+      opacity: 0;
+      transform: translateY(100px);
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .flip-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+      transform-style: preserve-3d;
+    }
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 4px;
+      padding: 50px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    /* Frente - estilo normal */
+    .flip-card-front {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .flip-card-front::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px; height: 0;
+      background: linear-gradient(to bottom, var(--magenta), var(--gold));
+      transition: height 0.6s ease;
+    }
+    .flip-card:hover .flip-card-front::before {
+      height: 100%;
+    }
+    /* Reverso - colores invertidos */
+    .flip-card-back {
+      background: linear-gradient(135deg, var(--magenta-dark), var(--magenta));
+      color: var(--white);
+      transform: rotateY(180deg);
+      border: 1px solid rgba(255,255,255,0.1);
+      align-items: center;
+      text-align: center;
+    }
+    .flip-card-back h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .flip-card-back p {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.8;
+      opacity: 0.9;
+    }
+    .flip-card-back .flip-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+    .esp-icon {
+      font-size: 36px;
+      color: var(--magenta);
+      margin-bottom: 25px;
+      transition: all 0.5s ease;
+      display: inline-block;
+    }
+    .flip-card:hover .esp-icon {
+      transform: translateY(-5px) scale(1.1);
+    }
+    .flip-card-front h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      color: var(--black);
+    }
+    .flip-card-front p {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.9;
+      color: var(--gray);
+    }
+    .esp-tag {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 6px 16px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--magenta);
+      border: 1px solid rgba(196,38,140,0.2);
+      border-radius: 20px;
+      transition: all 0.4s ease;
+      align-self: flex-start;
+    }
+    .flip-card:hover .esp-tag {
+      background: var(--magenta);
+      color: var(--white);
+      border-color: var(--magenta);
+    }
+
+    /* ===== TESTIMONIOS - CARRUSEL 3D ===== */
+    .testimonios {
+      padding: 150px 60px;
+      background: var(--gray-dark);
+      position: relative;
+      overflow: hidden;
+    }
+    .testimonios::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(196,38,140,0.05) 0%, transparent 60%);
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .testimonios-header {
+      text-align: center;
+      margin-bottom: 80px;
+      position: relative;
+      z-index: 1;
+    }
+    .testimonios-header .section-label { color: rgba(255,255,255,0.5); }
+    .testimonios-header .section-label::after { background: rgba(255,255,255,0.3); }
+    .testimonios-header .section-title { color: var(--white); }
+
+    /* Carrusel 3D */
+    .testimonios-carousel {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      height: 450px;
+      perspective: 1000px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .testi-slide {
+      position: absolute;
+      width: 380px;
+      padding: 50px 35px;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      border-left: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+      cursor: pointer;
+    }
+    .testi-slide.active {
+      transform: translateX(0) scale(1.15);
+      z-index: 10;
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(30px);
+      box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+    }
+    .testi-slide.prev {
+      transform: translateX(-420px) scale(0.85);
+      z-index: 5;
+      opacity: 0.5;
+      filter: blur(2px);
+    }
+    .testi-slide.next {
+      transform: translateX(420px) scale(0.85);
+      z-index: 5;
+      opacity: 0.5;
+      filter: blur(2px);
+    }
+    .testi-slide.hidden {
+      transform: translateX(0) scale(0.6);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .testi-slide::before {
+      content: '"';
+      position: absolute;
+      top: 20px; left: 25px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 80px;
+      font-weight: 100;
+      color: rgba(196,38,140,0.15);
+      line-height: 1;
+    }
+    .testi-stars {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 25px;
+    }
+    .testi-stars svg {
+      width: 18px; height: 18px;
+      fill: var(--gold);
+    }
+    .testi-text {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.9;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 30px;
+      font-style: italic;
+    }
+    .testi-author {
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+    .testi-role {
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(255,255,255,0.4);
+      margin-top: 5px;
+    }
+    /* Indicadores del carrusel */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 50px;
+      position: relative;
+      z-index: 20;
+    }
+    .carousel-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+    .carousel-dot.active {
+      background: var(--magenta);
+      transform: scale(1.3);
+      box-shadow: 0 0 15px rgba(196,38,140,0.5);
     }
 
     /* ===== ABOUT ===== */
     .about {
       padding: 150px 60px;
-      background: var(--gray-light);
+      background: var(--white);
       overflow: hidden;
       position: relative;
     }
-
     .about::before {
       content: '';
       position: absolute;
-      top: 50%;
-      left: -100px;
-      width: 300px;
-      height: 300px;
-      border: 1px solid rgba(196, 38, 140, 0.1);
+      top: 50%; left: -100px;
+      width: 300px; height: 300px;
+      border: 1px solid rgba(196,38,140,0.1);
       border-radius: 50%;
       animation: float 6s ease infinite;
     }
-
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
     .about-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -691,33 +1131,19 @@
       position: relative;
       z-index: 1;
     }
-
     .about-content {
       opacity: 0;
       transform: translateX(-80px);
       transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1);
     }
-
     .about-content.visible {
       opacity: 1;
       transform: translateX(0);
     }
-
     .about-content .section-label,
-    .about-content .section-title {
-      text-align: left;
-    }
-
-    .about-content .section-label::after {
-      left: 0;
-      transform: none;
-    }
-
-    .about-content .section-title {
-      margin-bottom: 40px;
-      font-weight: 200;
-    }
-
+    .about-content .section-title { text-align: left; }
+    .about-content .section-label::after { left: 0; transform: none; }
+    .about-content .section-title { margin-bottom: 40px; font-weight: 200; }
     .about-content p {
       font-size: 15px;
       font-weight: 300;
@@ -728,54 +1154,31 @@
       transform: translateY(20px);
       transition: all 0.8s ease;
     }
-
     .about-content.visible p {
       opacity: 1;
       transform: translateY(0);
     }
-
-    .about-content.visible p:nth-child(3) {
-      transition-delay: 0.3s;
-    }
-
-    .about-content.visible p:nth-child(4) {
-      transition-delay: 0.5s;
-    }
-
+    .about-content.visible p:nth-child(3) { transition-delay: 0.3s; }
+    .about-content.visible p:nth-child(4) { transition-delay: 0.5s; }
     .about-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 40px;
       margin-top: 50px;
     }
-
     .stat-item {
       opacity: 0;
       transform: translateY(30px);
       transition: all 0.8s ease;
     }
-
     .about-content.visible .stat-item {
       opacity: 1;
       transform: translateY(0);
     }
-
-    .about-content.visible .stat-item:nth-child(1) {
-      transition-delay: 0.6s;
-    }
-
-    .about-content.visible .stat-item:nth-child(2) {
-      transition-delay: 0.7s;
-    }
-
-    .about-content.visible .stat-item:nth-child(3) {
-      transition-delay: 0.8s;
-    }
-
-    .about-content.visible .stat-item:nth-child(4) {
-      transition-delay: 0.9s;
-    }
-
+    .about-content.visible .stat-item:nth-child(1) { transition-delay: 0.6s; }
+    .about-content.visible .stat-item:nth-child(2) { transition-delay: 0.7s; }
+    .about-content.visible .stat-item:nth-child(3) { transition-delay: 0.8s; }
+    .about-content.visible .stat-item:nth-child(4) { transition-delay: 0.9s; }
     .stat-item h4 {
       font-family: 'Outfit', sans-serif;
       font-size: 52px;
@@ -784,7 +1187,6 @@
       line-height: 1;
       margin-bottom: 10px;
     }
-
     .stat-item p {
       font-family: 'Outfit', sans-serif;
       font-size: 11px;
@@ -794,215 +1196,83 @@
       color: var(--black);
       margin: 0;
     }
-
     .about-image {
       position: relative;
       opacity: 0;
       transform: translateX(80px) scale(0.9);
       transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1) 0.2s;
     }
-
     .about-image.visible {
       opacity: 1;
       transform: translateX(0) scale(1);
     }
-
     .about-image img {
-      width: 100%;
-      height: auto;
+      width: 100%; height: auto;
       display: block;
       transition: all 0.5s ease;
+      filter: grayscale(0.3);
     }
-
     .about-image::before {
       content: '';
       position: absolute;
-      top: -30px;
-      left: -30px;
-      width: 100%;
-      height: 100%;
+      top: -30px; left: -30px;
+      width: 100%; height: 100%;
       border: 1px solid var(--magenta);
       z-index: -1;
       transition: all 0.6s ease;
     }
-
     .about-image::after {
       content: '';
       position: absolute;
-      bottom: -20px;
-      right: -20px;
-      width: 80px;
-      height: 80px;
+      bottom: -20px; right: -20px;
+      width: 80px; height: 80px;
       background: var(--magenta);
       opacity: 0.1;
       z-index: -1;
       transition: all 0.5s ease;
     }
-
     .about-image:hover::before {
-      top: -15px;
-      left: -15px;
+      top: -15px; left: -15px;
       border-width: 2px;
     }
-
     .about-image:hover::after {
       transform: scale(1.2);
       opacity: 0.15;
     }
-
     .about-image:hover img {
       transform: scale(1.02);
+      filter: grayscale(0);
     }
 
-    /* ===== VALORES ===== */
-    .valores {
-      padding: 150px 60px;
-      background: var(--white);
+    /* ===== CTA THREE.JS ===== */
+    .cta-three {
       position: relative;
-    }
-
-    .valores-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .valor-item {
-      padding: 70px 40px;
-      text-align: center;
-      border-right: 1px solid rgba(0, 0, 0, 0.06);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-      opacity: 0;
-      transform: translateY(40px) scale(0.95);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .valor-item.visible {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    .valor-item:nth-child(1) {
-      transition-delay: 0s;
-    }
-
-    .valor-item:nth-child(2) {
-      transition-delay: 0.15s;
-    }
-
-    .valor-item:nth-child(3) {
-      transition-delay: 0.3s;
-    }
-
-    .valor-item:nth-child(4) {
-      transition-delay: 0.45s;
-    }
-
-    .valor-item::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, rgba(196, 38, 140, 0.03) 0%, transparent 50%);
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
-    .valor-item:hover::before {
-      opacity: 1;
-    }
-
-    .valor-item:hover {
-      background: var(--gray-light);
-      transform: translateY(-5px);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-      z-index: 1;
-    }
-
-    .valor-icon {
-      font-size: 44px;
-      color: var(--magenta);
-      margin-bottom: 30px;
-      transition: all 0.5s ease;
-      display: inline-block;
-    }
-
-    .valor-item:hover .valor-icon {
-      transform: translateY(-5px) scale(1.1);
-    }
-
-    .valor-item h3 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 13px;
-      font-weight: 400;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-
-    .valor-item p {
-      font-size: 14px;
-      font-weight: 300;
-      line-height: 1.9;
-      color: var(--gray);
-    }
-
-    /* ===== CTA ===== */
-    .cta {
       padding: 180px 60px;
       background: var(--black);
       text-align: center;
-      position: relative;
       overflow: hidden;
+      min-height: 600px;
     }
-
-    .cta::before {
-      content: '';
+    #cta-canvas {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background:
-        radial-gradient(circle at 20% 50%, rgba(196, 38, 140, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 80% 50%, rgba(196, 38, 140, 0.05) 0%, transparent 50%);
-    }
-
-    .cta::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
-      height: 600px;
-      border: 1px solid rgba(255, 255, 255, 0.03);
-      border-radius: 50%;
-      animation: pulse 4s ease infinite;
-    }
-
-    .cta-content {
-      position: relative;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       z-index: 1;
+    }
+    .cta-three-content {
+      position: relative;
+      z-index: 2;
       max-width: 800px;
       margin: 0 auto;
       opacity: 0;
       transform: translateY(40px);
       transition: all 1s ease;
     }
-
-    .cta-content.visible {
+    .cta-three-content.visible {
       opacity: 1;
       transform: translateY(0);
     }
-
-    .cta h2 {
+    .cta-three-content h2 {
       font-family: 'Outfit', sans-serif;
       font-size: clamp(32px, 4.5vw, 56px);
       font-weight: 100;
@@ -1011,16 +1281,14 @@
       line-height: 1.2;
       letter-spacing: 2px;
     }
-
-    .cta p {
+    .cta-three-content p {
       font-size: 16px;
       font-weight: 300;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255,255,255,0.5);
       margin-bottom: 50px;
       line-height: 1.9;
       letter-spacing: 1px;
     }
-
     .btn {
       display: inline-block;
       padding: 20px 55px;
@@ -1030,7 +1298,7 @@
       letter-spacing: 4px;
       text-transform: uppercase;
       text-decoration: none;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255,255,255,0.3);
       color: var(--white);
       background: transparent;
       cursor: pointer;
@@ -1038,39 +1306,26 @@
       position: relative;
       overflow: hidden;
     }
-
     .btn::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
       background: var(--white);
       transition: left 0.5s ease;
       z-index: -1;
     }
-
-    .btn:hover::before {
-      left: 0;
-    }
-
-    .btn:hover {
-      color: var(--black);
-    }
-
+    .btn:hover::before { left: 0; }
+    .btn:hover { color: var(--black); }
     .btn-primary {
       background: var(--magenta);
       border-color: var(--magenta);
     }
-
-    .btn-primary::before {
-      background: var(--magenta-light);
-    }
-
+    .btn-primary::before { background: var(--magenta-light); }
     .btn-primary:hover {
       color: var(--white);
       border-color: var(--magenta-light);
+      box-shadow: 0 10px 40px rgba(196,38,140,0.4);
     }
 
     /* ===== CONTACTO ===== */
@@ -1078,37 +1333,41 @@
       padding: 150px 60px;
       background: var(--white);
       position: relative;
+      overflow: hidden;
     }
-
     .contacto::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(196, 38, 140, 0.2), transparent);
+      top: 0; left: 0;
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(196,38,140,0.2), transparent);
     }
-
+    .contacto-blur-bg {
+      position: absolute;
+      top: 10%; left: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(196,38,140,0.04) 0%, transparent 60%);
+      filter: blur(60px);
+      pointer-events: none;
+    }
     .contacto-container {
       max-width: 1200px;
       margin: 0 auto;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 100px;
+      position: relative;
+      z-index: 1;
     }
-
     .contacto-info {
       opacity: 0;
       transform: translateX(-60px);
       transition: all 1s ease;
     }
-
     .contacto-info.visible {
       opacity: 1;
       transform: translateX(0);
     }
-
     .contacto-info h3 {
       font-family: 'Outfit', sans-serif;
       font-size: 42px;
@@ -1116,15 +1375,13 @@
       margin-bottom: 40px;
       line-height: 1.2;
     }
-
-    .contacto-info>p {
+    .contacto-info > p {
       font-size: 15px;
       font-weight: 300;
       line-height: 2;
       color: var(--gray);
       margin-bottom: 50px;
     }
-
     .contacto-detail {
       display: flex;
       align-items: flex-start;
@@ -1134,28 +1391,14 @@
       transform: translateX(-30px);
       transition: all 0.6s ease;
     }
-
     .contacto-info.visible .contacto-detail {
       opacity: 1;
       transform: translateX(0);
     }
-
-    .contacto-info.visible .contacto-detail:nth-child(3) {
-      transition-delay: 0.2s;
-    }
-
-    .contacto-info.visible .contacto-detail:nth-child(4) {
-      transition-delay: 0.3s;
-    }
-
-    .contacto-info.visible .contacto-detail:nth-child(5) {
-      transition-delay: 0.4s;
-    }
-
-    .contacto-info.visible .contacto-detail:nth-child(6) {
-      transition-delay: 0.5s;
-    }
-
+    .contacto-info.visible .contacto-detail:nth-child(3) { transition-delay: 0.2s; }
+    .contacto-info.visible .contacto-detail:nth-child(4) { transition-delay: 0.3s; }
+    .contacto-info.visible .contacto-detail:nth-child(5) { transition-delay: 0.4s; }
+    .contacto-info.visible .contacto-detail:nth-child(6) { transition-delay: 0.5s; }
     .contacto-detail i {
       font-size: 24px;
       color: var(--magenta);
@@ -1163,11 +1406,10 @@
       margin-top: 3px;
       transition: all 0.3s ease;
     }
-
     .contacto-detail:hover i {
       transform: scale(1.2);
+      filter: drop-shadow(0 0 10px rgba(196,38,140,0.3));
     }
-
     .contacto-detail div strong {
       font-family: 'Outfit', sans-serif;
       font-size: 11px;
@@ -1177,29 +1419,30 @@
       display: block;
       margin-bottom: 8px;
     }
-
     .contacto-detail div span {
       font-size: 15px;
       font-weight: 300;
       color: var(--gray);
     }
-
     .contacto-form {
       opacity: 0;
       transform: translateY(40px);
       transition: all 1s ease 0.3s;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px);
+      padding: 50px;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 4px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.05);
     }
-
     .contacto-form.visible {
       opacity: 1;
       transform: translateY(0);
     }
-
     .form-group {
       margin-bottom: 35px;
       position: relative;
     }
-
     .form-group label {
       display: block;
       font-family: 'Outfit', sans-serif;
@@ -1211,50 +1454,46 @@
       color: var(--black);
       transition: color 0.3s ease;
     }
-
-    .form-group:focus-within label {
-      color: var(--magenta);
-    }
-
+    .form-group:focus-within label { color: var(--magenta); }
     .form-group input,
-    .form-group textarea {
+    .form-group textarea,
+    .form-group select {
       width: 100%;
       padding: 15px 0;
       font-family: 'Montserrat', sans-serif;
       font-size: 15px;
       font-weight: 300;
       border: none;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      border-bottom: 1px solid rgba(0,0,0,0.12);
       outline: none;
       transition: all 0.4s ease;
       background: transparent;
     }
-
     .form-group input:focus,
-    .form-group textarea:focus {
+    .form-group textarea:focus,
+    .form-group select:focus {
       border-color: var(--magenta);
       border-bottom-width: 2px;
     }
-
     .form-group textarea {
       resize: vertical;
       min-height: 120px;
     }
-
     .form-group::after {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
       background: var(--magenta);
       transition: width 0.4s ease;
     }
-
-    .form-group:focus-within::after {
-      width: 100%;
+    .form-group:focus-within::after { width: 100%; }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
     }
+    .form-submit { margin-top: 20px; }
 
     /* ===== FOOTER ===== */
     .footer {
@@ -1262,7 +1501,6 @@
       background: var(--black);
       color: var(--white);
     }
-
     .footer-container {
       max-width: 1200px;
       margin: 0 auto;
@@ -1270,18 +1508,13 @@
       grid-template-columns: 2fr 1fr 1fr 1fr;
       gap: 60px;
     }
-
-    .footer-brand .logo {
-      margin-bottom: 25px;
-    }
-
+    .footer-brand .logo { margin-bottom: 25px; }
     .footer-brand p {
       font-size: 13px;
       font-weight: 300;
       line-height: 1.9;
-      color: rgba(255, 255, 255, 0.4);
+      color: rgba(255,255,255,0.4);
     }
-
     .footer-col h4 {
       font-family: 'Outfit', sans-serif;
       font-size: 11px;
@@ -1289,164 +1522,115 @@
       letter-spacing: 3px;
       text-transform: uppercase;
       margin-bottom: 30px;
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255,255,255,0.8);
     }
-
-    .footer-col ul {
-      list-style: none;
-    }
-
-    .footer-col ul li {
-      margin-bottom: 15px;
-    }
-
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 15px; }
     .footer-col ul li a {
-      color: rgba(255, 255, 255, 0.4);
+      color: rgba(255,255,255,0.4);
       text-decoration: none;
       font-size: 13px;
       font-weight: 300;
       transition: all 0.3s ease;
       display: inline-block;
     }
-
     .footer-col ul li a:hover {
       color: var(--white);
       transform: translateX(5px);
     }
-
     .footer-bottom {
       max-width: 1200px;
       margin: 0 auto;
       padding-top: 50px;
       margin-top: 70px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid rgba(255,255,255,0.08);
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-
     .footer-bottom p {
       font-size: 12px;
       font-weight: 300;
-      color: rgba(255, 255, 255, 0.25);
+      color: rgba(255,255,255,0.25);
     }
 
-    /* ===== MOBILE ===== */
+    /* ===== RESPONSIVE ===== */
     @media (max-width: 968px) {
-      .navbar {
-        padding: 20px 30px;
-      }
-
+      .navbar { padding: 20px 30px; }
       .nav-links {
         position: fixed;
-        top: 0;
-        right: -100%;
-        width: 100%;
-        height: 100vh;
-        background: rgba(10, 10, 10, 0.98);
+        top: 0; right: -100%;
+        width: 100%; height: 100vh;
+        background: rgba(10,10,10,0.98);
         flex-direction: column;
         justify-content: center;
         align-items: center;
         gap: 30px;
         transition: right 0.4s ease;
       }
-
-      .nav-links.open {
-        right: 0;
-      }
-
-      .nav-links a {
-        font-size: 14px;
-      }
-
-      .menu-toggle {
-        display: flex;
-      }
-
-      .side-indicators {
-        left: 20px;
-      }
-
-      .slide-content {
-        right: 30px;
-        max-width: 85%;
-      }
-
-      .slide-title {
-        font-size: clamp(40px, 10vw, 70px);
-        letter-spacing: 5px;
-      }
-
+      .nav-links.open { right: 0; }
+      .nav-links a { font-size: 14px; }
+      .menu-toggle { display: flex; }
+      .side-indicators { left: 20px; }
+      .slide-content { right: 30px; max-width: 85%; }
+      .slide-title { font-size: clamp(40px, 10vw, 70px); letter-spacing: 5px; }
+      .intro-parallax-container,
       .servicios,
+      .especialidades,
+      .testimonios,
       .about,
-      .valores,
-      .cta,
+      .cta-three,
       .contacto {
         padding: 100px 30px;
       }
-
+      .intro-parallax-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
       .about-container,
       .contacto-container {
         grid-template-columns: 1fr;
         gap: 60px;
       }
-
-      .footer-container {
-        grid-template-columns: 1fr 1fr;
-        gap: 40px;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .valores-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+      .footer-container { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .services-grid,
+      .especialidades-grid { grid-template-columns: 1fr; }
+      .flip-card { height: 280px; }
+      .testi-slide.active { transform: translateX(0) scale(1.05); }
+      .testi-slide.prev { transform: translateX(-300px) scale(0.8); }
+      .testi-slide.next { transform: translateX(300px) scale(0.8); }
+      .parallax-elefante-bg,
+      .intro-parallax-bg { background-attachment: scroll; }
+      .form-row { grid-template-columns: 1fr; }
     }
-
     @media (max-width: 640px) {
-      .footer-container {
-        grid-template-columns: 1fr;
-      }
-
-      .about-stats {
-        grid-template-columns: 1fr;
-      }
-
-      .slide-counter {
-        display: none;
-      }
-
-      .slide-content {
-        max-width: 90%;
-        right: 20px;
-      }
-
-      .slide-title {
-        font-size: clamp(36px, 11vw, 50px);
-        letter-spacing: 3px;
-      }
-
-      .valores-grid {
-        grid-template-columns: 1fr;
-      }
+      .footer-container { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+      .slide-counter { display: none; }
+      .slide-content { max-width: 90%; right: 20px; }
+      .slide-title { font-size: clamp(36px, 11vw, 50px); letter-spacing: 3px; }
+      .contacto-form { padding: 30px; }
+      .testi-slide { width: 300px; padding: 35px 25px; }
+      .testi-slide.prev { transform: translateX(-250px) scale(0.75); }
+      .testi-slide.next { transform: translateX(250px) scale(0.75); }
     }
   </style>
   <base target="_blank">
+<base target="_blank">
 </head>
-
 <body>
 
   <!-- ===== NAVBAR ===== -->
   <nav class="navbar" id="navbar">
     <div class="logo">
-      <div class="logo-main">Wit<span>Law</span></div>
-      <div class="logo-sub">Abogados Internacionales</div>
+      <div class="logo-main">Alcázar<!--<span>Int</span>--></div>
+      <!--<div class="logo-sub">Asesoría Legal y Fiscal</div>-->
+      <div class="logo-sub">internacional</div>
     </div>
     <ul class="nav-links" id="navLinks">
       <li><a href="#inicio">Inicio</a></li>
       <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#especialidades">Especialidades</a></li>
       <li><a href="#nosotros">Nosotros</a></li>
       <li><a href="#contacto">Contacto</a></li>
     </ul>
@@ -1456,6 +1640,7 @@
   </nav>
 
   <!-- ===== HERO SLIDER ===== -->
+  <!-- NO MODIFICAR - Banner con animales y efecto máquina de escribir -->
   <section class="hero-slider" id="inicio">
 
     <!-- Slide 1: Elefante -->
@@ -1575,18 +1760,16 @@
       <span class="total"> / 07</span>
     </div>
     <button class="play-pause" id="playPause">
-      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="1.5"
-        id="pauseIcon">
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="1.5" id="pauseIcon">
         <rect x="6" y="4" width="4" height="16" />
         <rect x="14" y="4" width="4" height="16" />
       </svg>
-      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="currentColor" stroke-width="1.5"
-        id="playIcon" style="display:none">
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="currentColor" stroke-width="1.5" id="playIcon" style="display:none">
         <polygon points="5,3 19,12 5,21" />
       </svg>
     </button>
-    <div class="spin-square"><span>W</span></div>
-    <div class="scroll-indicator" onclick="document.getElementById('servicios').scrollIntoView({behavior:'smooth'})">
+    <div class="spin-square"><span>A</span></div>
+    <div class="scroll-indicator" onclick="document.getElementById('introParallax').scrollIntoView({behavior:'smooth'})">
       <span>Scroll</span>
       <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1">
         <path d="M12 5v14M5 12l7 7 7-7" />
@@ -1594,45 +1777,64 @@
     </div>
   </section>
 
+  <!-- ===== INTRO PARALLAX CON LOBOS ===== -->
+  <!-- Texto a la izquierda, imagen a la derecha con borde magenta -->
+  <section class="intro-parallax" id="introParallax">
+    <div class="intro-gradient-squares">
+      <div class="sq sq1"></div>
+      <div class="sq sq2"></div>
+      <div class="sq sq3"></div>
+    </div>
+    <div class="intro-parallax-bg"></div>
+    <div class="intro-parallax-overlay"></div>
+    <div class="intro-parallax-container">
+      <div class="intro-parallax-text" id="introText">
+        <p>Mudarse a España o invertir en el país es una gran decisión. Sabemos que el proceso puede ser complejo, con trámites administrativos, fiscales y legales que generan dudas e incertidumbre. <span>Nuestro objetivo es ayudarte a que todo sea más fácil, seguro y rápido.</span></p>
+      </div>
+      <div class="intro-parallax-image" id="introImage">
+        <img src="images/lobo1.webp" alt="Alcázar Internacional">
+      </div>
+    </div>
+  </section>
+
   <!-- ===== SERVICIOS ===== -->
+  <!-- Título en una sola línea + tarjetas cristal con animación elegante -->
   <section class="servicios" id="servicios">
+    <canvas id="servicios-canvas"></canvas>
     <div class="section-header" id="serviciosHeader">
-      <div class="section-label">Que Hacemos</div>
-      <div class="section-title">Servicios Legales<br>Internacionales</div>
+      <div class="section-label">Qué Hacemos</div>
+      <div class="section-title single-line">Servicios Legales y Fiscales</div>
     </div>
     <div class="services-grid">
       <div class="service-card" data-delay="0">
         <span class="service-number">01</span>
         <div class="service-icon"><i class="ph ph-house-line"></i></div>
         <h3>Derecho Inmobiliario</h3>
-        <p>Compraventa de propiedades, due diligence, licencias y permisos. Acompanamos cada paso del proceso con
-          minuciosidad absoluta.</p>
+        <p>Compraventa de propiedades, due diligence, licencias y permisos. Acompañamos cada paso del proceso con minuciosidad absoluta.</p>
       </div>
       <div class="service-card" data-delay="1">
         <span class="service-number">02</span>
         <div class="service-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
-        <h3>Inversion Extranjera</h3>
-        <p>Asesoramiento integral a inversores internacionales. Estructuracion de operaciones, fiscalidad y cumplimiento
-          normativo.</p>
+        <h3>Inversión Extranjera</h3>
+        <p>Asesoramiento integral a inversores internacionales. Estructuración de operaciones, fiscalidad y cumplimiento normativo.</p>
       </div>
       <div class="service-card" data-delay="2">
         <span class="service-number">03</span>
         <div class="service-icon"><i class="ph ph-scroll"></i></div>
         <h3>Contratos Mercantiles</h3>
-        <p>Redaccion, negociacion y revision de contratos. Protegemos tus intereses con la maxima precision legal.</p>
+        <p>Redacción, negociación y revisión de contratos. Protegemos tus intereses con la máxima precisión legal.</p>
       </div>
       <div class="service-card" data-delay="3">
         <span class="service-number">04</span>
         <div class="service-icon"><i class="ph ph-passport"></i></div>
         <h3>Residencia y Visados</h3>
-        <p>Golden Visa, permisos de residencia y trabajo, nacionalidad. Gestion completa del proceso migratorio.</p>
+        <p>Golden Visa, permisos de residencia y trabajo, nacionalidad. Gestión completa del proceso migratorio.</p>
       </div>
       <div class="service-card" data-delay="4">
         <span class="service-number">05</span>
         <div class="service-icon"><i class="ph ph-shield-check"></i></div>
         <h3>Cumplimiento Normativo</h3>
-        <p>Prevencion de blanqueo de capitales, proteccion de datos, compliance. Adaptamos tu empresa a la normativa
-          espanola.</p>
+        <p>Prevención de blanqueo de capitales, protección de datos, compliance. Adaptamos tu empresa a la normativa española.</p>
       </div>
       <div class="service-card" data-delay="5">
         <span class="service-number">06</span>
@@ -1643,17 +1845,216 @@
     </div>
   </section>
 
-  <!-- ===== ABOUT ===== -->
+  <!-- ===== PARALLAX ELEFANTE - TU TRANQUILIDAD ===== -->
+  <!-- Texto animado con efecto de revelado palabra por palabra -->
+  <section class="parallax-elefante">
+    <div class="parallax-elefante-bg"></div>
+    <div class="parallax-elefante-overlay"></div>
+    <div class="parallax-elefante-content">
+      <h2 id="parallaxElefanteTitle">
+        <span class="word">Tu</span>
+        <span class="word highlight">tranquilidad</span>
+        <span class="word">nuestra</span>
+        <span class="word highlight">prioridad</span>
+      </h2>
+      <p id="parallaxElefanteText">Más de una década protegiendo inversiones internacionales en España con rigor jurídico y visión estratégica.</p>
+    </div>
+  </section>
+
+  <!-- ===== ESPECIALIDADES - FLIP CARDS ===== -->
+  <!-- Tarjetas que giran 180° al hover, reverso con colores invertidos -->
+  <section class="especialidades" id="especialidades">
+    <div class="especialidades-blur"></div>
+    <div class="section-header" id="espHeader">
+      <div class="section-label">Áreas de Especialidad</div>
+      <div class="section-title">Soluciones a tu medida</div>
+    </div>
+    <div class="especialidades-grid">
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="esp-icon"><i class="ph ph-currency-eur"></i></div>
+            <h3>Ley Beckham y Fiscalidad</h3>
+            <p>La Ley Beckham te permite tributar solo un 24% en España y evitar la doble imposición sobre ingresos del extranjero.</p>
+            <span class="esp-tag">Fiscalidad</span>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-icon"><i class="ph ph-currency-eur"></i></div>
+            <h3>Optimización Fiscal</h3>
+            <p>Estrategias personalizadas para minimizar tu carga fiscal y maximizar tus beneficios en España.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="esp-icon"><i class="ph ph-buildings"></i></div>
+            <h3>Compra y Venta de Propiedades</h3>
+            <p>Invertir en inmuebles en España es una gran oportunidad, pero hacerlo con la estrategia fiscal adecuada marca la diferencia.</p>
+            <span class="esp-tag">Inmobiliario</span>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-icon"><i class="ph ph-buildings"></i></div>
+            <h3>Inversión Inmobiliaria</h3>
+            <p>Due diligence completa, negociación de condiciones y acompañamiento en cada fase de la operación.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="esp-icon"><i class="ph ph-hand-heart"></i></div>
+            <h3>Herencias y Donaciones</h3>
+            <p>Si planeas recibir una herencia o realizar una donación, es fundamental minimizar la carga fiscal y estructurar la operación correctamente.</p>
+            <span class="esp-tag">Sucesiones</span>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-icon"><i class="ph ph-hand-heart"></i></div>
+            <h3>Planificación Sucesoria</h3>
+            <p>Estructuramos herencias y donaciones para proteger el patrimonio familiar con la máxima eficiencia fiscal.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="esp-icon"><i class="ph ph-airplane-tilt"></i></div>
+            <h3>Visados y Residencia</h3>
+            <p>Te ayudamos a obtener la visa que mejor se adapte a tu situación, ya sea para residir, trabajar o invertir en España.</p>
+            <span class="esp-tag">Migratorio</span>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-icon"><i class="ph ph-airplane-tilt"></i></div>
+            <h3>Golden Visa & Residencia</h3>
+            <p>Gestión integral de visados, permisos de residencia, trabajo y nacionalidad española.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="esp-icon"><i class="ph ph-storefront"></i></div>
+            <h3>Creación de Empresas</h3>
+            <p>Si deseas emprender en España o trasladar tu negocio, te ayudamos con todos los trámites legales y fiscales.</p>
+            <span class="esp-tag">Empresas</span>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-icon"><i class="ph ph-storefront"></i></div>
+            <h3>Constitución de Sociedades</h3>
+            <p>Desde la elección de la forma jurídica hasta la puesta en marcha operativa de tu empresa en España.</p>
+          </div>
+        </div>
+      </div>
+      <div class="flip-card">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="esp-icon"><i class="ph ph-briefcase"></i></div>
+            <h3>Asesoría en Actividades Económicas</h3>
+            <p>Te acompañamos en la gestión integral de tu actividad económica en España, desde la constitución hasta el día a día.</p>
+            <span class="esp-tag">Negocios</span>
+          </div>
+          <div class="flip-card-back">
+            <div class="flip-icon"><i class="ph ph-briefcase"></i></div>
+            <h3>Gestión Empresarial</h3>
+            <p>Asesoramiento continuo en fiscalidad, laboral, mercantil y compliance para tu negocio en España.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TESTIMONIOS - CARRUSEL 3D ===== -->
+  <!-- 6 reseñas, central más grande, laterales más pequeñas, efecto cristal -->
+  <section class="testimonios" id="testimonios">
+    <div class="testimonios-header">
+      <div class="section-label">Testimonios</div>
+      <div class="section-title">Lo que dicen nuestros clientes</div>
+    </div>
+    <div class="testimonios-carousel" id="testimoniosCarousel">
+      <div class="testi-slide" data-index="0">
+        <div class="testi-stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="testi-text">Trabajar con Alcázar ha sido una experiencia increíble. Su equipo multidisciplinar no solo aborda los problemas con gran profundidad, sino que también ofrece soluciones innovadoras y prácticas.</p>
+        <div class="testi-author">Cliente Internacional</div>
+        <div class="testi-role">Inversor Inmobiliario</div>
+      </div>
+      <div class="testi-slide" data-index="1">
+        <div class="testi-stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="testi-text">Desde que inicié mi negocio, Alcázar ha sido un aliado invaluable. La atención al detalle ha superado nuestras expectativas. Recomiendo mucho sus servicios.</p>
+        <div class="testi-author">Empresario</div>
+        <div class="testi-role">Sector Tecnológico</div>
+      </div>
+      <div class="testi-slide" data-index="2">
+        <div class="testi-stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="testi-text">Alcázar se distingue por su profesionalismo y su capacidad de dar soluciones rápidas y efectivas. La experiencia y conocimiento de su equipo son increíbles.</p>
+        <div class="testi-author">Directora General</div>
+        <div class="testi-role">Consultora Internacional</div>
+      </div>
+      <div class="testi-slide" data-index="3">
+        <div class="testi-stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="testi-text">El equipo de Alcázar hizo que mi traslado a España fuera impecable. Desde la visa hasta la compra de mi propiedad, todo fue fluido y profesional.</p>
+        <div class="testi-author">Ejecutivo</div>
+        <div class="testi-role">Sector Financiero</div>
+      </div>
+      <div class="testi-slide" data-index="4">
+        <div class="testi-stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="testi-text">Gracias a Alcázar pude optimizar mi situación fiscal bajo la Ley Beckham. Ahorro anual significativo y total tranquilidad en mis declaraciones.</p>
+        <div class="testi-author">Consultor</div>
+        <div class="testi-role">Sector IT</div>
+      </div>
+      <div class="testi-slide" data-index="5">
+        <div class="testi-stars">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p class="testi-text">Constituí mi empresa en España con Alcázar y el proceso fue sorprendentemente sencillo. Su conocimiento del mercado local es excepcional.</p>
+        <div class="testi-author">Emprendedor</div>
+        <div class="testi-role">E-commerce</div>
+      </div>
+    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
+  </section>
+
+  <!-- ===== SOBRE NOSOTROS ===== -->
   <section class="about" id="nosotros">
     <div class="about-container">
       <div class="about-content" id="aboutContent">
-        <div class="section-label">Quienes Somos</div>
-        <div class="section-title">Mas de una decada<br>protegiendo inversiones<br>internacionales</div>
-        <p>En WitLaw combinamos el rigor juridico con una vision estrategica del negocio. Entendemos que cada cliente
-          internacional enfrenta desafios unicos al operar en Espana, y por eso ofrecemos un acompanamiento integral que
-          va mas alla del asesoramiento legal tradicional.</p>
-        <p>Nuestro equipo multidisciplinar trabaja como una extension de tu empresa, anticipando obstaculos y
-          transformando complejidad en oportunidades. No reaccionamos ante los problemas: los prevenimos.</p>
+        <div class="section-label">Quiénes Somos</div>
+        <div class="section-title">Más de una década<br>protegiendo inversiones<br>internacionales</div>
+        <p>En Alcázar Internacional combinamos el rigor jurídico con una visión estratégica del negocio. Entendemos que cada cliente internacional enfrenta desafíos únicos al operar en España.</p>
+        <p>Nuestro equipo multidisciplinar trabaja como una extensión de tu empresa, anticipando obstáculos y transformando complejidad en oportunidades. No reaccionamos ante los problemas: los prevenimos.</p>
         <div class="about-stats">
           <div class="stat-item">
             <h4 class="counter" data-target="500">0</h4>
@@ -1661,11 +2062,11 @@
           </div>
           <div class="stat-item">
             <h4 class="counter" data-target="35">0</h4>
-            <p>Paises Atendidos</p>
+            <p>Países Atendidos</p>
           </div>
           <div class="stat-item">
             <h4 class="counter" data-target="12">0</h4>
-            <p>Anos de Experiencia</p>
+            <p>Años de Experiencia</p>
           </div>
           <div class="stat-item">
             <h4 class="counter" data-target="98">0</h4>
@@ -1674,71 +2075,41 @@
         </div>
       </div>
       <div class="about-image" id="aboutImage">
-        <img src="images/lobo1.webp" alt="WitLaw Equipo">
+        <img src="images/elefante1.webp" alt="Alcázar Internacional Equipo">
       </div>
     </div>
   </section>
 
-  <!-- ===== VALORES ===== -->
-  <section class="valores">
-    <div class="section-header" id="valoresHeader">
-      <div class="section-label">Nuestros Valores</div>
-      <div class="section-title">El ADN de WitLaw</div>
-    </div>
-    <div class="valores-grid">
-      <div class="valor-item">
-        <div class="valor-icon"><i class="ph ph-eye"></i></div>
-        <h3>Anticipacion</h3>
-        <p>Vemos mas alla del presente para proteger tu futuro. Cada decision se toma con la mirada puesta en lo que
-          vendra.</p>
-      </div>
-      <div class="valor-item">
-        <div class="valor-icon"><i class="ph ph-barbell"></i></div>
-        <h3>Firmeza</h3>
-        <p>Defendemos tus intereses con determinacion. En la negociacion y en el litigio, somos incansables.</p>
-      </div>
-      <div class="valor-item">
-        <div class="valor-icon"><i class="ph ph-lightbulb"></i></div>
-        <h3>Claridad</h3>
-        <p>Traducimos la complejidad legal en lenguaje comprensible. Sabes donde estas en cada momento.</p>
-      </div>
-      <div class="valor-item">
-        <div class="valor-icon"><i class="ph ph-handshake"></i></div>
-        <h3>Cercania</h3>
-        <p>Estamos a tu lado, incluso cuando estas al otro lado del mundo. Comunicacion constante y transparente.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== CTA ===== -->
-  <section class="cta">
-    <div class="cta-content" id="ctaContent">
-      <h2>Tu proxima inversion en Espana empieza con una conversacion</h2>
-      <p>Cuentanos tu proyecto y te mostraremos como podemos ayudarte a hacerlo realidad sin sorpresas ni contratiempos.
-      </p>
+  <!-- ===== CTA THREE.JS ===== -->
+  <!-- Fondo animado con partículas Three.js -->
+  <section class="cta-three" id="cta">
+    <canvas id="cta-canvas"></canvas>
+    <div class="cta-three-content" id="ctaContent">
+      <h2>Tu próxima inversión en España empieza con una conversación</h2>
+      <p>Cuéntanos tu proyecto y te mostraremos cómo podemos ayudarte a hacerlo realidad sin sorpresas ni contratiempos.</p>
       <a href="#contacto" class="btn">Consulta Gratuita</a>
     </div>
   </section>
 
   <!-- ===== CONTACTO ===== -->
   <section class="contacto" id="contacto">
+    <div class="contacto-blur-bg"></div>
     <div class="contacto-container">
       <div class="contacto-info" id="contactoInfo">
         <div class="section-label">Contacto</div>
         <h3>Hablemos de<br>tu proyecto</h3>
-        <p>Estamos aqui para responder tus preguntas y ayudarte a navegar el entorno legal espanol con total confianza.
-        </p>
+        <p>Estamos aquí para responder tus preguntas y ayudarte a navegar el entorno legal español con total confianza.</p>
         <div class="contacto-detail">
           <i class="ph ph-paper-plane-right"></i>
           <div>
             <strong>Email</strong>
-            <span>hola@witlaw.es</span>
+            <span>hola@alcazarinternational.com</span>
           </div>
         </div>
         <div class="contacto-detail">
           <i class="ph ph-phone"></i>
           <div>
-            <strong>Telefono</strong>
+            <strong>Teléfono</strong>
             <span>+34 958 000 000</span>
           </div>
         </div>
@@ -1746,32 +2117,50 @@
           <i class="ph ph-map-pin"></i>
           <div>
             <strong>Oficina</strong>
-            <span>Calle Margarita 45, 18000 Granada, Espana</span>
+            <span>Granada, España</span>
           </div>
         </div>
       </div>
       <form class="contacto-form" id="contactoForm">
-        <div class="form-group">
-          <label>Nombre</label>
-          <input type="text" placeholder="Tu nombre completo">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" placeholder="Tu nombre completo" required>
+          </div>
+          <div class="form-group">
+            <label>Apellidos</label>
+            <input type="text" placeholder="Tus apellidos" required>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" placeholder="tu@email.com">
-        </div>
-        <div class="form-group">
-          <label>Telefono</label>
-          <input type="tel" placeholder="+34 600 000 000">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="tu@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input type="tel" placeholder="+34 600 000 000">
+          </div>
         </div>
         <div class="form-group">
           <label>Asunto</label>
-          <input type="text" placeholder="Compraventa, inversion, visado...">
+          <select required>
+            <option value="">Selecciona un servicio</option>
+            <option value="inmobiliario">Derecho Inmobiliario</option>
+            <option value="fiscalidad">Ley Beckham / Fiscalidad</option>
+            <option value="visado">Visados y Residencia</option>
+            <option value="empresa">Creación de Empresas</option>
+            <option value="herencia">Herencias y Donaciones</option>
+            <option value="otro">Otro</option>
+          </select>
         </div>
         <div class="form-group">
           <label>Mensaje</label>
-          <textarea placeholder="Cuentanos sobre tu proyecto..."></textarea>
+          <textarea placeholder="Cuéntanos sobre tu proyecto..." required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+        <div class="form-submit">
+          <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+        </div>
       </form>
     </div>
   </section>
@@ -1781,16 +2170,15 @@
     <div class="footer-container">
       <div class="footer-brand">
         <div class="logo">
-          <div class="logo-main">Wit<span>Law</span></div>
+          <div class="logo-main">Alcázar<!--<span>Int</span>--></div>
         </div>
-        <p>Abogados especializados en derecho internacional, inmobiliario y de inversiones. Protegiendo tus intereses en
-          Espana desde 2013.</p>
+        <p>Asesoría especializada en derecho internacional, inmobiliario y fiscal para inversores extranjeros en España. Protegiendo tus intereses desde 2013.</p>
       </div>
       <div class="footer-col">
         <h4>Servicios</h4>
         <ul>
           <li><a href="#">Derecho Inmobiliario</a></li>
-          <li><a href="#">Inversion Extranjera</a></li>
+          <li><a href="#">Inversión Extranjera</a></li>
           <li><a href="#">Contratos Mercantiles</a></li>
           <li><a href="#">Residencia y Visados</a></li>
         </ul>
@@ -1800,7 +2188,7 @@
         <ul>
           <li><a href="#">Sobre Nosotros</a></li>
           <li><a href="#">Equipo</a></li>
-          <li><a href="#">Casos de Exito</a></li>
+          <li><a href="#">Casos de Éxito</a></li>
           <li><a href="#">Blog Legal</a></li>
         </ul>
       </div>
@@ -1808,78 +2196,50 @@
         <h4>Legal</h4>
         <ul>
           <li><a href="#">Aviso Legal</a></li>
-          <li><a href="#">Politica de Privacidad</a></li>
+          <li><a href="#">Política de Privacidad</a></li>
           <li><a href="#">Cookies</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>WitLaw Abogados 2026. Todos los derechos reservados.</p>
-      <p>Granada, Espana</p>
+      <p>Alcázar Internacional 2026. Todos los derechos reservados.</p>
+      <p>Granada, España</p>
     </div>
   </footer>
 
   <script>
-    // ===== MAQUINA DE ESCRIBIR CON JS =====
-function typeWriterEffect(slide) {
-  const lines = slide.querySelectorAll('.line');
-  let totalDelay = 500;
-  
-  lines.forEach((line, lineIndex) => {
-    const text = line.getAttribute('data-text');
-    line.innerHTML = '';
-    
-    const chars = [];
-    for (let i = 0; i < text.length; i++) {
-      const span = document.createElement('span');
-      span.className = 'char';
-      span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
-      line.appendChild(span);
-      chars.push(span);
-    }
-    
-    // Cursor al final de la linea
-        // const cursor = document.createElement('span');
-        // cursor.className = 'cursor';
-        // line.appendChild(cursor);
-    
-    // Animar letras
-    chars.forEach((char, charIndex) => {
-      setTimeout(() => {
-        char.classList.add('visible');
-      }, totalDelay + (charIndex * 70));
-    });
-    
-    // Activar cursor SOLO al final de TODAS las lineas, no de cada una
-    if (lineIndex === lines.length - 1) {
-      setTimeout(() => {
-        cursor.classList.add('active');
-      }, totalDelay + (chars.length * 70));
-    }
-    
-    totalDelay += (chars.length * 70) + 200;
-  });
-  
-  // Mostrar subtitle al final
-  const subtitle = slide.querySelector('.slide-subtitle');
-  if (subtitle) {
-    setTimeout(() => {
-      subtitle.style.opacity = '1';
-    }, totalDelay + 300);
-  }
-}
-
-    function resetTypeWriter(slide) {
+    // ===== MAQUINA DE ESCRIBIR =====
+    function typeWriterEffect(slide) {
       const lines = slide.querySelectorAll('.line');
-      lines.forEach(line => {
+      let totalDelay = 500;
+      lines.forEach((line) => {
         const text = line.getAttribute('data-text');
         line.innerHTML = '';
-        // Restaurar texto original para que se vea vacio
+        const chars = [];
+        for (let i = 0; i < text.length; i++) {
+          const span = document.createElement('span');
+          span.className = 'char';
+          span.textContent = text[i] === ' ' ? ' ' : text[i];
+          line.appendChild(span);
+          chars.push(span);
+        }
+        chars.forEach((char, charIndex) => {
+          setTimeout(() => {
+            char.classList.add('visible');
+          }, totalDelay + (charIndex * 70));
+        });
+        totalDelay += (chars.length * 70) + 200;
       });
       const subtitle = slide.querySelector('.slide-subtitle');
       if (subtitle) {
-        subtitle.style.opacity = '';
+        setTimeout(() => { subtitle.style.opacity = '1'; }, totalDelay + 300);
       }
+    }
+    function resetTypeWriter(slide) {
+      const lines = slide.querySelectorAll('.line');
+      lines.forEach(line => { line.innerHTML = ''; });
+      const subtitle = slide.querySelector('.slide-subtitle');
+      if (subtitle) { subtitle.style.opacity = ''; }
     }
 
     // ===== SLIDER =====
@@ -1889,63 +2249,49 @@ function typeWriterEffect(slide) {
     const playPauseBtn = document.getElementById('playPause');
     const pauseIcon = document.getElementById('pauseIcon');
     const playIcon = document.getElementById('playIcon');
-
     let currentSlide = 0;
     let isPlaying = true;
     let slideInterval;
     const SLIDE_DURATION = 10000;
-
-    // Crear indicadores
     slides.forEach((_, i) => {
       const dot = document.createElement('div');
       dot.className = 'side-indicator' + (i === 0 ? ' active' : '');
       dot.addEventListener('click', () => goToSlide(i));
       indicatorsContainer.appendChild(dot);
     });
-
     const indicators = document.querySelectorAll('.side-indicator');
-
     function updateSlide() {
       slides.forEach((slide, i) => {
         slide.classList.remove('active', 'reveal');
         indicators[i].classList.remove('active');
         resetTypeWriter(slide);
       });
-
       slides[currentSlide].classList.add('active');
       indicators[currentSlide].classList.add('active');
       currentSlideEl.textContent = String(currentSlide + 1).padStart(2, '0');
-
-      // Iniciar efecto maquina de escribir
       typeWriterEffect(slides[currentSlide]);
-
       setTimeout(() => {
         slides[currentSlide].classList.add('reveal');
       }, 4000);
     }
-
     function nextSlide() {
       currentSlide = (currentSlide + 1) % slides.length;
       updateSlide();
     }
-
     function goToSlide(index) {
       currentSlide = index;
       updateSlide();
       resetInterval();
     }
-
     function startInterval() {
       slideInterval = setInterval(nextSlide, SLIDE_DURATION);
     }
-
     function resetInterval() {
       if (isPlaying) {
         clearInterval(slideInterval);
         startInterval();
       }
     }
-
     playPauseBtn.addEventListener('click', () => {
       isPlaying = !isPlaying;
       if (isPlaying) {
@@ -1958,12 +2304,7 @@ function typeWriterEffect(slide) {
         clearInterval(slideInterval);
       }
     });
-
-    // Inicializar primer slide
-    setTimeout(() => {
-      slides[0].classList.add('reveal');
-    }, 4000);
-
+    setTimeout(() => { slides[0].classList.add('reveal'); }, 4000);
     typeWriterEffect(slides[0]);
     startInterval();
 
@@ -1988,7 +2329,6 @@ function typeWriterEffect(slide) {
       threshold: 0.15,
       rootMargin: '0px 0px -50px 0px'
     };
-
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -1996,18 +2336,44 @@ function typeWriterEffect(slide) {
           if (entry.target.id === 'aboutContent') {
             animateCounters();
           }
+          if (entry.target.id === 'parallaxElefanteTitle') {
+            animateParallaxWords();
+          }
         }
       });
     }, observerOptions);
 
-document.querySelectorAll('#serviciosHeader, .service-card, #aboutContent, #aboutImage, #valoresHeader, .valor-item, #ctaContent, #contactoInfo, #contactoForm').forEach(el => {
-  observer.observe(el);
-});
+    // Observar elementos
+    document.querySelectorAll(
+      '#introText, #introImage, #serviciosHeader, .service-card, ' +
+      '#parallaxElefanteTitle, #parallaxElefanteText, #espHeader, .flip-card, ' +
+      '#aboutContent, #aboutImage, #ctaContent, #contactoInfo, #contactoForm'
+    ).forEach(el => { observer.observe(el); });
 
-    const serviceCards = document.querySelectorAll('.service-card');
-    serviceCards.forEach((card, index) => {
+    // Delay escalonado para tarjetas de servicios
+    document.querySelectorAll('.service-card').forEach((card, index) => {
+      card.style.transitionDelay = (index * 0.12) + 's';
+    });
+    // Delay escalonado para flip cards
+    document.querySelectorAll('.flip-card').forEach((card, index) => {
       card.style.transitionDelay = (index * 0.1) + 's';
     });
+
+    // ===== ANIMACIÓN PALABRAS PARALLAX ELEFANTE =====
+    function animateParallaxWords() {
+      const words = document.querySelectorAll('#parallaxElefanteTitle .word');
+      const text = document.getElementById('parallaxElefanteText');
+      words.forEach((word, index) => {
+        setTimeout(() => {
+          word.classList.add('visible');
+        }, index * 200);
+      });
+      if (text) {
+        setTimeout(() => {
+          text.classList.add('visible');
+        }, words.length * 200 + 300);
+      }
+    }
 
     // ===== CONTADORES ANIMADOS =====
     let countersAnimated = false;
@@ -2032,6 +2398,253 @@ document.querySelectorAll('#serviciosHeader, .service-card, #aboutContent, #abou
       });
     }
 
+    // ===== CARRUSEL TESTIMONIOS 3D =====
+    const testimoniosCarousel = document.getElementById('testimoniosCarousel');
+    const testiSlides = document.querySelectorAll('.testi-slide');
+    const carouselDotsContainer = document.getElementById('carouselDots');
+    let currentTesti = 0;
+    const totalTestis = testiSlides.length;
+    let testiInterval;
+
+    // Crear dots
+    testiSlides.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', () => goToTesti(i));
+      carouselDotsContainer.appendChild(dot);
+    });
+    const carouselDots = document.querySelectorAll('.carousel-dot');
+
+    function updateTestiPositions() {
+      testiSlides.forEach((slide, i) => {
+        slide.classList.remove('active', 'prev', 'next', 'hidden');
+        if (i === currentTesti) {
+          slide.classList.add('active');
+        } else if (i === (currentTesti - 1 + totalTestis) % totalTestis) {
+          slide.classList.add('prev');
+        } else if (i === (currentTesti + 1) % totalTestis) {
+          slide.classList.add('next');
+        } else {
+          slide.classList.add('hidden');
+        }
+      });
+      carouselDots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentTesti);
+      });
+    }
+
+    function nextTesti() {
+      currentTesti = (currentTesti + 1) % totalTestis;
+      updateTestiPositions();
+    }
+
+    function goToTesti(index) {
+      currentTesti = index;
+      updateTestiPositions();
+      clearInterval(testiInterval);
+      testiInterval = setInterval(nextTesti, 5000);
+    }
+
+    // Iniciar carrusel
+    updateTestiPositions();
+    testiInterval = setInterval(nextTesti, 5000);
+
+    // ===== THREE.JS CTA PARTICLES =====
+    (function() {
+      const canvas = document.getElementById('cta-canvas');
+      if (!canvas) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Partículas
+      const particlesCount = 800;
+      const posArray = new Float32Array(particlesCount * 3);
+      const colorsArray = new Float32Array(particlesCount * 3);
+
+      for (let i = 0; i < particlesCount * 3; i += 3) {
+        posArray[i] = (Math.random() - 0.5) * 10;
+        posArray[i + 1] = (Math.random() - 0.5) * 10;
+        posArray[i + 2] = (Math.random() - 0.5) * 10;
+
+        // Colores magenta y blanco
+        const isMagenta = Math.random() > 0.6;
+        colorsArray[i] = isMagenta ? 0.77 : 1;
+        colorsArray[i + 1] = isMagenta ? 0.15 : 1;
+        colorsArray[i + 2] = isMagenta ? 0.55 : 1;
+      }
+
+      const particlesGeometry = new THREE.BufferGeometry();
+      particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+      particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorsArray, 3));
+
+      const particlesMaterial = new THREE.PointsMaterial({
+        size: 0.02,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.8,
+        blending: THREE.AdditiveBlending
+      });
+
+      const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+      scene.add(particlesMesh);
+
+      // Líneas conectando partículas cercanas
+      const lineMaterial = new THREE.LineBasicMaterial({
+        color: 0xc4268c,
+        transparent: true,
+        opacity: 0.15
+      });
+
+      camera.position.z = 3;
+
+      let mouseX = 0;
+      let mouseY = 0;
+      let isActive = true;
+
+      document.addEventListener('mousemove', (event) => {
+        mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+      });
+
+      // Visibility check
+      const ctaSection = document.getElementById('cta');
+      const ctaObserver = new IntersectionObserver((entries) => {
+        isActive = entries[0].isIntersecting;
+      }, { threshold: 0.1 });
+      ctaObserver.observe(ctaSection);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        if (!isActive) return;
+
+        const time = Date.now() * 0.0005;
+
+        particlesMesh.rotation.y = time * 0.1;
+        particlesMesh.rotation.x = mouseY * 0.2;
+        particlesMesh.rotation.z = mouseX * 0.1;
+
+        // Movimiento ondulante
+        const positions = particlesGeometry.attributes.position.array;
+        for (let i = 0; i < particlesCount; i++) {
+          const i3 = i * 3;
+          positions[i3 + 1] += Math.sin(time + positions[i3]) * 0.002;
+        }
+        particlesGeometry.attributes.position.needsUpdate = true;
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // Resize
+      window.addEventListener('resize', () => {
+        camera.aspect = canvas.offsetWidth / canvas.offsetHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+      });
+    })();
+
+    // ===== THREE.JS SERVICIOS - CUADRADOS FLOTANTES =====
+    (function() {
+      const canvas = document.getElementById('servicios-canvas');
+      if (!canvas) return;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, canvas.offsetWidth / canvas.offsetHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // Crear cuadrados flotantes
+      const squares = [];
+      const squareCount = 8;
+      const colors = [
+        new THREE.Color(0xc4268c),
+        new THREE.Color(0xd94fa8),
+        new THREE.Color(0xc9a96e),
+        new THREE.Color(0x9e1d70)
+      ];
+
+      for (let i = 0; i < squareCount; i++) {
+        const size = Math.random() * 1.5 + 0.5;
+        const geometry = new THREE.PlaneGeometry(size, size);
+        const material = new THREE.MeshBasicMaterial({
+          color: colors[Math.floor(Math.random() * colors.length)],
+          transparent: true,
+          opacity: 0.08 + Math.random() * 0.12,
+          side: THREE.DoubleSide
+        });
+        const square = new THREE.Mesh(geometry, material);
+        square.position.x = (Math.random() - 0.5) * 15;
+        square.position.y = (Math.random() - 0.5) * 10;
+        square.position.z = (Math.random() - 0.5) * 5;
+        square.rotation.z = Math.random() * Math.PI;
+        square.userData = {
+          speedX: (Math.random() - 0.5) * 0.003,
+          speedY: (Math.random() - 0.5) * 0.003,
+          speedRot: (Math.random() - 0.5) * 0.002,
+          floatY: Math.random() * Math.PI * 2,
+          floatSpeed: 0.5 + Math.random() * 0.5
+        };
+        squares.push(square);
+        scene.add(square);
+      }
+
+      camera.position.z = 8;
+
+      let isActive = true;
+      const serviciosSection = document.getElementById('servicios');
+      const serviciosObserver = new IntersectionObserver((entries) => {
+        isActive = entries[0].isIntersecting;
+      }, { threshold: 0.1 });
+      serviciosObserver.observe(serviciosSection);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        if (!isActive) return;
+
+        const time = Date.now() * 0.001;
+
+        squares.forEach(square => {
+          const data = square.userData;
+          square.position.x += data.speedX;
+          square.position.y += data.speedY + Math.sin(time * data.floatSpeed + data.floatY) * 0.002;
+          square.rotation.z += data.speedRot;
+
+          // Reset si se sale mucho
+          if (Math.abs(square.position.x) > 10) data.speedX *= -1;
+          if (Math.abs(square.position.y) > 7) data.speedY *= -1;
+        });
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        camera.aspect = canvas.offsetWidth / canvas.offsetHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
+      });
+    })();
+
+    // ===== PARALLAX SCROLL MANUAL =====
+    const parallaxElements = document.querySelectorAll('.intro-parallax-bg, .parallax-elefante-bg');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      parallaxElements.forEach(el => {
+        const parent = el.parentElement;
+        const rect = parent.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          const speed = 0.4;
+          const yPos = -(scrolled - parent.offsetTop) * speed;
+          el.style.transform = `translateY(${yPos}px)`;
+        }
+      });
+    });
+
     // ===== FORM =====
     document.getElementById('contactoForm').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -2040,5 +2653,4 @@ document.querySelectorAll('#serviciosHeader, .service-card, #aboutContent, #abou
   </script>
 
 </body>
-
 </html>
