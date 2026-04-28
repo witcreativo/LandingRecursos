@@ -414,7 +414,7 @@
       position: absolute;
       top: -300px; left: 0;
       width: 100%; height: 1200px;
-      background-image: url('images/cocodrilo.webp');
+      background-image: url('images/fondoblanco.jpg');
       background-size: cover;
       background-position: center 30%;
       background-attachment: fixed;
@@ -425,7 +425,7 @@
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: linear-gradient(to right, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0.3) 40%, rgba(10,10,10,0.15) 100%);
+      background: linear-gradient(to right, rgba(94, 244, 255, 0.2) 100%, rgba(22, 247, 255, 0.3) 40%, rgba(255, 255, 255, 0.8) 10%);
       z-index: 3;
     }
     .intro-parallax-container {
@@ -437,7 +437,7 @@
       display: grid;
       grid-template-columns: 1.2fr 1fr;
       gap: 100px;
-      align-items: center;
+      align-items: center 20%;
       width: 100%;
     }
     .intro-parallax-text {
@@ -458,7 +458,7 @@
       letter-spacing: 1px;
     }
     .intro-parallax-text p span {
-      color: var(--magenta-light);
+      color: var(--gold);
       font-weight: 300;
     }
     .intro-parallax-image {
@@ -484,7 +484,7 @@
       position: absolute;
       top: -25px; left: -25px;
       width: 100%; height: 100%;
-      border: 1px solid var(--magenta);
+      border: 1px solid var(--gold);
       z-index: -1;
       transition: all 0.6s ease;
     }
@@ -1797,70 +1797,6 @@
     </div>
   </section>
 
-  <!-- ===== SERVICIOS ===== -->
-  <!-- Título en una sola línea + tarjetas cristal con animación elegante -->
-  <section class="servicios" id="servicios">
-    <canvas id="servicios-canvas"></canvas>
-    <div class="section-header" id="serviciosHeader">
-      <div class="section-label">Qué Hacemos</div>
-      <div class="section-title single-line">Servicios Legales y Fiscales</div>
-    </div>
-    <div class="services-grid">
-      <div class="service-card" data-delay="0">
-        <span class="service-number">01</span>
-        <div class="service-icon"><i class="ph ph-house-line"></i></div>
-        <h3>Derecho Inmobiliario</h3>
-        <p>Compraventa de propiedades, due diligence, licencias y permisos. Acompañamos cada paso del proceso con minuciosidad absoluta.</p>
-      </div>
-      <div class="service-card" data-delay="1">
-        <span class="service-number">02</span>
-        <div class="service-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
-        <h3>Inversión Extranjera</h3>
-        <p>Asesoramiento integral a inversores internacionales. Estructuración de operaciones, fiscalidad y cumplimiento normativo.</p>
-      </div>
-      <div class="service-card" data-delay="2">
-        <span class="service-number">03</span>
-        <div class="service-icon"><i class="ph ph-scroll"></i></div>
-        <h3>Contratos Mercantiles</h3>
-        <p>Redacción, negociación y revisión de contratos. Protegemos tus intereses con la máxima precisión legal.</p>
-      </div>
-      <div class="service-card" data-delay="3">
-        <span class="service-number">04</span>
-        <div class="service-icon"><i class="ph ph-passport"></i></div>
-        <h3>Residencia y Visados</h3>
-        <p>Golden Visa, permisos de residencia y trabajo, nacionalidad. Gestión completa del proceso migratorio.</p>
-      </div>
-      <div class="service-card" data-delay="4">
-        <span class="service-number">05</span>
-        <div class="service-icon"><i class="ph ph-shield-check"></i></div>
-        <h3>Cumplimiento Normativo</h3>
-        <p>Prevención de blanqueo de capitales, protección de datos, compliance. Adaptamos tu empresa a la normativa española.</p>
-      </div>
-      <div class="service-card" data-delay="5">
-        <span class="service-number">06</span>
-        <div class="service-icon"><i class="ph ph-scales"></i></div>
-        <h3>Litigios y Arbitraje</h3>
-        <p>Defensa de intereses en procesos judiciales y arbitrales. Estrategia legal personalizada para cada caso.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PARALLAX ELEFANTE - TU TRANQUILIDAD ===== -->
-  <!-- Texto animado con efecto de revelado palabra por palabra -->
-  <section class="parallax-elefante">
-    <div class="parallax-elefante-bg"></div>
-    <div class="parallax-elefante-overlay"></div>
-    <div class="parallax-elefante-content">
-      <h2 id="parallaxElefanteTitle">
-        <span class="word">Tu</span>
-        <span class="word highlight">tranquilidad</span>
-        <span class="word">nuestra</span>
-        <span class="word highlight">prioridad</span>
-      </h2>
-      <p id="parallaxElefanteText">Más de una década protegiendo inversiones internacionales en España con rigor jurídico y visión estratégica.</p>
-    </div>
-  </section>
-
   <!-- ===== ESPECIALIDADES - FLIP CARDS ===== -->
   <!-- Tarjetas que giran 180° al hover, reverso con colores invertidos -->
   <section class="especialidades" id="especialidades">
@@ -1959,6 +1895,72 @@
             <p>Asesoramiento continuo en fiscalidad, laboral, mercantil y compliance para tu negocio en España.</p>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+ 
+
+  <!-- ===== PARALLAX ELEFANTE - TU TRANQUILIDAD ===== -->
+  <!-- Texto animado con efecto de revelado palabra por palabra -->
+  <section class="parallax-elefante">
+    <div class="parallax-elefante-bg"></div>
+    <div class="parallax-elefante-overlay"></div>
+    <div class="parallax-elefante-content">
+      <h2 id="parallaxElefanteTitle">
+        <span class="word">Tu</span>
+        <span class="word highlight">tranquilidad</span>
+        <span class="word">nuestra</span>
+        <span class="word highlight">prioridad</span>
+      </h2>
+      <p id="parallaxElefanteText">Más de una década protegiendo inversiones internacionales en España con rigor jurídico y visión estratégica.</p>
+    </div>
+  </section>
+
+   <!-- ===== SERVICIOS ===== -->
+  <!-- Título en una sola línea + tarjetas cristal con animación elegante -->
+  <section class="servicios" id="servicios">
+    <canvas id="servicios-canvas"></canvas>
+    <div class="section-header" id="serviciosHeader">
+      <div class="section-label">Qué Hacemos</div>
+      <div class="section-title single-line">Servicios Legales y Fiscales</div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card" data-delay="0">
+        <span class="service-number">01</span>
+        <div class="service-icon"><i class="ph ph-house-line"></i></div>
+        <h3>Derecho Inmobiliario</h3>
+        <p>Compraventa de propiedades, due diligence, licencias y permisos. Acompañamos cada paso del proceso con minuciosidad absoluta.</p>
+      </div>
+      <div class="service-card" data-delay="1">
+        <span class="service-number">02</span>
+        <div class="service-icon"><i class="ph ph-globe-hemisphere-west"></i></div>
+        <h3>Inversión Extranjera</h3>
+        <p>Asesoramiento integral a inversores internacionales. Estructuración de operaciones, fiscalidad y cumplimiento normativo.</p>
+      </div>
+      <div class="service-card" data-delay="2">
+        <span class="service-number">03</span>
+        <div class="service-icon"><i class="ph ph-scroll"></i></div>
+        <h3>Contratos Mercantiles</h3>
+        <p>Redacción, negociación y revisión de contratos. Protegemos tus intereses con la máxima precisión legal.</p>
+      </div>
+      <div class="service-card" data-delay="3">
+        <span class="service-number">04</span>
+        <div class="service-icon"><i class="ph ph-passport"></i></div>
+        <h3>Residencia y Visados</h3>
+        <p>Golden Visa, permisos de residencia y trabajo, nacionalidad. Gestión completa del proceso migratorio.</p>
+      </div>
+      <div class="service-card" data-delay="4">
+        <span class="service-number">05</span>
+        <div class="service-icon"><i class="ph ph-shield-check"></i></div>
+        <h3>Cumplimiento Normativo</h3>
+        <p>Prevención de blanqueo de capitales, protección de datos, compliance. Adaptamos tu empresa a la normativa española.</p>
+      </div>
+      <div class="service-card" data-delay="5">
+        <span class="service-number">06</span>
+        <div class="service-icon"><i class="ph ph-scales"></i></div>
+        <h3>Litigios y Arbitraje</h3>
+        <p>Defensa de intereses en procesos judiciales y arbitrales. Estrategia legal personalizada para cada caso.</p>
       </div>
     </div>
   </section>
@@ -2561,12 +2563,17 @@
       // Crear cuadrados flotantes
       const squares = [];
       const squareCount = 8;
-      const colors = [
-        new THREE.Color(0xc4268c),
-        new THREE.Color(0xd94fa8),
-        new THREE.Color(0xc9a96e),
-        new THREE.Color(0x9e1d70)
-      ];
+/*const colors = [
+    new THREE.Color(0xc4268c),   // magenta
+    new THREE.Color(0x00d4aa),   // turquesa
+    new THREE.Color(0xc9a96e),   // dorado
+    new THREE.Color(0x4facfe)    // azul claro
+];*/
+const colors = [
+
+    new THREE.Color(0xc9a96e),   // dorado
+
+];
 
       for (let i = 0; i < squareCount; i++) {
         const size = Math.random() * 1.5 + 0.5;
