@@ -11,9 +11,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
     :root {
-      --magenta: #c4268c;
-      --magenta-light: #d94fa8;
-      --magenta-dark: #9e1d70;
+      --turquoise: #0d7377;
+      --turquoise-light: #14a085;
+      --turquoise-dark: #095c5f;
       --black: #0a0a0a;
       --white: #ffffff;
       --gray: #888888;
@@ -21,6 +21,7 @@
       --gray-dark: #1a1a1a;
       --gold: #c9a96e;
       --gold-light: #e0c896;
+      --gold-dark: #a08050;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -338,7 +339,7 @@
       position: absolute;
       top: -20%; left: -10%;
       width: 500px; height: 500px;
-      background: linear-gradient(135deg, rgba(196,38,140,0.4) 0%, rgba(201,169,110,0.2) 50%, transparent 100%);
+      background: linear-gradient(135deg, rgba(13,115,119,0.4) 0%, rgba(201,169,110,0.2) 50%, transparent 100%);
       filter: blur(80px);
       border-radius: 50%;
       animation: floatGradient1 12s ease-in-out infinite;
@@ -349,7 +350,7 @@
       position: absolute;
       bottom: -30%; right: -5%;
       width: 600px; height: 600px;
-      background: linear-gradient(225deg, rgba(196,38,140,0.3) 0%, rgba(100,50,150,0.2) 50%, transparent 100%);
+      background: linear-gradient(225deg, rgba(13,115,119,0.3) 0%, rgba(13,115,119,0.2) 50%, transparent 100%);
       filter: blur(100px);
       border-radius: 50%;
       animation: floatGradient2 15s ease-in-out infinite;
@@ -383,7 +384,7 @@
     .intro-gradient-squares .sq1 {
       top: 10%; left: 5%;
       width: 300px; height: 300px;
-      background: linear-gradient(135deg, #c4268c, #d94fa8);
+      background: linear-gradient(135deg, #0d7377, #14a085);
       animation: sqFloat1 10s ease-in-out infinite;
     }
     .intro-gradient-squares .sq2 {
@@ -395,7 +396,7 @@
     .intro-gradient-squares .sq3 {
       bottom: 10%; left: 30%;
       width: 200px; height: 200px;
-      background: linear-gradient(45deg, #9e1d70, #c4268c);
+      background: linear-gradient(45deg, #095c5f, #0d7377);
       animation: sqFloat3 11s ease-in-out infinite;
     }
     @keyframes sqFloat1 {
@@ -413,7 +414,8 @@
     .intro-parallax-bg {
       position: absolute;
       top: -300px; left: 0;
-      width: 100%; height: 1200px;
+      width: 100%; 
+      /*height: 1200px;*/
       background-image: url('images/fondoblanco.jpg');
       background-size: cover;
       background-position: center 30%;
@@ -493,7 +495,7 @@
       position: absolute;
       bottom: -15px; right: -15px;
       width: 60px; height: 60px;
-      background: var(--magenta);
+      background: var(--turquoise);
       opacity: 0.1;
       z-index: -1;
       transition: all 0.5s ease;
@@ -524,7 +526,7 @@
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(196,38,140,0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(13,115,119,0.3), transparent);
     }
     /* Canvas Three.js para cuadrados flotantes */
     #servicios-canvas {
@@ -553,7 +555,7 @@
       font-weight: 300;
       letter-spacing: 6px;
       text-transform: uppercase;
-      color: var(--magenta);
+      color: var(--turquoise);
       margin-bottom: 20px;
       display: inline-block;
       position: relative;
@@ -565,7 +567,7 @@
       left: 50%;
       transform: translateX(-50%);
       width: 40px; height: 1px;
-      background: var(--magenta);
+      background: var(--turquoise);
     }
     .section-title {
       font-family: 'Outfit', sans-serif;
@@ -579,10 +581,10 @@
       color: var(--black);
     }
     .servicios .section-label {
-      color: var(--magenta);
+      color: var(--gold);
     }
     .servicios .section-label::after {
-      background: var(--magenta);
+      background: var(--gold);
     }
     .section-title.single-line {
       white-space: nowrap;
@@ -630,9 +632,9 @@
       background: linear-gradient(
         135deg,
         rgba(255, 255, 255, 0.8) 0%,
-        rgba(196, 38, 140, 0.4) 25%,
+        rgba(13, 115, 119, 0.4) 25%,
         rgba(201, 169, 110, 0.3) 50%,
-        rgba(196, 38, 140, 0.4) 75%,
+        rgba(13, 115, 119, 0.4) 75%,
         rgba(255, 255, 255, 0.8) 100%
       );
       -webkit-mask: 
@@ -673,15 +675,15 @@
       backdrop-filter: blur(30px);
       -webkit-backdrop-filter: blur(30px);
       box-shadow: 
-        0 20px 60px rgba(196, 38, 140, 0.15),
+        0 20px 60px rgba(13, 115, 119, 0.15),
         inset 0 1px 0 rgba(255, 255, 255, 0.8);
       transform: translateY(-10px) scale(1.02);
-      border-color: rgba(196, 38, 140, 0.3);
+      border-color: rgba(13, 115, 119, 0.3);
     }
 
     .service-card:hover .service-icon {
       transform: scale(1.15) rotate(-8deg);
-      color: var(--magenta-dark);
+      color: var(--turquoise-dark);
     }
     .service-card:hover .service-icon::after {
       transform: translate(-50%, -50%) scale(1.5);
@@ -695,7 +697,7 @@
       margin-bottom: 20px;
       transition: color 0.3s ease;
     }
-    .service-card:hover h3 { color: var(--magenta); }
+    .service-card:hover h3 { color: var(--turquoise); }
     .service-card p {
       font-size: 14px;
       font-weight: 300;
@@ -709,7 +711,7 @@
       color: rgba(0, 0, 0, 0.06);
     }
     .service-card:hover .service-number {
-      color: rgba(196, 38, 140, 0.15);
+      color: rgba(13, 115, 119, 0.15);
     }
     .service-number {
       position: absolute;
@@ -722,7 +724,7 @@
       transition: all 0.4s ease;
     }
     .service-card:hover .service-number {
-      color: rgba(196,38,140,0.1);
+      color: rgba(13,115,119,0.1);
       transform: scale(1.1);
     }
 
@@ -785,7 +787,7 @@
       transform: translateY(0) rotateX(0deg);
     }
     .parallax-elefante-content h2 .word.highlight {
-      color: var(--magenta-light);
+      color: var(--gold);
       font-weight: 300;
     }
     .parallax-elefante-content p {
@@ -816,7 +818,7 @@
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(196,38,140,0.2), transparent);
+      background: linear-gradient(90deg, transparent, rgba(13,115,119,0.2), transparent);
     }
     .especialidades-blur {
       position: absolute;
@@ -881,7 +883,7 @@
       position: absolute;
       top: 0; left: 0;
       width: 4px; height: 0;
-      background: linear-gradient(to bottom, var(--magenta), var(--gold));
+      background: linear-gradient(to bottom, var(--turquoise), var(--gold));
       transition: height 0.6s ease;
     }
     .flip-card:hover .flip-card-front::before {
@@ -889,7 +891,7 @@
     }
     /* Reverso - colores invertidos */
     .flip-card-back {
-      background: linear-gradient(135deg, var(--magenta-dark), var(--magenta));
+      background: linear-gradient(135deg, var(--turquoise-dark), var(--turquoise));
       color: var(--white);
       transform: rotateY(180deg);
       border: 1px solid rgba(255,255,255,0.1);
@@ -917,7 +919,7 @@
     }
     .esp-icon {
       font-size: 36px;
-      color: var(--magenta);
+      color: var(--turquoise);
       margin-bottom: 25px;
       transition: all 0.5s ease;
       display: inline-block;
@@ -949,16 +951,16 @@
       font-weight: 500;
       letter-spacing: 2px;
       text-transform: uppercase;
-      color: var(--magenta);
-      border: 1px solid rgba(196,38,140,0.2);
+      color: var(--turquoise);
+      border: 1px solid rgba(13,115,119,0.2);
       border-radius: 20px;
       transition: all 0.4s ease;
       align-self: flex-start;
     }
     .flip-card:hover .esp-tag {
-      background: var(--magenta);
+      background: var(--turquoise);
       color: var(--white);
-      border-color: var(--magenta);
+      border-color: var(--turquoise);
     }
 
     /* ===== TESTIMONIOS - CARRUSEL 3D ===== */
@@ -974,7 +976,7 @@
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(196,38,140,0.05) 0%, transparent 60%);
+      background: radial-gradient(circle, rgba(13,115,119,0.05) 0%, transparent 60%);
       filter: blur(80px);
       pointer-events: none;
     }
@@ -1045,7 +1047,7 @@
       font-family: 'Outfit', sans-serif;
       font-size: 80px;
       font-weight: 100;
-      color: rgba(196,38,140,0.15);
+      color: rgba(13,115,119,0.15);
       line-height: 1;
     }
     .testi-stars {
@@ -1096,9 +1098,9 @@
       transition: all 0.4s ease;
     }
     .carousel-dot.active {
-      background: var(--magenta);
+      background: var(--turquoise);
       transform: scale(1.3);
-      box-shadow: 0 0 15px rgba(196,38,140,0.5);
+      box-shadow: 0 0 15px rgba(13,115,119,0.5);
     }
 
     /* ===== ABOUT ===== */
@@ -1113,7 +1115,7 @@
       position: absolute;
       top: 50%; left: -100px;
       width: 300px; height: 300px;
-      border: 1px solid rgba(196,38,140,0.1);
+      border: 1px solid rgba(13,115,119,0.1);
       border-radius: 50%;
       animation: float 6s ease infinite;
     }
@@ -1183,7 +1185,7 @@
       font-family: 'Outfit', sans-serif;
       font-size: 52px;
       font-weight: 100;
-      color: var(--magenta);
+      color: var(--turquoise);
       line-height: 1;
       margin-bottom: 10px;
     }
@@ -1217,7 +1219,7 @@
       position: absolute;
       top: -30px; left: -30px;
       width: 100%; height: 100%;
-      border: 1px solid var(--magenta);
+      border: 1px solid var(--turquoise);
       z-index: -1;
       transition: all 0.6s ease;
     }
@@ -1226,7 +1228,7 @@
       position: absolute;
       bottom: -20px; right: -20px;
       width: 80px; height: 80px;
-      background: var(--magenta);
+      background: var(--turquoise);
       opacity: 0.1;
       z-index: -1;
       transition: all 0.5s ease;
@@ -1318,14 +1320,14 @@
     .btn:hover::before { left: 0; }
     .btn:hover { color: var(--black); }
     .btn-primary {
-      background: var(--magenta);
-      border-color: var(--magenta);
+      background: var(--turquoise);
+      border-color: var(--turquoise);
     }
-    .btn-primary::before { background: var(--magenta-light); }
+    .btn-primary::before { background: var(--turquoise-light); }
     .btn-primary:hover {
       color: var(--white);
-      border-color: var(--magenta-light);
-      box-shadow: 0 10px 40px rgba(196,38,140,0.4);
+      border-color: var(--turquoise-light);
+      box-shadow: 0 10px 40px rgba(13,115,119,0.4);
     }
 
     /* ===== CONTACTO ===== */
@@ -1340,13 +1342,13 @@
       position: absolute;
       top: 0; left: 0;
       width: 100%; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(196,38,140,0.2), transparent);
+      background: linear-gradient(90deg, transparent, rgba(13,115,119,0.2), transparent);
     }
     .contacto-blur-bg {
       position: absolute;
       top: 10%; left: -100px;
       width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(196,38,140,0.04) 0%, transparent 60%);
+      background: radial-gradient(circle, rgba(13,115,119,0.04) 0%, transparent 60%);
       filter: blur(60px);
       pointer-events: none;
     }
@@ -1401,14 +1403,14 @@
     .contacto-info.visible .contacto-detail:nth-child(6) { transition-delay: 0.5s; }
     .contacto-detail i {
       font-size: 24px;
-      color: var(--magenta);
+      color: var(--turquoise);
       flex-shrink: 0;
       margin-top: 3px;
       transition: all 0.3s ease;
     }
     .contacto-detail:hover i {
       transform: scale(1.2);
-      filter: drop-shadow(0 0 10px rgba(196,38,140,0.3));
+      filter: drop-shadow(0 0 10px rgba(13,115,119,0.3));
     }
     .contacto-detail div strong {
       font-family: 'Outfit', sans-serif;
@@ -1454,7 +1456,7 @@
       color: var(--black);
       transition: color 0.3s ease;
     }
-    .form-group:focus-within label { color: var(--magenta); }
+    .form-group:focus-within label { color: var(--turquoise); }
     .form-group input,
     .form-group textarea,
     .form-group select {
@@ -1472,7 +1474,7 @@
     .form-group input:focus,
     .form-group textarea:focus,
     .form-group select:focus {
-      border-color: var(--magenta);
+      border-color: var(--turquoise);
       border-bottom-width: 2px;
     }
     .form-group textarea {
@@ -1484,7 +1486,7 @@
       position: absolute;
       bottom: 0; left: 0;
       width: 0; height: 2px;
-      background: var(--magenta);
+      background: var(--turquoise);
       transition: width 0.4s ease;
     }
     .form-group:focus-within::after { width: 100%; }
@@ -1614,8 +1616,378 @@
       .testi-slide.prev { transform: translateX(-250px) scale(0.75); }
       .testi-slide.next { transform: translateX(250px) scale(0.75); }
     }
+
+    /* ===== CHATBOT GLASSMORPHISM ===== */
+    .chatbot-container {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 9999;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .chatbot-toggle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--turquoise), var(--black));
+      border: none;
+      color: var(--white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      position: relative;
+    }
+    .chatbot-toggle::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      padding: 2px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.1));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .chatbot-toggle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 40px rgba(9, 9, 9, 0.6);
+    }
+    .chatbot-toggle:active {
+      transform: scale(0.95);
+    }
+    .chatbot-toggle .icon-close {
+      display: none;
+    }
+    .chatbot-toggle.active .icon-open {
+      display: none;
+    }
+    .chatbot-toggle.active .icon-close {
+      display: block;
+    }
+    /* Notificación pulsante */
+    .chatbot-toggle::after {
+      content: '';
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 16px;
+      height: 16px;
+      background: var(--gold);
+      border-radius: 50%;
+      border: 2px solid var(--white);
+      animation: pulseChat 2s ease infinite;
+    }
+    @keyframes pulseChat {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.7; }
+    }
+    .chatbot-toggle.active::after {
+      display: none;
+    }
+
+    /* Ventana de chat */
+    .chatbot-window {
+      position: absolute;
+      bottom: 80px;
+      right: 0;
+      width: 380px;
+      max-height: 550px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      pointer-events: none;
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .chatbot-window.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: all;
+    }
+    /* Borde brillante */
+    .chatbot-window::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      padding: 1.5px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(13,115,119,0.3), rgba(201,169,110,0.2), rgba(13,115,119,0.3), rgba(255,255,255,0.8));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Header */
+    .chatbot-header {
+      padding: 20px 24px;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.9), rgba(9,92,95,0.95));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+    .chatbot-header-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .chatbot-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--white);
+    }
+    .chatbot-name {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: 1px;
+    }
+    .chatbot-status {
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 2px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #4ade80;
+      border-radius: 50%;
+      animation: pulse 2s ease infinite;
+    }
+    .chatbot-close {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.8);
+      cursor: pointer;
+      padding: 4px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .chatbot-close:hover {
+      color: var(--white);
+      transform: rotate(90deg);
+    }
+
+    /* Mensajes */
+    .chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      z-index: 2;
+    }
+    .chatbot-messages::-webkit-scrollbar {
+      width: 4px;
+    }
+    .chatbot-messages::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .chatbot-messages::-webkit-scrollbar-thumb {
+      background: rgba(13,115,119,0.2);
+      border-radius: 2px;
+    }
+    .chatbot-message {
+      display: flex;
+      animation: fadeInUp 0.4s ease;
+    }
+    .chatbot-message.bot {
+      justify-content: flex-start;
+    }
+    .chatbot-message.user {
+      justify-content: flex-end;
+    }
+    .message-bubble {
+      max-width: 85%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 13px;
+      line-height: 1.7;
+      font-weight: 300;
+    }
+    .chatbot-message.bot .message-bubble {
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(13,115,119,0.1);
+      color: var(--black);
+      border-bottom-left-radius: 4px;
+    }
+    .chatbot-message.user .message-bubble {
+      background: linear-gradient(135deg, var(--turquoise), var(--turquoise-dark));
+      color: var(--white);
+      border-bottom-right-radius: 4px;
+    }
+    .message-bubble strong {
+      font-weight: 500;
+      color: var(--turquoise);
+    }
+    .chatbot-message.user .message-bubble strong {
+      color: var(--gold-light);
+    }
+    .message-bubble ul {
+      margin: 0;
+      padding-left: 16px;
+    }
+    .message-bubble ul li {
+      margin-bottom: 4px;
+    }
+
+    /* Área de input */
+    .chatbot-input-area {
+      padding: 16px 24px 20px;
+      border-top: 1px solid rgba(13,115,119,0.08);
+      position: relative;
+      z-index: 2;
+    }
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .quick-btn {
+      padding: 8px 14px;
+      background: rgba(13,115,119,0.08);
+      border: 1px solid rgba(13,115,119,0.15);
+      border-radius: 20px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--turquoise);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+    .quick-btn:hover {
+      background: var(--turquoise);
+      color: var(--white);
+      border-color: var(--turquoise);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(13,115,119,0.3);
+    }
+    .chatbot-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .chatbot-input {
+      flex: 1;
+      padding: 14px 18px;
+      border: 1px solid rgba(13,115,119,0.15);
+      border-radius: 30px;
+      background: rgba(255,255,255,0.7);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--black);
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .chatbot-input::placeholder {
+      color: var(--gray);
+    }
+    .chatbot-input:focus {
+      border-color: var(--turquoise);
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 0 20px rgba(13,115,119,0.1);
+    }
+    .chatbot-send {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--turquoise), var(--turquoise-dark));
+      border: none;
+      color: var(--white);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+    .chatbot-send:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(13,115,119,0.4);
+    }
+    .chatbot-send:active {
+      transform: scale(0.95);
+    }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: flex;
+      gap: 4px;
+      padding: 14px 18px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(13,115,119,0.1);
+      border-radius: 16px;
+      border-bottom-left-radius: 4px;
+      width: fit-content;
+    }
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--turquoise);
+      border-radius: 50%;
+      animation: typingBounce 1.4s ease infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .chatbot-container {
+        bottom: 20px;
+        right: 20px;
+      }
+      .chatbot-window {
+        width: calc(100vw - 40px);
+        max-width: 360px;
+        right: -10px;
+      }
+      .chatbot-toggle {
+        width: 52px;
+        height: 52px;
+      }
+    }
   </style>
   <base target="_blank">
+<base target="_blank">
 <base target="_blank">
 </head>
 <body>
@@ -1645,8 +2017,8 @@
 
     <!-- Slide 1: Elefante -->
     <div class="slide active" data-index="0">
-      <div class="slide-layer img1" style="background-image: url('images/elefante.webp')"></div>
-      <div class="slide-layer img2" style="background-image: url('images/elefante1.webp')"></div>
+      <div class="slide-layer img1" style="background-image: url('images/lince.jpg')"></div>
+      <div class="slide-layer img2" style="background-image: url('images/lince1.jpg')"></div>
       <div class="slide-darken"></div>
       <div class="slide-content">
         <div class="slide-label">Vision Global</div>
@@ -1778,7 +2150,7 @@
   </section>
 
   <!-- ===== INTRO PARALLAX CON LOBOS ===== -->
-  <!-- Texto a la izquierda, imagen a la derecha con borde magenta -->
+  <!-- Texto a la izquierda, imagen a la derecha con borde dorado -->
   <section class="intro-parallax" id="introParallax">
     <div class="intro-gradient-squares">
       <div class="sq sq1"></div>
@@ -2077,7 +2449,7 @@
         </div>
       </div>
       <div class="about-image" id="aboutImage">
-        <img src="images/elefante1.webp" alt="Alcázar Internacional Equipo">
+        <img src="images/ballena1.webp" alt="Alcázar Internacional Equipo">
       </div>
     </div>
   </section>
@@ -2472,11 +2844,11 @@
         posArray[i + 1] = (Math.random() - 0.5) * 10;
         posArray[i + 2] = (Math.random() - 0.5) * 10;
 
-        // Colores magenta y blanco
-        const isMagenta = Math.random() > 0.6;
-        colorsArray[i] = isMagenta ? 0.77 : 1;
-        colorsArray[i + 1] = isMagenta ? 0.15 : 1;
-        colorsArray[i + 2] = isMagenta ? 0.55 : 1;
+        // Colores turquesa y blanco
+        const isTurquoise = Math.random() > 0.6;
+        colorsArray[i] = isTurquoise ? 0.05 : 1;
+        colorsArray[i + 1] = isTurquoise ? 0.45 : 1;
+        colorsArray[i + 2] = isTurquoise ? 0.47 : 1;
       }
 
       const particlesGeometry = new THREE.BufferGeometry();
@@ -2564,7 +2936,7 @@
       const squares = [];
       const squareCount = 8;
 /*const colors = [
-    new THREE.Color(0xc4268c),   // magenta
+    new THREE.Color(0x0d7377),   // turquesa
     new THREE.Color(0x00d4aa),   // turquesa
     new THREE.Color(0xc9a96e),   // dorado
     new THREE.Color(0x4facfe)    // azul claro
@@ -2652,6 +3024,146 @@ const colors = [
       });
     });
 
+
+    // ===== CHATBOT ALCÁZAR =====
+    // Esperar a que el DOM esté completamente cargado
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('[Chatbot] Inicializando...');
+
+      const toggle = document.getElementById('chatbotToggle');
+      const chatWindow = document.getElementById('chatbotWindow');
+      const closeBtn = document.getElementById('chatbotClose');
+      const messages = document.getElementById('chatbotMessages');
+      const input = document.getElementById('chatbotInput');
+      const send = document.getElementById('chatbotSend');
+      const quickReplies = document.getElementById('quickReplies');
+
+      if (!toggle || !chatWindow) {
+        console.error('[Chatbot] Error: No se encontraron elementos del chatbot');
+        return;
+      }
+
+      console.log('[Chatbot] Elementos encontrados correctamente');
+
+      let isOpen = false;
+
+      function toggleChat(e) {
+        if (e) e.stopPropagation();
+        isOpen = !isOpen;
+        console.log('[Chatbot] Toggle:', isOpen);
+        chatWindow.classList.toggle('open', isOpen);
+        toggle.classList.toggle('active', isOpen);
+        if (isOpen && input) {
+          setTimeout(() => input.focus(), 300);
+        }
+      }
+
+      toggle.addEventListener('click', toggleChat);
+      if (closeBtn) closeBtn.addEventListener('click', toggleChat);
+
+      // Base de conocimiento de Alcázar
+      const knowledge = {
+        'ley beckham': {
+          keywords: ['beckham', 'tributar', '24%', 'impuesto', 'fiscalidad', 'no residente', 'régimen'],
+          response: 'La <strong>Ley Beckham</strong> es un régimen fiscal especial para trabajadores extranjeros desplazados a España. Te permite tributar como no residente durante los primeros 6 años, pagando solo un <strong>24% de IRPF</strong> sobre rentas obtenidas en España (hasta 600.000€), en lugar del tipo escalonado habitual que puede llegar al 47%.<br><br><strong>Ventajas principales:</strong><ul><li>Tipo fijo del 24% en rentas de trabajo</li><li>Exención en rentas obtenidas en el extranjero</li><li>Solo tributas por bienes situados en España</li><li>Aplicable durante 6 años consecutivos</li></ul>En Alcázar te ayudamos a optimizar tu situación fiscal bajo este régimen. ¿Te gustaría saber si cumples los requisitos?'
+        },
+        'golden visa': {
+          keywords: ['golden', 'visa', 'visado', 'residencia', 'inversor', 'permiso'],
+          response: 'La <strong>Golden Visa</strong> es un permiso de residencia para inversores no comunitarios. En Alcázar gestionamos todo el proceso.<br><br><strong>Requisitos de inversión (uno de estos):</strong><ul><li>Compra de inmueble por valor ≥ 500.000€</li><li>Inversión en acciones españolas ≥ 1.000.000€</li><li>Depósito bancario ≥ 1.000.000€</li><li>Inversión en deuda pública ≥ 2.000.000€</li><li>Proyecto empresarial de interés general</li></ul><strong>Ventajas:</strong> Residencia para ti y tu familia, libre circulación por Schengen, renovación cada 2 años, posibilidad de obtener nacionalidad.<br><br>¿Tienes alguna inversión planificada?'
+        },
+        'inmobiliario': {
+          keywords: ['inmobiliario', 'propiedad', 'casa', 'piso', 'compraventa', 'due diligence', 'inmueble'],
+          response: 'Nuestro servicio de <strong>Derecho Inmobiliario</strong> cubre todo el ciclo de la inversión:<br><br><ul><li><strong>Due diligence legal:</strong> Verificación de titularidad, cargas, licencias y urbanismo</li><li><strong>Contrato de arras:</strong> Redacción y negociación de condiciones</li><li><strong>Escritura pública:</strong> Preparación y acompañamiento en notaría</li><li><strong>Registro de la propiedad:</strong> Inscripción y gestión de impuestos</li><li><strong>Post-compra:</strong> Cambio de suministros, comunidad, IBI</li></ul>También asesoramos en <strong>estructuración fiscal</strong> para minimizar impuestos (ITP, IVA, plusvalía).<br><br>¿Buscas una propiedad específica o necesitas revisar una operación en curso?'
+        },
+        'empresa': {
+          keywords: ['empresa', 'sociedad', 'crear', 'constituir', 'autónomo', 'SL', 'negocio', 'emprender'],
+          response: 'En Alcázar te acompañamos desde la idea hasta la operación:<br><br><strong>Formas jurídicas:</strong><ul><li><strong>SL (Sociedad Limitada):</strong> Capital mínimo 3.000€, responsabilidad limitada</li><li><strong>Autónomo:</strong> Rápido y económico, responsabilidad personal</li><li><strong>Sociedad Laboral:</strong> Para proyectos con trabajadores</li><li><strong>Sucursal:</strong> Si ya tienes empresa en el extranjero</li></ul><strong>Servicios incluidos:</strong><ul><li>Elección de la forma óptima según tu actividad</li><li>Trámites ante Registro Mercantil y Hacienda</li><li>Licencias de apertura</li><li>Alta en Seguridad Social</li><li>Asesoramiento fiscal y laboral continuo</li></ul>¿Qué tipo de negocio quieres montar?'
+        },
+        'herencia': {
+          keywords: ['herencia', 'donación', 'sucesión', 'testamento', 'patrimonio', 'familiar'],
+          response: 'La <strong>planificación sucesoria</strong> es clave para proteger el patrimonio familiar. En Alcázar estructuramos herencias y donaciones con la máxima eficiencia fiscal.<br><br><strong>Servicios:</strong><ul><li>Redacción y revisión de testamentos</li><li>Donaciones en vida (inter vivos)</li><li>Declaración de herencia y cálculo de impuestos</li><li>Partición de bienes entre herederos</li><li>Disposición de bienes extranjeros</li></ul><strong>Optimización fiscal:</strong> Bonificaciones por parentesco, reducciones por residencia habitual, aplazamientos de pago.<br><br>¿Necesitas hacer un testamento o gestionar una herencia reciente?'
+        },
+        'precio': {
+          keywords: ['precio', 'coste', 'cuánto', 'tarifa', 'honorarios', 'gratis', 'consulta'],
+          response: 'Ofrecemos una <strong>primera consulta gratuita</strong> de 30 minutos para conocer tu situación y definir el alcance del servicio.<br><br><strong>Modalidades de tarifa:</strong><ul><li><strong>Por hora:</strong> Para consultas puntuales y asesoramiento</li><li><strong>Por proyecto:</strong> Precio cerrado para operaciones definidas (compra de inmueble, constitución de empresa...)</li><li><strong>Retainer mensual:</strong> Para empresas que necesitan asesoramiento continuo</li></ul>Cada caso es diferente. En la consulta inicial analizamos tus necesidades y te presentamos un presupuesto detallado sin compromiso.<br><br>¿Te gustaría agendar tu consulta gratuita?'
+        },
+        'servicios': {
+          keywords: ['servicios', 'qué hacéis', 'qué ofrecéis', 'asesoría', 'ayuda', 'trámites'],
+          response: 'En <strong>Alcázar Internacional</strong> ofrecemos servicios integrales para inversores y expatriados en España:<br><br><ul><li><strong>Derecho Inmobiliario</strong> — Compraventa, due diligence, licencias</li><li><strong>Inversión Extranjera</strong> — Estructuración fiscal, compliance</li><li><strong>Contratos Mercantiles</strong> — Redacción, negociación, revisión</li><li><strong>Residencia y Visados</strong> — Golden Visa, permisos, nacionalidad</li><li><strong>Cumplimiento Normativo</strong> — Compliance, protección de datos</li><li><strong>Litigios y Arbitraje</strong> — Defensa judicial y arbitral</li></ul>También somos especialistas en <strong>Ley Beckham</strong>, <strong>herencias</strong> y <strong>creación de empresas</strong>.<br><br>¿Sobre qué área necesitas más información?'
+        },
+        'contacto': {
+          keywords: ['contacto', 'email', 'teléfono', 'llamar', 'escribir', 'oficina', 'granada'],
+          response: 'Puedes contactar con nosotros de varias formas:<br><br><ul><li>📧 <strong>Email:</strong> hola@alcazarinternational.com</li><li>📞 <strong>Teléfono:</strong> +34 958 000 000</li><li>📍 <strong>Oficina:</strong> Granada, España</li><li>💬 <strong>Este chat</strong> para preguntas rápidas</li></ul>También puedes rellenar el <strong>formulario de contacto</strong> al final de esta página y te responderemos en menos de 24 horas.<br><br>¿Prefieres que te llamemos nosotros?'
+        },
+        'default': {
+          response: 'Gracias por tu mensaje. Para darte una respuesta más precisa, ¿podrías indicarme si tu consulta es sobre alguno de estos temas?<br><br><ul><li>Ley Beckham / Fiscalidad</li><li>Golden Visa / Residencia</li><li>Compra de propiedades</li><li>Creación de empresas</li><li>Herencias y donaciones</li><li>Precios y consultas</li></ul>También puedes escribirnos directamente a <strong>hola@alcazarinternational.com</strong> o llamarnos al <strong>+34 958 000 000</strong>.'
+        }
+      };
+
+      function findResponse(text) {
+        const lower = text.toLowerCase();
+        for (const key in knowledge) {
+          if (key === 'default') continue;
+          const entry = knowledge[key];
+          if (entry.keywords && entry.keywords.some(function(k) { return lower.indexOf(k) !== -1; })) {
+            return entry.response;
+          }
+        }
+        return knowledge.default.response;
+      }
+
+      function addMessage(text, isUser) {
+        const div = document.createElement('div');
+        div.className = 'chatbot-message ' + (isUser ? 'user' : 'bot');
+        div.innerHTML = '<div class="message-bubble">' + text + '</div>';
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function showTyping() {
+        const div = document.createElement('div');
+        div.className = 'chatbot-message bot typing-msg';
+        div.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+        return div;
+      }
+
+      function sendMessage() {
+        const text = input.value.trim();
+        if (!text) return;
+        addMessage(text, true);
+        input.value = '';
+
+        const typing = showTyping();
+        setTimeout(function() {
+          typing.remove();
+          const response = findResponse(text);
+          addMessage(response, false);
+        }, 1200 + Math.random() * 800);
+      }
+
+      if (send) send.addEventListener('click', sendMessage);
+      if (input) {
+        input.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') sendMessage();
+        });
+      }
+
+      // Quick replies
+      if (quickReplies) {
+        quickReplies.querySelectorAll('.quick-btn').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            const question = btn.getAttribute('data-question');
+            input.value = question;
+            sendMessage();
+          });
+        });
+      }
+
+      console.log('[Chatbot] Inicializado correctamente');
+    });
+
     // ===== FORM =====
     document.getElementById('contactoForm').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -2659,5 +3171,66 @@ const colors = [
     });
   </script>
 
+
+  <!-- ===== CHATBOT ALCÁZAR ===== -->
+  <!-- Botón flotante + ventana de chat con glassmorphism -->
+  <div class="chatbot-container" id="chatbotContainer">
+    <div class="chatbot-window" id="chatbotWindow">
+      <div class="chatbot-header">
+        <div class="chatbot-header-info">
+          <div class="chatbot-avatar">A</div>
+          <div>
+            <div class="chatbot-name">Alcázar Asistente</div>
+            <div class="chatbot-status">
+              <span class="status-dot"></span> En línea
+            </div>
+          </div>
+        </div>
+        <button class="chatbot-close" id="chatbotClose">
+          <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="chatbot-messages" id="chatbotMessages">
+        <div class="chatbot-message bot">
+          <div class="message-bubble">
+            ¡Hola! Soy el asistente virtual de <strong>Alcázar Internacional</strong>. ¿En qué puedo ayudarte hoy? Puedo orientarte sobre:
+            <ul style="margin-top:8px; padding-left:16px;">
+              <li>Ley Beckham y fiscalidad</li>
+              <li>Visados y residencia</li>
+              <li>Inversión inmobiliaria</li>
+              <li>Creación de empresas</li>
+              <li>Herencias y donaciones</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="chatbot-input-area">
+        <div class="quick-replies" id="quickReplies">
+          <button class="quick-btn" data-question="¿Qué es la Ley Beckham?">Ley Beckham</button>
+          <button class="quick-btn" data-question="¿Cómo obtener la Golden Visa?">Golden Visa</button>
+          <button class="quick-btn" data-question="¿Qué servicios ofrecen?">Servicios</button>
+          <button class="quick-btn" data-question="¿Cuál es el precio de una consulta?">Precios</button>
+        </div>
+        <div class="chatbot-input-row">
+          <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Escribe tu pregunta...">
+          <button class="chatbot-send" id="chatbotSend">
+            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2">
+              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <button class="chatbot-toggle" id="chatbotToggle">
+      <svg class="icon-open" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" stroke-width="1.5">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+      </svg>
+      <svg class="icon-close" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" fill="none" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
 </body>
 </html>
